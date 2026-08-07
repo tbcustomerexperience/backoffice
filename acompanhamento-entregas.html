@@ -9,28 +9,28 @@
 <title>Acompanhamento de Entregas · CX Tania Bulhões</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
-    --tb-green:#2c4f3a;
-    --tb-green-dark:#1e3627;
-    --tb-gold:#b89a5e;
+    --tb-green:#669156;
+    --tb-green-dark:#2C4F3A;
+    --tb-gold:#B89A5E;
     --tb-gold-light:#d8c7a0;
-    --tb-cream:#f7f3ea;
-    --tb-cream-2:#efe8d8;
-    --risco-critico:#a8412f;
-    --risco-critico-bg:#fbeae7;
-    --risco-atencao:#b8862f;
-    --risco-atencao-bg:#faf1de;
-    --risco-normal:#3d6b52;
-    --risco-normal-bg:#e9f1ec;
-    --risco-entregue:#7b7368;
-    --risco-entregue-bg:#f1efe9;
-    --ink:#2a2723;
-    --ink-soft:#7c7466;
-    --line:#e2dbc9;
-    --shadow:0 2px 14px rgba(44,79,58,.08);
+    --tb-cream:#FBFAF7;
+    --tb-cream-2:#F2F0E6;
+    --risco-critico:#7A3B3B;
+    --risco-critico-bg:#F1E1E1;
+    --risco-atencao:#8a6d31;
+    --risco-atencao-bg:#F3EBD8;
+    --risco-normal:#2C4F3A;
+    --risco-normal-bg:#E4EEE0;
+    --risco-entregue:#9B9B90;
+    --risco-entregue-bg:#ECEBE6;
+    --ink:#2b2b28;
+    --ink-soft:#8D8D84;
+    --line:#E7E4DC;
+    --shadow:0 1px 2px rgba(0,0,0,.03);
     font-family:'DM Sans',sans-serif;
   }
   *{box-sizing:border-box;}
@@ -40,67 +40,87 @@
     color:var(--ink);
     -webkit-font-smoothing:antialiased;
   }
-  h1,h2,h3{font-family:'Cormorant Garamond',serif; font-weight:600; margin:0;}
+  h1,h2,h3{font-family:'Lora',serif; font-weight:600; margin:0;}
   .topbar{
-    background:linear-gradient(135deg,var(--tb-green) 0%,var(--tb-green-dark) 100%);
+    background:var(--tb-green-dark);
     color:var(--tb-cream);
-    padding:28px 36px 26px;
+    padding:16px 28px;
+    position:sticky; top:0; z-index:50;
   }
   .topbar .eyebrow{
-    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--tb-gold); font-weight:600; margin-bottom:6px;
+    font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--tb-gold); font-weight:600; margin-bottom:4px;
   }
-  .topbar h1{font-size:30px; color:#fff;}
-  .topbar .sub{font-size:13.5px; color:#d9d3bf; margin-top:6px; max-width:640px; line-height:1.5;}
+  .topbar h1{font-size:19px; color:#fff; letter-spacing:.2px;}
+  .topbar .sub{font-size:11.5px; color:#D9CFAF; margin-top:4px; max-width:640px; line-height:1.5; font-weight:500;}
   .topbar-meta{
-    text-align:right; font-size:11.5px; color:#c9c2ac; white-space:nowrap; flex:0 0 auto;
-    padding-bottom:2px;
+    text-align:right; font-size:11px; color:#CFE0D2; white-space:nowrap; flex:0 0 auto;
+    background:rgba(255,255,255,.08); padding:5px 10px; border-radius:20px;
   }
-  .topbar-meta b{display:block; font-size:14px; color:#fff; font-weight:600; margin-top:3px;}
+  .topbar-meta b{display:inline; font-size:11px; color:#fff; font-weight:700; margin-top:0; margin-left:4px;}
   .wrap{max-width:1440px; margin:0 auto; padding:0 28px 60px;}
 
   .upload-zone{
-    margin-top:-20px; margin-bottom:26px;
+    margin-top:18px; margin-bottom:22px;
     background:#fff;
-    border:1.5px dashed var(--tb-gold);
+    border:1px solid var(--line);
     border-radius:10px;
-    padding:20px 24px;
-    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
-    box-shadow:0 6px 18px rgba(44,79,58,.08);
+    padding:12px 18px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+    transition:border-color .15s, background .15s;
   }
-  .upload-zone.dragover{ background:var(--tb-cream-2); border-color:var(--tb-green); }
+  .upload-zone.empty{
+    border-style:dashed; border-color:var(--tb-gold); padding:22px 24px;
+  }
+  .upload-zone.dragover{ background:var(--tb-cream-2); border-color:var(--tb-green); border-style:dashed; }
   .upload-icon{
-    width:44px; height:44px; flex:0 0 auto; border-radius:50%;
+    width:34px; height:34px; flex:0 0 auto; border-radius:50%;
     background:var(--tb-cream-2); display:flex; align-items:center; justify-content:center;
-    color:var(--tb-green); font-size:20px;
+    color:var(--tb-green); font-size:15px;
   }
-  .upload-text b{display:block; font-size:14.5px; color:var(--tb-green-dark);}
-  .upload-text span{font-size:12.5px; color:#7c7466;}
+  .upload-zone.empty .upload-icon{width:44px; height:44px; font-size:20px;}
+  .upload-text b{display:block; font-size:13px; color:var(--tb-green-dark); font-weight:700;}
+  .upload-text span{font-size:11.5px; color:#7c7466;}
+  .upload-zone.empty .upload-text b{font-size:14.5px;}
+  .upload-zone.empty .upload-text span{font-size:12.5px;}
   .upload-btn{
-    margin-left:auto; background:var(--tb-green); color:#fff; border:none; padding:10px 18px;
-    border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;
+    background:var(--tb-green); color:#fff; border:none; padding:7px 14px;
+    border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;
     transition:background .15s;
   }
   .upload-btn:hover{background:var(--tb-green-dark);}
+  .upload-btn-ghost{
+    font-size:12px; font-weight:700; padding:7px 14px; border-radius:6px; border:1px solid var(--tb-gold);
+    background:#fff; color:var(--tb-green-dark); cursor:pointer; font-family:'DM Sans',sans-serif;
+    transition:background .15s,color .15s;
+  }
+  .upload-btn-ghost:hover{background:var(--tb-gold); color:#fff;}
+  .upload-actions{margin-left:auto; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .upload-link{
+    background:none; border:none; font-size:11px; color:var(--ink-soft); cursor:pointer;
+    text-decoration:underline; font-family:'DM Sans',sans-serif; padding:0;
+  }
+  .upload-link:hover{color:var(--risco-critico);}
   #btnRefresh{
-    box-shadow: 0 3px 0 var(--tb-green), 0 5px 10px rgba(44,79,58,.18);
+    box-shadow: 0 2px 0 var(--tb-green), 0 4px 8px rgba(44,79,58,.14);
     transform: translateY(0);
     transition: transform .1s ease, box-shadow .1s ease, background .15s, color .15s;
   }
   #btnRefresh:hover:not(:disabled){ background:var(--tb-cream-2); }
   #btnRefresh:active:not(:disabled){
-    transform: translateY(3px);
+    transform: translateY(2px);
     box-shadow: 0 0 0 var(--tb-green), 0 1px 3px rgba(44,79,58,.18);
   }
   #btnRefresh:disabled{
     cursor: default;
-    transform: translateY(3px);
+    transform: translateY(2px);
     box-shadow: 0 0 0 var(--tb-green), 0 1px 3px rgba(44,79,58,.18);
     opacity:.9;
   }
-  #btnRefresh.is-loading{ padding-left:32px; position:relative; }
+  #btnRefresh.is-loading{ padding-left:30px; position:relative; }
   #btnRefresh.is-loading::before{
     content:'';
-    position:absolute; left:12px; top:50%; margin-top:-7px;
+    position:absolute; left:11px; top:50%; margin-top:-7px;
     width:14px; height:14px;
     border:2px solid rgba(44,79,58,.25);
     border-top-color: var(--tb-green);
@@ -110,7 +130,8 @@
   #btnRefresh.is-success{ background:var(--tb-green); color:#fff; }
   @keyframes btnRefreshSpin{ to{ transform: rotate(360deg); } }
   input[type=file]{display:none;}
-  .file-meta{font-size:12px; color:#7c7466; margin-top:2px;}
+  .file-meta{font-size:11px; color:#7c7466; margin-top:1px;}
+  .upload-zone.empty .file-meta{font-size:12px; margin-top:2px;}
 
   .empty-state{
     text-align:center; padding:80px 20px; color:#8a8172;
@@ -136,7 +157,7 @@
     text-transform:uppercase; letter-spacing:.08em; font-weight:700;
   }
   .kpi .n{
-    font-family:'Lora',serif; font-style:normal; font-size:27px; font-weight:500; color:#4c6e58;
+    font-family:'Lora',serif; font-style:normal; font-size:27px; font-weight:500; color:var(--tb-green-dark);
     line-height:1; letter-spacing:.005em;
   }
   .kpi .sub{
@@ -144,6 +165,86 @@
   }
   .kpi.crit .n{color:var(--risco-critico);}
   .kpi.aten .n{color:var(--risco-atencao);}
+
+  .kpi-section-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; flex-wrap:wrap;}
+  .view-toggle{display:flex; gap:4px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:3px;}
+  .view-toggle-btn{
+    background:none; border:none; border-radius:6px; padding:5px 10px; font-size:13px; line-height:1;
+    color:var(--ink-soft); cursor:pointer; transition:background .15s,color .15s;
+  }
+  .view-toggle-btn.active{background:var(--tb-green); color:#fff;}
+  .view-toggle-btn:hover:not(.active){background:var(--tb-cream-2);}
+
+  .kpi-list{
+    background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow);
+    overflow:hidden; margin-bottom:26px;
+  }
+  .kpi-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  .kpi-table tr{border-bottom:1px solid var(--line);}
+  .kpi-table tr:last-child{border-bottom:none;}
+  .kpi-table td{padding:10px 18px; vertical-align:middle;}
+  .kpi-table .kpi-table-label{
+    font-family:'DM Sans',sans-serif; font-size:11px; color:var(--ink-soft); font-weight:700;
+    text-transform:uppercase; letter-spacing:.06em; width:38%;
+  }
+  .kpi-table .kpi-table-val{
+    font-family:'Lora',serif; font-weight:500; font-size:17px; color:var(--tb-green-dark); width:18%;
+  }
+  .kpi-table .kpi-table-val.crit{color:var(--risco-critico);}
+  .kpi-table .kpi-table-val.aten{color:var(--risco-atencao);}
+  .kpi-table .kpi-table-sub{font-family:'DM Sans',sans-serif; font-size:11.5px; color:var(--ink-soft);}
+  @media(max-width:900px){ .kpi-table .kpi-table-label{width:auto;} }
+
+  /* KPI compacto — cards estilo "imagem 2" */
+  .kv2-top{display:grid; grid-template-columns:1fr 1fr 1.7fr; gap:10px; margin-bottom:12px;}
+  .kv2-card{
+    background:#fff; border:1px solid var(--line); border-radius:10px; padding:11px 13px;
+    box-shadow:var(--shadow);
+  }
+  .kv2-head{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:5px;}
+  .kv2-label{
+    font-family:'DM Sans',sans-serif; font-size:9.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-soft); font-weight:700;
+  }
+  .kv2-badge{font-size:9px; font-weight:700; padding:2px 8px; border-radius:100px; white-space:nowrap;}
+  .kv2-badge.crit{background:var(--risco-critico-bg); color:var(--risco-critico);}
+  .kv2-badge.aten{background:var(--risco-atencao-bg); color:var(--risco-atencao);}
+  .kv2-num{font-family:'Lora',serif; font-size:21px; font-weight:600; color:var(--tb-green-dark); line-height:1;}
+  .kv2-card.crit .kv2-num{color:var(--risco-critico);}
+  .kv2-card.aten .kv2-num{color:var(--risco-atencao);}
+  .kv2-sub{font-family:'DM Sans',sans-serif; font-size:10px; color:var(--ink-soft); margin-top:5px; line-height:1.35;}
+
+  .kv2-quality-row{display:flex; align-items:center; gap:14px; margin-top:3px;}
+  .kv2-quality-pct{flex:1; min-width:0;}
+  .kv2-quality-pct .kv2-num{font-size:22px;}
+  .kv2-quality-pct-label{font-family:'DM Sans',sans-serif; font-size:10px; color:var(--ink-soft); margin-left:4px;}
+  .kv2-bar-track{height:5px; background:var(--tb-cream-2); border-radius:4px; overflow:hidden; margin-top:6px;}
+  .kv2-bar-fill{height:100%; background:var(--tb-green); border-radius:4px; transition:width .3s;}
+  .kv2-quality-breakdown{
+    display:flex; flex-direction:column; gap:8px; border-left:1px solid var(--line); padding-left:16px; flex:0 0 auto;
+  }
+  .kv2-quality-item{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; font-family:'DM Sans',sans-serif; font-size:11.5px; color:var(--ink-soft);
+  }
+  .kv2-quality-item b{font-family:'Lora',serif; font-size:20px; color:var(--tb-green-dark); font-weight:600;}
+
+  .kv2-section-head{display:flex; align-items:baseline; justify-content:space-between; margin:14px 0 8px;}
+  .kv2-section-head h3{font-family:'Lora',serif; font-size:14px; color:var(--tb-green-dark); font-weight:600;}
+  .kv2-section-head span{font-family:'DM Sans',sans-serif; font-size:10.5px; color:var(--ink-soft);}
+
+  .kv2-status-row{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:22px;}
+  .kv2-status-card{
+    background:#fff; border:1px solid var(--line); border-top:3px solid var(--accent, var(--tb-green));
+    border-radius:10px; padding:11px 13px;
+  }
+  .kv2-status-num-row{display:flex; align-items:baseline; justify-content:space-between; margin-top:2px;}
+  .kv2-pct{font-family:'DM Sans',sans-serif; font-size:11px; color:var(--ink-soft); font-weight:700;}
+  .kv2-status-card .kv2-bar-track{margin-top:7px;}
+
+  @media(max-width:900px){
+    .kv2-top{grid-template-columns:1fr;}
+    .kv2-status-row{grid-template-columns:repeat(2,1fr);}
+  }
 
   .new-alert{
     background:var(--risco-critico-bg); border:1px solid #eec9c2; color:var(--risco-critico);
@@ -164,14 +265,17 @@
   .panel-head .desc{font-size:12.5px; color:var(--ink-soft); margin-top:3px;}
 
   .controls{
-    padding:14px 22px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    padding:16px 22px; display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;
     border-bottom:1px solid var(--line); background:#fbfaf6;
   }
-  .controls input[type=text], .controls select{
+  .f-group{display:flex; flex-direction:column; gap:5px;}
+  .f-group label{font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); font-weight:700;}
+  .controls input[type=text], .controls input[type=number], .controls select{
     font-family:'DM Sans',sans-serif; font-size:12.5px; padding:8px 10px; border:1px solid var(--line);
     border-radius:6px; background:#fff; color:var(--ink);
   }
-  .controls input[type=text]{width:240px;}
+  .controls input[type=text]{width:230px;}
+  .controls select{cursor:pointer;}
   .pill-toggle{display:flex; gap:6px; flex-wrap:wrap;}
   .pill{
     font-size:11.5px; padding:6px 12px; border-radius:100px; border:1px solid var(--line);
@@ -196,6 +300,7 @@
   .ms-dropdown.open .ms-dropdown-panel{display:block;}
   .ms-dropdown-panel label{
     display:flex; align-items:center; gap:8px; padding:7px 12px; font-size:12.5px; color:var(--ink); cursor:pointer;
+    text-transform:none; letter-spacing:normal; font-weight:500;
   }
   .ms-dropdown-panel label:hover{background:var(--tb-cream-2);}
   .ms-dropdown-panel input[type=checkbox]{cursor:pointer; accent-color:var(--tb-green);}
@@ -214,11 +319,11 @@
 
   table{width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed;}
   thead th{
-    text-align:left; padding:10px 12px; background:var(--tb-cream-2); color:var(--tb-green-dark);
+    text-align:left; padding:10px 12px; background:var(--tb-green-dark); color:#EFE9D8;
     font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; font-weight:700;
-    position:sticky; top:0; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    position:sticky; top:0; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; z-index:2;
   }
-  thead th:hover{color:var(--tb-gold);}
+  thead th:hover{background:#385942; color:#fff;}
   tbody td{padding:10px 12px; border-top:1px solid var(--line); vertical-align:top; overflow-wrap:break-word; overflow:hidden;}
   tbody tr:hover{background:#fbfaf6;}
   .table-scroll{max-height:600px; overflow-y:auto; overflow-x:hidden;}
@@ -239,7 +344,12 @@
   .days{font-size:11px; color:#8a8172; display:block; margin-top:2px;}
   .days.late{color:var(--risco-critico); font-weight:600;}
 
-  .obs-cell{}
+  .obs-cell{max-width:220px; text-align:left !important; white-space:normal;}
+  .obs-current{font-size:11.5px; color:var(--ink); line-height:1.4; margin-bottom:4px; white-space:normal;}
+  .obs-current.empty{color:var(--ink-soft); font-style:italic;}
+  .obs-meta{font-size:9.5px; color:var(--ink-soft); margin-bottom:3px;}
+  .obs-btn{font-size:10.5px; color:var(--tb-green); font-weight:700; background:none; border:none; cursor:pointer; padding:0; text-decoration:underline;}
+
   .obs-input{
     width:100%; min-height:44px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:12px;
     padding:7px 9px; border:1px solid var(--line); border-radius:6px; background:#fbfaf6; color:var(--ink);
@@ -248,6 +358,39 @@
   .obs-input:focus{outline:none; border-color:var(--tb-gold); background:#fff;}
   .obs-saved{font-size:10px; color:var(--risco-normal); margin-top:3px; opacity:0; transition:opacity .3s;}
   .obs-saved.show{opacity:1;}
+
+  /* Modal de observações (mesmo padrão visual do acompanhamento-pedidos-5k) */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(30,28,22,.45); display:none; align-items:center; justify-content:center; z-index:100;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:#fff; border-radius:14px; width:480px; max-width:92vw; max-height:82vh; display:flex; flex-direction:column;
+    box-shadow:0 10px 40px rgba(0,0,0,.2);
+  }
+  .modal-head{padding:18px 22px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;}
+  .modal-head h3{font-size:15px; color:var(--tb-green-dark); font-family:'Lora',serif;}
+  .modal-head .tbs-tag{font-size:11px; color:var(--ink-soft); margin-top:2px; font-family:'DM Sans',sans-serif;}
+  .modal-close{background:none; border:none; font-size:18px; cursor:pointer; color:var(--ink-soft);}
+  .modal-body{padding:16px 22px; overflow-y:auto; flex:1;}
+  .hist-entry{border-left:2px solid var(--tb-green); padding:6px 0 6px 12px; margin-bottom:10px;}
+  .hist-entry .txt{font-size:12.5px; color:var(--ink); line-height:1.5; white-space:pre-wrap;}
+  .hist-entry .meta{font-size:10px; color:var(--ink-soft); margin-top:3px;}
+  .hist-empty{font-size:12px; color:var(--ink-soft); font-style:italic; text-align:center; padding:20px 0;}
+  .modal-foot{padding:16px 22px; border-top:1px solid var(--line);}
+  .obs-sync-tag{font-size:10px; color:var(--ink-soft); margin-bottom:8px;}
+  .modal-foot textarea{
+    width:100%; border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-family:'DM Sans',sans-serif;
+    font-size:12.5px; resize:vertical; min-height:56px; margin-bottom:8px; box-sizing:border-box;
+  }
+  .modal-foot textarea:focus{outline:none; border-color:var(--tb-gold);}
+  .modal-foot .row{display:flex; gap:8px; align-items:center; justify-content:flex-end;}
+  .modal-foot .btn-green{
+    background:var(--tb-green); color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:12px;
+    font-weight:700; font-family:'DM Sans',sans-serif; cursor:pointer;
+  }
+  .modal-foot .btn-green:hover{filter:brightness(1.08);}
+  .modal-foot .btn-green:disabled{opacity:.5; cursor:not-allowed;}
 
   .empty-row td{text-align:center; padding:36px; color:#a39c8c; font-style:italic;}
 
@@ -374,7 +517,7 @@
     <div>
       <div class="eyebrow">CX · Tania Bulhões</div>
       <h1>Painel de Acompanhamento de Entregas</h1>
-      <div class="sub">Suba o export diário da Intelipost e o time identifica na hora quem precisa de contato proativo — atrasos, ocorrências e entregas em risco.</div>
+      <div class="sub">Acompanhe atrasos, ocorrências e entregas em risco</div>
     </div>
     <div class="topbar-meta" id="topbarMeta"></div>
   </div>
@@ -382,17 +525,18 @@
 
 <div class="wrap">
 
-  <div class="upload-zone" id="dropZone">
+  <div class="upload-zone empty" id="dropZone">
     <div class="upload-icon">⇪</div>
     <div class="upload-text">
       <b id="uploadTitle">Arraste o arquivo da Intelipost aqui</b>
       <span id="uploadSub">ou clique para selecionar o .xlsx exportado hoje</span>
-      <div class="file-meta" id="fileMeta"></div>
       <div class="file-meta" id="syncStatus" style="margin-top:2px;"></div>
     </div>
-    <button class="upload-btn" id="btnRefresh" style="background:transparent; color:var(--tb-green); border:1px solid var(--tb-green); display:none;">Atualizar agora</button>
-    <button class="upload-btn" id="btnSelect">Selecionar arquivo</button>
-    <button class="upload-btn" id="btnClear" style="background:transparent; color:var(--tb-green); border:1px solid var(--tb-green); margin-left:8px;">Limpar base salva</button>
+    <div class="upload-actions">
+      <button class="upload-btn" id="btnRefresh" style="background:transparent; color:var(--tb-green); border:1px solid var(--tb-green); display:none;">Atualizar base</button>
+      <button class="upload-btn" id="btnSelect">Selecionar arquivo</button>
+      <button class="upload-link" id="btnClear">Limpar base salva</button>
+    </div>
     <input type="file" id="fileInput" accept=".xlsx,.xls">
   </div>
 
@@ -412,64 +556,140 @@
 
     <div id="tabPainel" class="tab-content active">
 
-    <div class="kpi-row kpi-row-4col">
-      <div class="kpi crit"><div class="l">Total de NFs Críticas</div><div class="n" id="kpiCritico">0</div><div class="sub">Ação imediata</div></div>
-      <div class="kpi aten"><div class="l">NFs Atenção</div><div class="n" id="kpiAtencao">0</div><div class="sub">Monitorar</div></div>
-      <div class="kpi"><div class="l">Com observação</div><div class="n" id="kpiComObs">0</div><div class="sub" id="kpiComObsSub">% das NFs críticas</div></div>
-      <div class="kpi"><div class="l">Sem observação</div><div class="n" id="kpiSemObs">0</div><div class="sub" id="kpiSemObsSub">% das NFs críticas</div></div>
-      <div class="kpi"><div class="l">Pendente</div><div class="n" id="kpiStPendente">0</div><div class="sub" id="kpiStPendenteSub">% das NFs críticas</div></div>
-      <div class="kpi"><div class="l">Em andamento</div><div class="n" id="kpiStAndamento">0</div><div class="sub" id="kpiStAndamentoSub">% das NFs críticas</div></div>
-      <div class="kpi"><div class="l">Finalizado</div><div class="n" id="kpiStFinalizado">0</div><div class="sub" id="kpiStFinalizadoSub">% das NFs críticas</div></div>
-      <div class="kpi"><div class="l">Em devolução</div><div class="n" id="kpiStDevolucao">0</div><div class="sub" id="kpiStDevolucaoSub">% das NFs críticas</div></div>
+    <div class="kpi-section-head">
+      <div style="font-size:11px; color:#8a8172;">Os números abaixo consideram os filtros aplicados na lista de ação.</div>
+    </div>
+    <div id="kpiCardsView">
+      <div class="kv2-top">
+        <div class="kv2-card crit">
+          <div class="kv2-head"><span class="kv2-label">NFs Críticas</span><span class="kv2-badge crit">Ação imediata</span></div>
+          <div class="kv2-num" id="kpiCritico">0</div>
+          <div class="kv2-sub">Pedidos que já ultrapassaram a previsão de entrega</div>
+        </div>
+        <div class="kv2-card aten">
+          <div class="kv2-head"><span class="kv2-label">NFs Atenção</span><span class="kv2-badge aten">Monitorar</span></div>
+          <div class="kv2-num" id="kpiAtencao">0</div>
+          <div class="kv2-sub">Pedidos com até 3 dias para a previsão de entrega</div>
+        </div>
+        <div class="kv2-card kv2-quality">
+          <div class="kv2-label">Qualidade do acompanhamento</div>
+          <div class="kv2-quality-row">
+            <div class="kv2-quality-pct">
+              <span class="kv2-num" id="kpiQualityPct">0%</span>
+              <span class="kv2-quality-pct-label">com observação</span>
+              <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiQualityBar" style="width:0%;"></div></div>
+            </div>
+            <div class="kv2-quality-breakdown">
+              <div class="kv2-quality-item"><span>Com observação</span><b id="kpiComObs">0</b></div>
+              <div class="kv2-quality-item"><span>Sem observação</span><b id="kpiSemObs">0</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kv2-section-head">
+        <h3>Status das tratativas</h3>
+        <span id="kpiTotalCriticas">0 registros no recorte</span>
+      </div>
+      <div class="kv2-status-row">
+        <div class="kv2-status-card" style="--accent:#8a6d31;">
+          <div class="kv2-label">Pendente</div>
+          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStPendente">0</span><span class="kv2-pct" id="kpiStPendentePct">0%</span></div>
+          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStPendenteBar" style="width:0%; background:#8a6d31;"></div></div>
+          <div class="kv2-sub">Ainda sem conclusão da tratativa</div>
+        </div>
+        <div class="kv2-status-card" style="--accent:#5C7A8A;">
+          <div class="kv2-label">Em andamento</div>
+          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStAndamento">0</span><span class="kv2-pct" id="kpiStAndamentoPct">0%</span></div>
+          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStAndamentoBar" style="width:0%; background:#5C7A8A;"></div></div>
+          <div class="kv2-sub">Casos já em acompanhamento</div>
+        </div>
+        <div class="kv2-status-card" style="--accent:var(--tb-green);">
+          <div class="kv2-label">Finalizado</div>
+          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStFinalizado">0</span><span class="kv2-pct" id="kpiStFinalizadoPct">0%</span></div>
+          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStFinalizadoBar" style="width:0%; background:var(--tb-green);"></div></div>
+          <div class="kv2-sub">Tratativas concluídas no recorte</div>
+        </div>
+        <div class="kv2-status-card" style="--accent:var(--risco-critico);">
+          <div class="kv2-label">Em devolução</div>
+          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStDevolucao">0</span><span class="kv2-pct" id="kpiStDevolucaoPct">0%</span></div>
+          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStDevolucaoBar" style="width:0%; background:var(--risco-critico);"></div></div>
+          <div class="kv2-sub">Pedidos em fluxo de devolução</div>
+        </div>
+      </div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
         <div>
-          <h2>Lista de ação — quem contatar hoje</h2>
-          <div class="desc">Ordenada por nível de risco. Crítico = já passou da previsão de entrega e ainda não foi entregue. Atenção = faltam até 3 dias para a previsão de entrega e ainda não foi entregue.</div>
+          <h2>Entregas para acompanhamento</h2>
+          <div class="desc" id="rowCount"></div>
         </div>
         <div style="display:flex; gap:8px;">
-          <button class="btn-sec" id="btnCopy">Copiar lista para comunicação</button>
-          <button class="btn-sec" id="btnCsv">Exportar CSV filtrado</button>
+          <button class="btn-sec" id="btnCopy" title="Copiar lista para comunicação">Copiar lista</button>
+          <button class="btn-sec" id="btnCsv" title="Exportar CSV filtrado">Exportar CSV</button>
         </div>
       </div>
       <div class="controls">
-        <div class="pill-toggle" id="riskFilter">
-          <div class="pill active" data-risk="all">Todos</div>
-          <div class="pill" data-risk="critico">Crítico</div>
-          <div class="pill" data-risk="atencao">Atenção</div>
-          <div class="pill" data-risk="normal">Em trânsito</div>
-          <div class="pill" data-risk="entregue">Entregues</div>
+        <div class="f-group">
+          <label>Buscar</label>
+          <input type="text" id="searchBox" placeholder="Nota fiscal, cliente ou observação">
         </div>
-        <input type="text" id="searchBox" placeholder="Buscar por nota fiscal ou nome...">
-        <div class="ms-dropdown" id="transpFilterWrap">
-          <button type="button" class="ms-dropdown-btn" id="transpFilterBtn">Transportadora (todas)</button>
-          <div class="ms-dropdown-panel" id="transpFilterPanel">
-            <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+        <div class="f-group">
+          <label>Nível</label>
+          <select id="riskFilter">
+            <option value="all">Todos</option>
+            <option value="critico">Crítico</option>
+            <option value="atencao">Atenção</option>
+            <option value="normal">Em trânsito</option>
+            <option value="entregue">Entregues</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label>Atraso</label>
+          <select id="diasAtrasoFilter">
+            <option value="">Todos</option>
+            <option value="1">A partir de 1 dia</option>
+            <option value="3">A partir de 3 dias</option>
+            <option value="7">A partir de 7 dias</option>
+            <option value="15">A partir de 15 dias</option>
+            <option value="30">A partir de 30 dias</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label>Transportadora</label>
+          <div class="ms-dropdown" id="transpFilterWrap">
+            <button type="button" class="ms-dropdown-btn" id="transpFilterBtn">Todas</button>
+            <div class="ms-dropdown-panel" id="transpFilterPanel">
+              <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+            </div>
           </div>
         </div>
-        <div class="ms-dropdown" id="obsFilterWrap">
-          <button type="button" class="ms-dropdown-btn" id="obsFilterBtn">Observação (todas)</button>
-          <div class="ms-dropdown-panel" id="obsFilterPanel">
-            <label><input type="checkbox" value="com"> Com observação</label>
-            <label><input type="checkbox" value="sem"> Sem observação</label>
-            <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+        <div class="f-group">
+          <label>Observação</label>
+          <div class="ms-dropdown" id="obsFilterWrap">
+            <button type="button" class="ms-dropdown-btn" id="obsFilterBtn">Todas</button>
+            <div class="ms-dropdown-panel" id="obsFilterPanel">
+              <label><input type="checkbox" value="com"> Com observação</label>
+              <label><input type="checkbox" value="sem"> Sem observação</label>
+              <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+            </div>
           </div>
         </div>
-        <div class="ms-dropdown" id="statusCxFilterWrap">
-          <button type="button" class="ms-dropdown-btn" id="statusCxFilterBtn">Status CX (todos)</button>
-          <div class="ms-dropdown-panel" id="statusCxFilterPanel">
-            <label><input type="checkbox" value="pendente"> Pendente</label>
-            <label><input type="checkbox" value="andamento"> Em andamento</label>
-            <label><input type="checkbox" value="finalizado"> Finalizado</label>
-            <label><input type="checkbox" value="devolucao"> Em devolução</label>
-            <label><input type="checkbox" value="__sem"> Sem status</label>
-            <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+        <div class="f-group">
+          <label>Status CX</label>
+          <div class="ms-dropdown" id="statusCxFilterWrap">
+            <button type="button" class="ms-dropdown-btn" id="statusCxFilterBtn">Todos</button>
+            <div class="ms-dropdown-panel" id="statusCxFilterPanel">
+              <label><input type="checkbox" value="pendente"> Pendente</label>
+              <label><input type="checkbox" value="andamento"> Em andamento</label>
+              <label><input type="checkbox" value="finalizado"> Finalizado</label>
+              <label><input type="checkbox" value="devolucao"> Em devolução</label>
+              <label><input type="checkbox" value="__sem"> Sem status</label>
+              <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+            </div>
           </div>
         </div>
-        <div class="spacer"></div>
-        <span style="font-size:11.5px; color:#8a8172;" id="rowCount"></span>
       </div>
       <div class="table-scroll">
         <table>
@@ -516,7 +736,7 @@
         </div>
         <div class="kpi-row" style="margin:22px 22px 0; width:auto;">
           <div class="kpi crit"><div class="l">NFs com problema</div><div class="n" id="indTotalProblemas">0</div><div class="sub">Crítico</div></div>
-          <div class="kpi"><div class="l">Acompanhamento em dia</div><div class="n" id="indTaxaEmDia" style="color:#3d6b52;">0%</div><div class="sub" id="indTaxaEmDiaSub">NFs críticas com contato há até 1 dia</div></div>
+          <div class="kpi"><div class="l">Acompanhamento em dia</div><div class="n" id="indTaxaEmDia" style="color:#2C4F3A;">0%</div><div class="sub" id="indTaxaEmDiaSub">NFs críticas com contato há até 1 dia</div></div>
           <div class="kpi crit"><div class="l">Nunca comentadas</div><div class="n" id="indSemObs">0</div><div class="sub" id="indSemObsSub">Sobre NFs críticas</div></div>
           <div class="kpi aten"><div class="l">Paradas há +1 dia</div><div class="n" id="indParados">0</div><div class="sub" id="indParadosSub">Já comentadas, sem atualização recente</div></div>
           <div class="kpi aten"><div class="l">Tempo médio de atraso</div><div class="n" id="indTempoMedio">—</div><div class="sub">Dias, entre as NFs críticas</div></div>
@@ -563,6 +783,27 @@
   <footer>Painel gerado a partir do export Intelipost · quando a base compartilhada está configurada, os dados ficam numa planilha do Google acessível apenas ao time.</footer>
 </div>
 
+<!-- MODAL OBSERVAÇÕES -->
+<div class="modal-overlay" id="obsModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Histórico de observações</h3>
+        <div class="tbs-tag" id="modalNfTag"></div>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <div class="obs-sync-tag" id="obsSyncTag"></div>
+      <textarea id="obsInput" placeholder="Registrar novo contato / observação sobre esta NF..."></textarea>
+      <div class="row">
+        <button class="btn-green" id="btnAddObs">Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    CONFIGURAÇÃO DA BASE COMPARTILHADA
@@ -578,7 +819,7 @@ const CONFIG = {
 };
 const SHARED_MODE = !!CONFIG.API_URL;
 
-const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], obsFilter:[], statusFilter:[], obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
+const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], obsFilter:[], statusFilter:[], diasAtrasoMin:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
 const TABLE_PAGE_SIZE = 60;
 
 const STATUS_CX = {
@@ -647,19 +888,19 @@ function initMultiSelectFilter(prefix, opts){
 document.addEventListener('click', ()=> document.querySelectorAll('.ms-dropdown.open').forEach(w=>w.classList.remove('open')));
 
 const transpMs = initMultiSelectFilter('transpFilter', {
-  labelAll: 'Transportadora (todas)', labelPrefix: 'Transportadora',
+  labelAll: 'Todas', labelPrefix: 'Transportadora',
   labelFor: v=>v,
   getSelected: ()=>state.transp, setSelected: v=>{ state.transp = v; },
   onChange: ()=>applyFilters(),
 });
 const obsMs = initMultiSelectFilter('obsFilter', {
-  labelAll: 'Observação (todas)', labelPrefix: 'Observação',
+  labelAll: 'Todas', labelPrefix: 'Observação',
   labelFor: v=> v==='com' ? 'Com observação' : 'Sem observação',
   getSelected: ()=>state.obsFilter, setSelected: v=>{ state.obsFilter = v; },
   onChange: ()=>applyFilters(),
 });
 const statusCxMs = initMultiSelectFilter('statusCxFilter', {
-  labelAll: 'Status CX (todos)', labelPrefix: 'Status CX',
+  labelAll: 'Todos', labelPrefix: 'Status CX',
   labelFor: v=> STATUS_FILTER_LABELS[v],
   getSelected: ()=>state.statusFilter, setSelected: v=>{ state.statusFilter = v; },
   onChange: ()=>applyFilters(),
@@ -943,9 +1184,10 @@ function renderDataset(rows, meta){
   rows = rows.map(r=>({...r, risk: recomputeRisk(r)}));
   state.rows = rows;
 
-  document.getElementById('uploadTitle').textContent = 'Base carregada: ' + meta.filename;
-  document.getElementById('uploadSub').textContent = 'Clique ou arraste um novo arquivo para atualizar';
-  document.getElementById('fileMeta').textContent = rows.length + ' notas fiscais · atualizado em ' + new Date(meta.uploadedAt).toLocaleString('pt-BR');
+  document.getElementById('dropZone').classList.remove('empty');
+  document.getElementById('uploadTitle').textContent = meta.filename;
+  const updDate = new Date(meta.uploadedAt);
+  document.getElementById('uploadSub').textContent = fmtNum(rows.length) + ' notas fiscais · sincronizado às ' + updDate.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
 
   document.getElementById('emptyState').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
@@ -958,7 +1200,6 @@ function renderDataset(rows, meta){
   checkNewCritical(rows);
   populateTransportFilter(rows);
   populateMonthFilter(rows);
-  renderKPIs(rows);
   renderIndicadores(rows);
   applyFilters();
 }
@@ -1074,7 +1315,7 @@ function riskLabelShort(risk){
   return risk;
 }
 
-const DONUT_PALETTE = ['#2c4f3a','#b89a5e','#a8412f','#2f5c8a','#6b4c7a','#3d6b52','#8a6d3f','#7b7368'];
+const DONUT_PALETTE = ['#2C4F3A','#B89A5E','#7A3B3B','#5C7A8A','#6b4c7a','#669156','#8a6d31','#9B9B90'];
 
 function renderDonutGeneric(container, entries, opts){
   opts = opts || {};
@@ -1173,7 +1414,7 @@ function renderIndicadores(allRows){
   document.getElementById('indParadosSub').textContent = totalCriticas ? Math.round((paradosCount/totalCriticas)*100)+'% das NFs críticas' : 'Já comentadas, sem atualização recente';
   const taxaEl = document.getElementById('indTaxaEmDia');
   taxaEl.textContent = totalCriticas ? taxaEmDia+'%' : '—';
-  taxaEl.style.color = totalCriticas === 0 ? '#4c6e58' : (taxaEmDia >= 90 ? '#3d6b52' : (taxaEmDia >= 70 ? '#b8862f' : '#a8412f'));
+  taxaEl.style.color = totalCriticas === 0 ? '#2C4F3A' : (taxaEmDia >= 90 ? '#2C4F3A' : (taxaEmDia >= 70 ? '#8a6d31' : '#7A3B3B'));
   document.getElementById('indTaxaEmDiaSub').textContent = totalCriticas ? fmtNum(emDiaCount)+' de '+fmtNum(totalCriticas)+' NFs críticas' : 'NFs críticas com contato há até 1 dia';
   document.getElementById('indTempoMedio').textContent = tempoMedioAtraso===null ? '—' : tempoMedioAtraso.toFixed(1).replace('.', ',');
 
@@ -1181,9 +1422,9 @@ function renderIndicadores(allRows){
   const agingEl = document.getElementById('indAgingDonut');
   renderDonutGeneric(agingEl,
     [
-      {label:'Nunca comentada', count: semObsCount, color:'#a8412f'},
-      {label:'Parada há +1 dia', count: paradosCount, color:'#b8862f'},
-      {label:'Em dia (≤1 dia)', count: emDiaCount, color:'#3d6b52'}
+      {label:'Nunca comentada', count: semObsCount, color:'#7A3B3B'},
+      {label:'Parada há +1 dia', count: paradosCount, color:'#8a6d31'},
+      {label:'Em dia (≤1 dia)', count: emDiaCount, color:'#2C4F3A'}
     ].filter(e=>e.count>0),
     {centerLabel:'NFs críticas', emptyMsg:'Nenhuma NF crítica no filtro selecionado.'});
 
@@ -1244,7 +1485,7 @@ function renderIndicadores(allRows){
 
   // --- Casos por Status CX (donut, base = apenas NFs Crítico) ---
   const statusOrder = ['pendente','andamento','finalizado','devolucao','__sem'];
-  const statusColors = {pendente:'#b8862f', andamento:'#2f5c8a', finalizado:'#3d6b52', devolucao:'#a8412f', __sem:'#a39c8c'};
+  const statusColors = {pendente:'#8a6d31', andamento:'#5C7A8A', finalizado:'#2C4F3A', devolucao:'#7A3B3B', __sem:'#9B9B90'};
   const statusCount = {pendente:0, andamento:0, finalizado:0, devolucao:0, __sem:0};
   criticalRows.forEach(r=>{
     const s = getStatusCx(r.nf);
@@ -1401,20 +1642,51 @@ function renderKPIs(rows){
 
   const pct = n => totalCriticas ? Math.round((n/totalCriticas)*100) + '% das NFs críticas' : '% das NFs críticas';
 
-  document.getElementById('kpiCritico').textContent = fmtNum(critico);
-  document.getElementById('kpiAtencao').textContent = fmtNum(atencao);
-  document.getElementById('kpiComObs').textContent = fmtNum(comObs);
-  document.getElementById('kpiSemObs').textContent = fmtNum(semObs);
-  document.getElementById('kpiComObsSub').textContent = pct(comObs);
-  document.getElementById('kpiSemObsSub').textContent = pct(semObs);
-  document.getElementById('kpiStPendente').textContent = fmtNum(statusCount.pendente);
-  document.getElementById('kpiStAndamento').textContent = fmtNum(statusCount.andamento);
-  document.getElementById('kpiStFinalizado').textContent = fmtNum(statusCount.finalizado);
-  document.getElementById('kpiStDevolucao').textContent = fmtNum(statusCount.devolucao);
-  document.getElementById('kpiStPendenteSub').textContent = pct(statusCount.pendente);
-  document.getElementById('kpiStAndamentoSub').textContent = pct(statusCount.andamento);
-  document.getElementById('kpiStFinalizadoSub').textContent = pct(statusCount.finalizado);
-  document.getElementById('kpiStDevolucaoSub').textContent = pct(statusCount.devolucao);
+  // Atualiza os dois modos de visualização (cards e lista) com os mesmos valores —
+  // cada id tem uma versão "_list" espelhada na tabela compacta.
+  const setKpi = (id, text) => {
+    const a = document.getElementById(id);
+    if(a) a.textContent = text;
+    const b = document.getElementById(id + '_list');
+    if(b) b.textContent = text;
+  };
+
+  setKpi('kpiCritico', fmtNum(critico));
+  setKpi('kpiAtencao', fmtNum(atencao));
+  setKpi('kpiComObs', fmtNum(comObs));
+  setKpi('kpiSemObs', fmtNum(semObs));
+  setKpi('kpiComObsSub', pct(comObs));
+  setKpi('kpiSemObsSub', pct(semObs));
+  setKpi('kpiStPendente', fmtNum(statusCount.pendente));
+  setKpi('kpiStAndamento', fmtNum(statusCount.andamento));
+  setKpi('kpiStFinalizado', fmtNum(statusCount.finalizado));
+  setKpi('kpiStDevolucao', fmtNum(statusCount.devolucao));
+  setKpi('kpiStPendenteSub', pct(statusCount.pendente));
+  setKpi('kpiStAndamentoSub', pct(statusCount.andamento));
+  setKpi('kpiStFinalizadoSub', pct(statusCount.finalizado));
+  setKpi('kpiStDevolucaoSub', pct(statusCount.devolucao));
+
+  // Elementos exclusivos do card "estilo imagem 2" (percentual, barra de progresso, contagem do recorte)
+  const pctNum = n => totalCriticas ? Math.round((n/totalCriticas)*100) : 0;
+  const qualityPct = pctNum(comObs);
+  const setBar = (barId, pctVal) => { const el = document.getElementById(barId); if(el) el.style.width = pctVal + '%'; };
+  const setPctText = (id, pctVal) => { const el = document.getElementById(id); if(el) el.textContent = pctVal + '%'; };
+
+  const qualityPctEl = document.getElementById('kpiQualityPct');
+  if(qualityPctEl) qualityPctEl.textContent = qualityPct + '%';
+  setBar('kpiQualityBar', qualityPct);
+
+  const totalCriticasEl = document.getElementById('kpiTotalCriticas');
+  if(totalCriticasEl) totalCriticasEl.textContent = fmtNum(totalCriticas) + (totalCriticas===1 ? ' registro no recorte' : ' registros no recorte');
+
+  setPctText('kpiStPendentePct', pctNum(statusCount.pendente));
+  setPctText('kpiStAndamentoPct', pctNum(statusCount.andamento));
+  setPctText('kpiStFinalizadoPct', pctNum(statusCount.finalizado));
+  setPctText('kpiStDevolucaoPct', pctNum(statusCount.devolucao));
+  setBar('kpiStPendenteBar', pctNum(statusCount.pendente));
+  setBar('kpiStAndamentoBar', pctNum(statusCount.andamento));
+  setBar('kpiStFinalizadoBar', pctNum(statusCount.finalizado));
+  setBar('kpiStDevolucaoBar', pctNum(statusCount.devolucao));
 }
 
 function showCriticalAlert(novos, sourceLabel){
@@ -1440,16 +1712,16 @@ function checkNewCritical(rows){
   localStorage.setItem('tb_cx_entregas_snapshot', JSON.stringify({date:todayKey, critical:criticalNow}));
 }
 
-document.getElementById('riskFilter').addEventListener('click', e=>{
-  const pill = e.target.closest('.pill');
-  if(!pill) return;
-  [...document.querySelectorAll('#riskFilter .pill')].forEach(p=>p.classList.remove('active'));
-  pill.classList.add('active');
-  state.risk = pill.dataset.risk;
+document.getElementById('riskFilter').addEventListener('change', e=>{
+  state.risk = e.target.value;
   applyFilters();
 });
 document.getElementById('searchBox').addEventListener('input', e=>{
   state.search = e.target.value.trim().toLowerCase();
+  applyFilters();
+});
+document.getElementById('diasAtrasoFilter').addEventListener('change', e=>{
+  state.diasAtrasoMin = e.target.value;
   applyFilters();
 });
 document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -1480,6 +1752,25 @@ document.querySelectorAll('thead th[data-sort]').forEach(th=>{
   });
 });
 
+function calcDiasAtraso(r){
+  // Mesma lógica usada no render da coluna Previsão: dias em atraso até hoje
+  // (não entregue) ou dias de atraso na entrega efetiva (entregue).
+  const isEntregue = (r.risk === 'entregue' || r.risk === 'entregue-atraso');
+  if(isEntregue){
+    const dataEntregaEfetiva = r.dataEntrega || r.atualizado;
+    if(!r.previsao || !dataEntregaEfetiva) return null;
+    const p = new Date(r.previsao); p.setHours(0,0,0,0);
+    const e = new Date(dataEntregaEfetiva); e.setHours(0,0,0,0);
+    const diff = Math.round((e-p)/86400000);
+    return diff > 0 ? diff : 0;
+  }
+  if(!r.previsao) return null;
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const p = new Date(r.previsao); p.setHours(0,0,0,0);
+  const diff = Math.round((hoje-p)/86400000);
+  return diff > 0 ? diff : 0;
+}
+
 function applyFilters(){
   let rows = state.rows;
   if(state.risk !== 'all'){
@@ -1495,9 +1786,18 @@ function applyFilters(){
   });
   if(state.obsFilter.length){
     rows = rows.filter(r=>{
-      const hasObs = !!getObs(r.nf).trim();
+      const hasObs = !!getObsLatestText(r.nf).trim();
       return state.obsFilter.some(f=> f==='com' ? hasObs : !hasObs);
     });
+  }
+  if(state.diasAtrasoMin !== null && state.diasAtrasoMin !== ''){
+    const min = Number(state.diasAtrasoMin);
+    if(!isNaN(min)){
+      rows = rows.filter(r=>{
+        const d = calcDiasAtraso(r);
+        return d !== null && d >= min;
+      });
+    }
   }
   if(state.statusFilter.length){
     rows = rows.filter(r=>{
@@ -1526,7 +1826,8 @@ function applyFilters(){
 
   state.filtered = rows;
   state.page = 1;
-  document.getElementById('rowCount').textContent = rows.length + ' registro(s)';
+  document.getElementById('rowCount').textContent = fmtNum(rows.length) + ' registro' + (rows.length===1?'':'s') + ' exibido' + (rows.length===1?'':'s');
+  renderKPIs(rows);
   renderTablePage();
 }
 
@@ -1589,7 +1890,7 @@ function renderTable(rows){
       else if(diff===0) daysHtml = `<span class="days late">Vence hoje</span>`;
       else daysHtml = `<span class="days">em ${diff} dia(s)</span>`;
     }
-    const obs = getObs(r.nf);
+    const latest = getObsLatest(r.nf);
     const statusCx = getStatusCx(r.nf);
     const statusCls = statusCx && STATUS_CX[statusCx] ? STATUS_CX[statusCx].cls : '';
     const statusOptions = ['<option value="">— Selecionar —</option>'].concat(
@@ -1605,8 +1906,9 @@ function renderTable(rows){
       <td>${escapeHtml(r.status) || '—'}</td>
       <td><span class="msg">${escapeHtml(r.msg) || escapeHtml(r.ocorrenciaMacro) || '—'}</span></td>
       <td class="obs-cell">
-        <textarea class="obs-input" data-nf="${escapeHtml(r.nf)}" placeholder="Ex: cliente avisado por WhatsApp em 07/07...">${escapeHtml(obs)}</textarea>
-        <div class="obs-saved">Salvo ✓</div>
+        <div class="obs-current ${latest?'':'empty'}">${latest ? escapeHtml(latest.texto) : 'Sem observações registradas'}</div>
+        ${latest && latest.data ? `<div class="obs-meta">${new Date(latest.data).toLocaleString('pt-BR')}</div>` : ''}
+        <button class="obs-btn" data-obs="${escapeHtml(r.nf)}">Ver histórico / adicionar</button>
       </td>
       <td class="obs-cell">
         <select class="status-select ${statusCls}" data-nf="${escapeHtml(r.nf)}">${statusOptions}</select>
@@ -1693,26 +1995,82 @@ async function saveStatusCx(nf, status, text){
   }
 }
 
-document.getElementById('tableBody').addEventListener('input', e=>{
-  if(!e.target.classList.contains('obs-input')) return;
-  const nf = e.target.dataset.nf;
-  const badge = e.target.parentElement.querySelector('.obs-saved');
-  clearTimeout(e.target._saveTimer);
-  badge.textContent = 'Salvando...';
-  badge.style.color = '#8a8172';
-  badge.classList.add('show');
-  e.target._saveTimer = setTimeout(async ()=>{
-    const ok = await saveObs(nf, e.target.value);
-    badge.textContent = ok ? 'Salvo ✓' : 'Falha ao salvar — tentando de novo ao sair do campo';
-    badge.style.color = ok ? 'var(--risco-normal)' : 'var(--risco-critico)';
-    if(ok) setTimeout(()=>badge.classList.remove('show'), 1200);
-  }, 500);
+/* ============ HISTÓRICO DE OBSERVAÇÕES ============
+   O backend/planilha compartilhada guarda um único campo de texto por NF
+   (mesmo formato de sempre). Para ter histórico com várias entradas — como
+   no painel-pedidos-alto-valor.html — cada entrada nova é serializada como
+   um array JSON [{texto, data}, ...] dentro desse mesmo campo de texto.
+   Observações antigas (texto simples, de antes dessa mudança) continuam
+   funcionando: são tratadas como uma única entrada do histórico. */
+function getObsHistory(nf){
+  const raw = getObs(nf);
+  if(!raw) return [];
+  try{
+    const parsed = JSON.parse(raw);
+    if(Array.isArray(parsed)) return parsed;
+  }catch(e){ /* observação antiga em texto simples */ }
+  const updatedAt = getObsUpdatedAt(nf);
+  return [{ texto: raw, data: updatedAt ? updatedAt.toISOString() : null }];
+}
+function getObsLatest(nf){
+  const hist = getObsHistory(nf);
+  return hist.length ? hist[0] : null;
+}
+function getObsLatestText(nf){
+  const latest = getObsLatest(nf);
+  return latest ? latest.texto : '';
+}
+async function addObsEntry(nf, texto){
+  const hist = getObsHistory(nf);
+  hist.unshift({ texto, data: new Date().toISOString() });
+  return saveObs(nf, JSON.stringify(hist));
+}
+
+/* ============ MODAL OBSERVAÇÕES ============ */
+let currentModalNf = null;
+function openObsModal(nf){
+  currentModalNf = nf;
+  document.getElementById('modalNfTag').textContent = 'NF ' + nf;
+  document.getElementById('obsInput').value = '';
+  const tag = document.getElementById('obsSyncTag');
+  tag.textContent = SHARED_MODE
+    ? 'Observações compartilhadas com o time (planilha central).'
+    : 'Observações salvas apenas neste navegador — backend não configurado.';
+  renderModalHistory();
+  document.getElementById('obsModal').classList.add('open');
+}
+function renderModalHistory(){
+  const hist = getObsHistory(currentModalNf);
+  const body = document.getElementById('modalBody');
+  if(!hist.length){
+    body.innerHTML = `<div class="hist-empty">Nenhuma observação registrada ainda para esta NF.</div>`;
+    return;
+  }
+  body.innerHTML = hist.map(o=>`
+    <div class="hist-entry">
+      <div class="txt">${escapeHtml(o.texto)}</div>
+      <div class="meta">${o.data ? new Date(o.data).toLocaleString('pt-BR') : ''}</div>
+    </div>`).join('');
+}
+document.getElementById('modalClose').addEventListener('click', ()=> document.getElementById('obsModal').classList.remove('open'));
+document.getElementById('obsModal').addEventListener('click', e=>{ if(e.target.id==='obsModal') document.getElementById('obsModal').classList.remove('open'); });
+document.getElementById('btnAddObs').addEventListener('click', async ()=>{
+  const texto = document.getElementById('obsInput').value.trim();
+  if(!texto || !currentModalNf) return;
+  const btn = document.getElementById('btnAddObs');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  await addObsEntry(currentModalNf, texto);
+  btn.disabled = false; btn.textContent = 'Adicionar';
+  document.getElementById('obsInput').value = '';
+  renderModalHistory();
+  applyFilters();
 });
-document.getElementById('tableBody').addEventListener('blur', e=>{
-  if(!e.target.classList.contains('obs-input')) return;
-  clearTimeout(e.target._saveTimer);
-  saveObs(e.target.dataset.nf, e.target.value);
-}, true);
+
+document.getElementById('tableBody').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-obs]');
+  if(!btn) return;
+  openObsModal(btn.dataset.obs);
+});
 
 document.getElementById('tableBody').addEventListener('change', async e=>{
   if(!e.target.classList.contains('status-select')) return;
@@ -1734,7 +2092,7 @@ document.getElementById('btnCopy').addEventListener('click', ()=>{
   const critAten = state.filtered.filter(r=>r.risk==='critico'||r.risk==='atencao');
   const list = critAten.length ? critAten : state.filtered;
   const text = list.map(r=>{
-    const obs = getObs(r.nf);
+    const obs = getObsLatestText(r.nf);
     return `NF ${r.nf} | ${r.dest||'Cliente'} | Previsão: ${fmtDate(r.previsao)} | ${r.situacao} — ${r.status}${r.msg?(' | '+r.msg):''}${obs?(' | Obs: '+obs):''}`;
   }).join('\n');
   navigator.clipboard.writeText(text).then(()=>{
@@ -1751,7 +2109,7 @@ document.getElementById('btnCsv').addEventListener('click', ()=>{
   const csvRows = [headers.join(';')].concat(rows.map(r=>{
     const statusCx = getStatusCx(r.nf);
     return [
-      riskMeta[r.risk].label, r.nf, r.dest, r.cidade, r.uf, r.transp, fmtDate(r.previsao), r.situacao, r.status, fmtDateTime(r.atualizado), (r.msg||'').replace(/;/g,',').replace(/\n/g,' '), (getObs(r.nf)||'').replace(/;/g,',').replace(/\n/g,' '), (statusCx && STATUS_CX[statusCx] ? STATUS_CX[statusCx].label : '')
+      riskMeta[r.risk].label, r.nf, r.dest, r.cidade, r.uf, r.transp, fmtDate(r.previsao), r.situacao, r.status, fmtDateTime(r.atualizado), (r.msg||'').replace(/;/g,',').replace(/\n/g,' '), (getObsLatestText(r.nf)||'').replace(/;/g,',').replace(/\n/g,' '), (statusCx && STATUS_CX[statusCx] ? STATUS_CX[statusCx].label : '')
     ].join(';');
   }));
   const blob = new Blob(['\ufeff'+csvRows.join('\n')], {type:'text/csv;charset=utf-8;'});
