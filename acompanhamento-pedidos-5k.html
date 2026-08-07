@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos de Alto Valor · TB CX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --green-dark:#2C4F3A;
+    --green:#669156;
+    --gold:#B89A5E;
+    --wine:#7A3B3B;
+    --oxido:#3D3F39;
+    --ink:#2b2b28;
+    --ink-soft:#8D8D84;
+    --paper:#FBFAF7;
+    --card:#FFFFFF;
+    --line:#E7E4DC;
+    --blue-soft:#5C7A8A;
+    --gray-soft:#9B9B90;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;}
+  h1,h2,h3{font-family:'Lora',serif;font-weight:600;margin:0;}
+  .topbar{
+    background:var(--green-dark);color:#fff;padding:16px 28px;
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    position:sticky;top:0;z-index:50;
+  }
+  .topbar h1{font-size:19px;color:#fff;letter-spacing:.2px;}
+  .topbar .sub{font-size:11.5px;color:#D9CFAF;margin-top:2px;font-weight:500;}
+  .topbar-right{display:flex;align-items:center;gap:14px;}
+  .updated-tag{font-size:11px;color:#CFE0D2;background:rgba(255,255,255,.08);padding:5px 10px;border-radius:20px;}
+  .btn{
+    border:none;border-radius:8px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-weight:600;
+    font-size:12.5px;cursor:pointer;transition:.15s;letter-spacing:.2px;
+  }
+  .btn-gold{background:var(--gold);color:#2b2417;}
+  .btn-gold:hover{background:#a9895075;filter:brightness(0.95);}
+  .btn-outline{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;}
+  .btn-outline:hover{background:rgba(255,255,255,.1);}
+  .btn-green{background:var(--green);color:#fff;}
+  .btn-green:hover{filter:brightness(1.08);}
+  .btn-ghost{background:var(--line);color:var(--ink);}
+  .btn-ghost:hover{background:#ddd8cb;}
+  .btn-sm{padding:6px 11px;font-size:11.5px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  .wrap{max-width:1400px;margin:0 auto;padding:26px 28px 60px;}
+
+  /* Upload */
+  .upload-card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:32px;max-width:900px;margin:20px auto 0;box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .upload-card h2{font-size:20px;color:var(--green-dark);margin-bottom:6px;}
+  .upload-card p.desc{color:var(--ink-soft);font-size:13px;margin:0 0 24px;line-height:1.5;}
+  .upload-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .slot{
+    border:1.5px dashed var(--line);border-radius:10px;padding:18px 14px;text-align:center;
+    transition:.15s;background:#FDFCFA;
+  }
+  .slot.filled{border-style:solid;border-color:var(--green);background:#F2F7EF;}
+  .slot.dragover{border-style:solid;border-color:var(--gold);background:#FBF6EA;}
+  .slot .num{
+    display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;
+    background:var(--green-dark);color:#fff;font-size:11px;font-weight:700;margin-bottom:10px;font-family:'Lora',serif;
+  }
+  .slot h4{font-size:13px;margin:0 0 4px;color:var(--ink);}
+  .slot .hint{font-size:11px;color:var(--ink-soft);margin-bottom:12px;line-height:1.4;}
+  .slot input[type=file]{display:none;}
+  .slot label.pick{
+    display:inline-block;background:var(--line);color:var(--ink);padding:6px 12px;border-radius:6px;
+    font-size:11.5px;font-weight:600;cursor:pointer;
+  }
+  .slot.filled label.pick{background:var(--green);color:#fff;}
+  .slot .fname{font-size:10.5px;color:var(--green-dark);margin-top:8px;word-break:break-all;font-weight:600;}
+  .upload-actions{display:flex;justify-content:center;margin-top:26px;}
+  .upload-msg{text-align:center;font-size:12px;color:var(--wine);margin-top:14px;min-height:16px;}
+
+  /* KPIs */
+  .kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:22px;}
+  .kpi{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03);
+  }
+  .kpi .val{font-family:'Lora',serif;font-weight:500;font-size:25px;color:var(--green-dark);}
+  .kpi .val.wine{color:var(--wine);}
+  .kpi .val.gold{color:#93783f;}
+  .kpi .label{font-size:11px;color:var(--ink);font-weight:600;margin-top:4px;}
+  .kpi .sub{font-size:10px;color:var(--ink-soft);margin-top:1px;}
+
+  /* Filters */
+  .filters{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+    display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;margin-bottom:16px;
+  }
+  .f-group{display:flex;flex-direction:column;gap:5px;}
+  .f-group label{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-soft);font-weight:700;}
+  .f-group input[type=text],.f-group input[type=date],.f-group input[type=number]{
+    border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-size:12px;font-family:'DM Sans',sans-serif;
+    color:var(--ink);width:135px;
+  }
+  .f-group input[type=text]{width:190px;}
+  .dropdown-filter{position:relative;}
+  .dropdown-btn{
+    border:1px solid var(--line);border-radius:6px;padding:7px 12px;font-size:12px;font-family:'DM Sans',sans-serif;
+    color:var(--ink);width:180px;text-align:left;background:#fff;cursor:pointer;position:relative;
+  }
+  .dropdown-btn::after{content:'▾';position:absolute;right:10px;color:var(--ink-soft);font-size:10px;}
+  .dropdown-btn.has-selection{border-color:var(--green);color:var(--green-dark);font-weight:600;}
+  .dropdown-panel{
+    display:none;position:absolute;top:calc(100% + 6px);left:0;background:#fff;border:1px solid var(--line);
+    border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.1);padding:10px;width:230px;z-index:30;
+  }
+  .dropdown-panel.open{display:block;}
+  .dropdown-list{display:flex;flex-direction:column;gap:2px;max-height:260px;overflow-y:auto;}
+  .dropdown-list label{
+    display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink);padding:6px 6px;border-radius:6px;
+    cursor:pointer;font-weight:500;text-transform:none;letter-spacing:0;
+  }
+  .dropdown-list label:hover{background:#F5F3EC;}
+  .dropdown-list input[type=checkbox]{accent-color:var(--green-dark);width:14px;height:14px;}
+  .dropdown-actions{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:8px;padding-top:8px;}
+  .dropdown-actions button{
+    background:none;border:none;font-size:10.5px;font-weight:700;color:var(--green);cursor:pointer;padding:0;
+  }
+  .dropdown-actions button:last-child{color:var(--wine);}
+  .f-clear{font-size:11px;color:var(--wine);cursor:pointer;text-decoration:underline;font-weight:600;background:none;border:none;}
+
+  /* Table */
+  .table-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .table-scroll{overflow-x:auto;max-height:640px;overflow-y:auto;}
+  table{border-collapse:collapse;width:100%;min-width:1180px;font-size:12px;}
+  thead th{
+    position:sticky;top:0;background:var(--green-dark);color:#EFE9D8;text-align:center;padding:10px 12px;
+    font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:700;white-space:nowrap;z-index:2;
+  }
+  thead th.sortable{cursor:pointer;user-select:none;}
+  thead th.sortable:hover{background:#385942;}
+  .sort-ind{display:inline-block;width:9px;font-size:9px;color:var(--gold);}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;text-align:center;white-space:nowrap;}
+  tbody td.wrap-ok{white-space:normal;}
+  tbody tr:hover{background:#FAF8F2;}
+  tbody tr.expand-row td{background:#F7F5EE;padding-top:0;padding-bottom:14px;white-space:normal;}
+  .cliente-name{font-weight:600;color:var(--ink);}
+  .cliente-sub{font-size:10.5px;color:var(--ink-soft);}
+  .valor{font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--green-dark);white-space:nowrap;}
+  .badge{
+    display:inline-block;padding:4px 9px;border-radius:20px;font-size:10.5px;font-weight:700;
+    white-space:nowrap;letter-spacing:.2px;
+  }
+  .b-verde{background:#E4EEE0;color:var(--green-dark);}
+  .b-wine{background:#F1E1E1;color:var(--wine);}
+  .b-gold{background:#F3EBD8;color:#8a6d31;}
+  .b-blue{background:#E4EBEE;color:var(--blue-soft);}
+  .b-gray{background:#ECEBE6;color:var(--gray-soft);}
+  .nf-list{font-size:11px;color:var(--ink-soft);}
+  .expand-btn{
+    border:none;background:var(--line);width:20px;height:20px;border-radius:5px;cursor:pointer;
+    font-size:11px;color:var(--ink);line-height:1;
+  }
+  .obs-cell{max-width:220px;text-align:left !important;}
+  .obs-current{font-size:11.5px;color:var(--ink);line-height:1.4;margin-bottom:4px;}
+  .obs-current.empty{color:var(--ink-soft);font-style:italic;}
+  .obs-meta{font-size:9.5px;color:var(--ink-soft);}
+  .obs-btn{font-size:10.5px;color:var(--green);font-weight:700;background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;}
+
+  .nf-detail-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px;}
+  .nf-detail-table th{text-align:left;color:var(--ink-soft);font-weight:700;padding:4px 8px;border-bottom:1px solid var(--line);}
+  .nf-detail-table td{padding:4px 8px;border-bottom:1px solid #EFECE3;}
+
+  .table-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid var(--line);}
+  .count-info{font-size:11.5px;color:var(--ink-soft);}
+
+  /* Modal */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(30,28,22,.45);display:none;align-items:center;justify-content:center;z-index:100;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:#fff;border-radius:14px;width:480px;max-width:92vw;max-height:82vh;display:flex;flex-direction:column;
+    box-shadow:0 10px 40px rgba(0,0,0,.2);
+  }
+  .modal-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .modal-head h3{font-size:15px;color:var(--green-dark);}
+  .modal-head .tbs-tag{font-size:11px;color:var(--ink-soft);margin-top:2px;font-family:'DM Sans',sans-serif;}
+  .modal-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-soft);}
+  .modal-body{padding:16px 22px;overflow-y:auto;flex:1;}
+  .hist-entry{border-left:2px solid var(--green);padding:6px 0 6px 12px;margin-bottom:10px;}
+  .hist-entry .txt{font-size:12.5px;color:var(--ink);line-height:1.5;}
+  .hist-entry .meta{font-size:10px;color:var(--ink-soft);margin-top:3px;}
+  .hist-empty{font-size:12px;color:var(--ink-soft);font-style:italic;text-align:center;padding:20px 0;}
+  .modal-foot{padding:16px 22px;border-top:1px solid var(--line);}
+  .modal-foot textarea{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:'DM Sans',sans-serif;
+    font-size:12.5px;resize:vertical;min-height:56px;margin-bottom:8px;
+  }
+  .modal-foot .row{display:flex;gap:8px;align-items:center;}
+  .modal-foot input[type=text]{
+    border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;width:130px;font-family:'DM Sans',sans-serif;
+  }
+  .modal-foot .row{justify-content:space-between;}
+
+  .empty-state{text-align:center;padding:60px 20px;color:var(--ink-soft);}
+  .empty-state h3{color:var(--ink);margin-bottom:6px;}
+
+  @media(max-width:1100px){
+    .kpi-row{grid-template-columns:repeat(3,1fr);}
+    .upload-slots{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>Pedidos de Alto Valor</h1>
+    <div class="sub">Acompanhamento diferenciado · Pedidos ≥ R$ 5.000</div>
+  </div>
+  <div class="topbar-right">
+    <span class="updated-tag" id="updatedTag" style="display:none;"></span>
+    <button class="btn btn-outline" id="btnToggleUpload">Carregar planilhas</button>
+    <button class="btn btn-gold" id="btnExportCsv" style="display:none;">Exportar CSV</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- UPLOAD -->
+  <div class="upload-card" id="uploadCard">
+    <h2>Carregar planilhas</h2>
+    <p class="desc">Envie as três bases para gerar (ou atualizar) o painel — arraste o arquivo para a área correspondente ou clique para escolher. As observações já registradas são mantidas mesmo ao atualizar as planilhas.</p>
+    <div class="upload-slots">
+      <div class="slot" id="slot-data">
+        <div class="num">1</div>
+        <h4>Base de Pedidos (Data)</h4>
+        <div class="hint">Colunas: ID TBS, Data Prevista, Valor Pago</div>
+        <label class="pick">Escolher arquivo<input type="file" id="file-data" accept=".xlsx,.xls"></label>
+        <div class="fname" id="fname-data"></div>
+      </div>
+      <div class="slot" id="slot-integrados">
+        <div class="num">2</div>
+        <h4>Pedidos Integrados</h4>
+        <div class="hint">Colunas: Id TBS, Status, Nota</div>
+        <label class="pick">Escolher arquivo<input type="file" id="file-integrados" accept=".xlsx,.xls"></label>
+        <div class="fname" id="fname-integrados"></div>
+      </div>
+      <div class="slot" id="slot-trans">
+        <div class="num">3</div>
+        <h4>Transações (Entregas)</h4>
+        <div class="hint">Colunas: Nota Fiscal, Data Entrega</div>
+        <label class="pick">Escolher arquivo<input type="file" id="file-trans" accept=".xlsx,.xls"></label>
+        <div class="fname" id="fname-trans"></div>
+      </div>
+    </div>
+    <div class="upload-actions">
+      <button class="btn btn-green" id="btnProcess" disabled>Processar planilhas</button>
+    </div>
+    <div class="upload-msg" id="uploadMsg"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardView" style="display:none;">
+
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="filters">
+      <div class="f-group">
+        <label>Status final</label>
+        <div class="dropdown-filter" id="statusDropdown">
+          <button class="dropdown-btn" id="statusDropdownBtn" type="button">Todos os status</button>
+          <div class="dropdown-panel" id="statusDropdownPanel">
+            <div class="dropdown-list" id="statusDropdownList"></div>
+            <div class="dropdown-actions">
+              <button type="button" id="statusSelectAll">Selecionar todos</button>
+              <button type="button" id="statusClearSel">Limpar seleção</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="f-group">
+        <label>Buscar cliente / TBS / NF</label>
+        <input type="text" id="fSearch" placeholder="Ex.: TBS-01327429, Olavo, 111355">
+      </div>
+      <div class="f-group">
+        <label>Valor mín.</label>
+        <input type="number" id="fMin" placeholder="5.000">
+      </div>
+      <div class="f-group">
+        <label>Valor máx.</label>
+        <input type="number" id="fMax" placeholder="ilimitado">
+      </div>
+      <div class="f-group">
+        <label>Prevista de</label>
+        <input type="date" id="fDateFrom">
+      </div>
+      <div class="f-group">
+        <label>Prevista até</label>
+        <input type="date" id="fDateTo">
+      </div>
+      <button class="f-clear" id="btnClearFilters">Limpar filtros</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th class="sortable" data-sort="dataVenda">Data venda <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="tbs">TBS <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="nfsDisplay">NF <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="cliente">Cliente <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="valorTotal">Valor total <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="statusIntegracao">Status integração <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="dataPrevista">Data prevista <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="dataEntregaFinal">Data entrega <span class="sort-ind"></span></th>
+              <th class="sortable" data-sort="statusFinal">Status final <span class="sort-ind"></span></th>
+              <th style="min-width:210px;">Observação</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <div class="count-info" id="countInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <h3>Nenhum pedido acima de R$ 5.000 encontrado</h3>
+    <p>Confira se as três planilhas corretas foram enviadas.</p>
+  </div>
+
+</div>
+
+<!-- MODAL OBSERVAÇÕES -->
+<div class="modal-overlay" id="obsModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Histórico de observações</h3>
+        <div class="tbs-tag" id="modalTbsTag"></div>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <textarea id="obsInput" placeholder="Registrar novo contato / observação sobre este pedido..."></textarea>
+      <div class="row">
+        <input type="text" id="obsAutor" placeholder="Seu nome">
+        <button class="btn btn-green btn-sm" id="btnAddObs">Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ CONFIG ============ */
+const LIMIAR_VALOR = 5000;
+const LS_DATA = 'pav_data_v1';
+const LS_OBS = 'pav_obs_v1';
+const LS_AUTOR = 'pav_autor_v1';
+
+const STATUS_META = {
+  'Não Localizado em Integrados': {cls:'b-gray', short:'Não localizado'},
+  'Aguardando Faturamento':   {cls:'b-gray',  short:'Aguard. faturamento'},
+  'Cancelado':                {cls:'b-gray',  short:'Cancelado'},
+  'Faturado - Aguardando Expedição': {cls:'b-blue', short:'Aguard. expedição'},
+  'Em Trânsito':              {cls:'b-gold',  short:'Em trânsito'},
+  'Em Atraso':                {cls:'b-wine',  short:'Em atraso'},
+  'Entregue no Prazo':        {cls:'b-verde', short:'Entregue no prazo'},
+  'Entregue com Atraso':      {cls:'b-wine',  short:'Entregue com atraso'},
+};
+
+let PEDIDOS = [];          // dataset atual (após cruzamento)
+let filesStaged = {data:null, integrados:null, trans:null};
+let activeStatusFilters = new Set();
+let currentModalTbs = null;
+let sortKey = 'dataVenda';
+let sortDir = 'asc';
+
+/* ============ HELPERS DE DATA ============ */
+function excelSerialToDate(serial){
+  const utc_days = Math.floor(serial - 25569);
+  const utc_value = utc_days * 86400;
+  return new Date(utc_value * 1000);
+}
+function parseDateFlex(v){
+  if(v === null || v === undefined || v === '') return null;
+  if(v instanceof Date) return isNaN(v.getTime()) ? null : v;
+  if(typeof v === 'number') return excelSerialToDate(v);
+  if(typeof v === 'string'){
+    const s = v.trim();
+    if(!s) return null;
+    const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if(m) return new Date(Number(m[3]), Number(m[2])-1, Number(m[1]));
+    const d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  return null;
+}
+function dateOnlyTs(d){ return d ? new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime() : null; }
+function fmtDate(d){ return d ? d.toLocaleDateString('pt-BR') : '—'; }
+function fmtMoney(v){ return (v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function toISO(d){ return d ? d.toISOString() : null; }
+function fromISO(s){ return s ? new Date(s) : null; }
+
+/* ============ LEITURA DE PLANILHA ============ */
+function readSheetAsJson(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      try{
+        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(sheet, {defval:''});
+        resolve(json);
+      }catch(err){ reject(err); }
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+/* ============ CRUZAMENTO ============ */
+function cruzarBases(dataRows, integradosRows, transRows){
+  // 1) Agrupa base "Data" por TBS
+  const pedidosMap = new Map();
+  dataRows.forEach(row=>{
+    const tbs = (row['ID TBS']||'').toString().trim();
+    if(!tbs) return;
+    const valor = Number(row['Valor Pago'])||0;
+    if(!pedidosMap.has(tbs)){
+      pedidosMap.set(tbs, {
+        tbs,
+        valorTotal:0,
+        dataVenda: parseDateFlex(row['Data Venda']),
+        dataPrevista: parseDateFlex(row['Data Prevista']),
+        cliente: (row['customer_full_name']||'').toString().trim(),
+        telefone: (row['Telefone']||'').toString().trim(),
+        email: (row['E-mail']||'').toString().trim(),
+        uf: (row['customer_state']||'').toString().trim(),
+      });
+    }
+    pedidosMap.get(tbs).valorTotal += valor;
+  });
+
+  let pedidos = Array.from(pedidosMap.values()).filter(p=>p.valorTotal >= LIMIAR_VALOR);
+
+  // 2) Agrupa Pedidos Integrados por TBS -> status + NFs faturadas
+  const integradosMap = new Map();
+  integradosRows.forEach(row=>{
+    const tbs = (row['Id TBS']||'').toString().trim();
+    if(!tbs) return;
+    if(!integradosMap.has(tbs)) integradosMap.set(tbs, {statuses:new Set(), nfs:[]});
+    const rec = integradosMap.get(tbs);
+    const status = (row['Status']||'').toString().trim();
+    if(status) rec.statuses.add(status);
+    const notaRaw = (row['Nota']||'').toString().trim();
+    if(status === 'FATURADO' && notaRaw){
+      const notaNum = parseInt(notaRaw,10);
+      if(!isNaN(notaNum) && !rec.nfs.some(n=>n.num===notaNum)){
+        rec.nfs.push({num:notaNum, display:notaRaw, serie:(row['Serie']||'').toString().trim()});
+      }
+    }
+  });
+
+  // 3) Indexa Transações por NF
+  const transMap = new Map();
+  transRows.forEach(row=>{
+    const nf = Number(row['Nota Fiscal']);
+    if(isNaN(nf)) return;
+    const rec = {
+      dataDespacho: parseDateFlex(row['Data Despacho']),
+      dataEntrega: parseDateFlex(row['Data Entrega']),
+      situacaoTransp: (row['Situação Transp.']||'').toString().trim(),
+      transportadora: (row['Transportadora']||'').toString().trim(),
+      metodoEnvio: (row['Método de envio']||'').toString().trim(),
+      cidade: (row['Cidade do Destinatário']||'').toString().trim(),
+      uf: (row['UF']||'').toString().trim(),
+    };
+    if(!transMap.has(nf)) transMap.set(nf, []);
+    transMap.get(nf).push(rec);
+  });
+
+  const hoje = new Date();
+
+  // 4) Junta tudo e calcula status final
+  pedidos.forEach(p=>{
+    const integ = integradosMap.get(p.tbs);
+    p.statusIntegracao = integ && integ.statuses.size ? Array.from(integ.statuses).join(', ') : 'Não encontrado';
+    const nfs = integ ? integ.nfs : [];
+
+    let nfDetails = [];
+    nfs.forEach(nfo=>{
+      const arr = transMap.get(nfo.num) || [];
+      if(arr.length===0){
+        nfDetails.push({...nfo, dataDespacho:null, dataEntrega:null, situacaoTransp:'', transportadora:'', metodoEnvio:'', cidade:'', uf:''});
+      }else{
+        arr.forEach(t=> nfDetails.push({...nfo, ...t}));
+      }
+    });
+
+    let statusFinal;
+    if(!integ){
+      statusFinal = 'Não Localizado em Integrados';
+    }else if(nfs.length===0){
+      statusFinal = integ.statuses.has('CANCELADO') ? 'Cancelado' : 'Aguardando Faturamento';
+    }else{
+      const semRastreio = nfDetails.every(d=>!d.dataDespacho && !d.dataEntrega && !d.situacaoTransp);
+      if(semRastreio){
+        statusFinal = 'Faturado - Aguardando Expedição';
+      }else{
+        const todasEntregues = nfDetails.every(d=>d.dataEntrega);
+        if(todasEntregues){
+          const algumAtraso = nfDetails.some(d=> p.dataPrevista && dateOnlyTs(d.dataEntrega) > dateOnlyTs(p.dataPrevista));
+          statusFinal = algumAtraso ? 'Entregue com Atraso' : 'Entregue no Prazo';
+        }else{
+          const risco = nfDetails.some(d => d.situacaoTransp==='Atrasado' || (!d.dataEntrega && p.dataPrevista && dateOnlyTs(hoje) > dateOnlyTs(p.dataPrevista)));
+          statusFinal = risco ? 'Em Atraso' : 'Em Trânsito';
+        }
+      }
+    }
+
+    p.nfDetails = nfDetails;
+    p.nfsDisplay = nfs.length ? nfs.map(n=>n.display).join(', ') : '—';
+    p.statusFinal = statusFinal;
+    const entregues = nfDetails.filter(d=>d.dataEntrega).map(d=>d.dataEntrega).sort((a,b)=>b-a);
+    p.dataEntregaFinal = entregues.length ? entregues[0] : null;
+  });
+
+  pedidos.sort((a,b)=> b.valorTotal - a.valorTotal);
+  return pedidos;
+}
+
+/* ============ PERSISTÊNCIA ============ */
+function serializePedidos(pedidos){
+  return pedidos.map(p=>({
+    ...p,
+    dataVenda: toISO(p.dataVenda),
+    dataPrevista: toISO(p.dataPrevista),
+    dataEntregaFinal: toISO(p.dataEntregaFinal),
+    nfDetails: p.nfDetails.map(d=>({...d, dataDespacho: toISO(d.dataDespacho), dataEntrega: toISO(d.dataEntrega)})),
+  }));
+}
+function deserializePedidos(arr){
+  return arr.map(p=>({
+    ...p,
+    dataVenda: fromISO(p.dataVenda),
+    dataPrevista: fromISO(p.dataPrevista),
+    dataEntregaFinal: fromISO(p.dataEntregaFinal),
+    nfDetails: p.nfDetails.map(d=>({...d, dataDespacho: fromISO(d.dataDespacho), dataEntrega: fromISO(d.dataEntrega)})),
+  }));
+}
+function saveData(pedidos){
+  const payload = {updatedAt: new Date().toISOString(), pedidos: serializePedidos(pedidos)};
+  localStorage.setItem(LS_DATA, JSON.stringify(payload));
+}
+function loadData(){
+  const raw = localStorage.getItem(LS_DATA);
+  if(!raw) return null;
+  try{
+    const payload = JSON.parse(raw);
+    return {updatedAt: payload.updatedAt, pedidos: deserializePedidos(payload.pedidos)};
+  }catch(e){ return null; }
+}
+function loadObsStore(){
+  try{ return JSON.parse(localStorage.getItem(LS_OBS)||'{}'); }catch(e){ return {}; }
+}
+function saveObsStore(store){ localStorage.setItem(LS_OBS, JSON.stringify(store)); }
+function addObservacao(tbs, texto, autor){
+  const store = loadObsStore();
+  if(!store[tbs]) store[tbs] = [];
+  store[tbs].unshift({texto, autor: autor||'—', data: new Date().toISOString()});
+  saveObsStore(store);
+}
+function getLatestObs(tbs){
+  const store = loadObsStore();
+  const arr = store[tbs];
+  return (arr && arr.length) ? arr[0] : null;
+}
+
+/* ============ UPLOAD UI ============ */
+const fileInputs = {data:'file-data', integrados:'file-integrados', trans:'file-trans'};
+function stageFile(key, file){
+  if(!file) return;
+  const isXlsx = /\.xlsx?$/i.test(file.name);
+  if(!isXlsx){
+    document.getElementById('uploadMsg').style.color = 'var(--wine)';
+    document.getElementById('uploadMsg').textContent = 'Arquivo "'+file.name+'" ignorado: envie um .xlsx ou .xls.';
+    return;
+  }
+  filesStaged[key] = file;
+  document.getElementById('slot-'+key).classList.add('filled');
+  document.getElementById('fname-'+key).textContent = file.name;
+  document.getElementById('btnProcess').disabled = !(filesStaged.data && filesStaged.integrados && filesStaged.trans);
+}
+Object.entries(fileInputs).forEach(([key, id])=>{
+  const slotEl = document.getElementById('slot-'+key);
+  document.getElementById(id).addEventListener('change', e=> stageFile(key, e.target.files[0]));
+
+  ['dragenter','dragover'].forEach(evt=>{
+    slotEl.addEventListener(evt, e=>{ e.preventDefault(); e.stopPropagation(); slotEl.classList.add('dragover'); });
+  });
+  ['dragleave','dragend'].forEach(evt=>{
+    slotEl.addEventListener(evt, e=>{ e.preventDefault(); e.stopPropagation(); slotEl.classList.remove('dragover'); });
+  });
+  slotEl.addEventListener('drop', e=>{
+    e.preventDefault(); e.stopPropagation();
+    slotEl.classList.remove('dragover');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    stageFile(key, file);
+  });
+});
+
+document.getElementById('btnProcess').addEventListener('click', async ()=>{
+  const msg = document.getElementById('uploadMsg');
+  msg.style.color = 'var(--ink-soft)';
+  msg.textContent = 'Lendo e cruzando planilhas...';
+  document.getElementById('btnProcess').disabled = true;
+  try{
+    const [dataRows, integradosRows, transRows] = await Promise.all([
+      readSheetAsJson(filesStaged.data),
+      readSheetAsJson(filesStaged.integrados),
+      readSheetAsJson(filesStaged.trans),
+    ]);
+    const pedidos = cruzarBases(dataRows, integradosRows, transRows);
+    saveData(pedidos);
+    PEDIDOS = pedidos;
+    msg.textContent = '';
+    renderAll(new Date().toISOString());
+    toggleUploadView(false);
+  }catch(err){
+    console.error(err);
+    msg.style.color = 'var(--wine)';
+    msg.textContent = 'Erro ao processar planilhas: ' + err.message + '. Confira se os arquivos correspondem ao esperado.';
+  }
+  document.getElementById('btnProcess').disabled = false;
+});
+
+function toggleUploadView(show){
+  document.getElementById('uploadCard').style.display = show ? 'block' : 'none';
+  const hasData = PEDIDOS.length > 0 || loadData();
+  document.getElementById('dashboardView').style.display = (!show && PEDIDOS.length) ? 'block' : 'none';
+  document.getElementById('btnExportCsv').style.display = (!show && PEDIDOS.length) ? 'inline-block' : 'none';
+  document.getElementById('btnToggleUpload').textContent = show ? 'Voltar ao painel' : 'Atualizar planilhas';
+}
+document.getElementById('btnToggleUpload').addEventListener('click', ()=>{
+  const isShowing = document.getElementById('uploadCard').style.display !== 'none';
+  toggleUploadView(!isShowing);
+});
+
+/* ============ RENDER ============ */
+function computeKpis(pedidos){
+  const total = pedidos.length;
+  const valorTotal = pedidos.reduce((s,p)=>s+p.valorTotal,0);
+  const ticket = total ? valorTotal/total : 0;
+  const noPrazo = pedidos.filter(p=>p.statusFinal==='Entregue no Prazo').length;
+  const atrasado = pedidos.filter(p=>p.statusFinal==='Entregue com Atraso'||p.statusFinal==='Em Atraso').length;
+  const pendente = total - noPrazo - atrasado;
+  return {total, valorTotal, ticket, noPrazo, atrasado, pendente};
+}
+function renderKpis(pedidos){
+  const k = computeKpis(pedidos);
+  const pct = (n)=> k.total ? ((n/k.total)*100).toFixed(0)+'%' : '0%';
+  document.getElementById('kpiRow').innerHTML = `
+    <div class="kpi"><div class="val">${k.total}</div><div class="label">Pedidos ≥ R$5k</div><div class="sub">Volume acompanhado</div></div>
+    <div class="kpi"><div class="val" style="font-size:20px;">${fmtMoney(k.valorTotal)}</div><div class="label">Valor total</div><div class="sub">Soma dos pedidos filtrados</div></div>
+    <div class="kpi"><div class="val" style="font-size:20px;">${fmtMoney(k.ticket)}</div><div class="label">Ticket médio</div><div class="sub">Por pedido</div></div>
+    <div class="kpi"><div class="val">${k.noPrazo}</div><div class="label">Entregues no prazo</div><div class="sub">${pct(k.noPrazo)} do total</div></div>
+    <div class="kpi"><div class="val wine">${k.atrasado}</div><div class="label">Atrasados</div><div class="sub">${pct(k.atrasado)} do total</div></div>
+    <div class="kpi"><div class="val gold">${k.pendente}</div><div class="label">Em andamento</div><div class="sub">${pct(k.pendente)} do total</div></div>
+  `;
+}
+function renderStatusChips(){
+  const list = document.getElementById('statusDropdownList');
+  list.innerHTML = Object.keys(STATUS_META).map(s=>`
+    <label>
+      <input type="checkbox" data-status="${s}" ${activeStatusFilters.has(s)?'checked':''}>
+      ${STATUS_META[s].short}
+    </label>`).join('');
+  list.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const s = cb.dataset.status;
+      if(cb.checked) activeStatusFilters.add(s); else activeStatusFilters.delete(s);
+      updateStatusDropdownBtn();
+      renderTable();
+    });
+  });
+  updateStatusDropdownBtn();
+}
+function updateStatusDropdownBtn(){
+  const btn = document.getElementById('statusDropdownBtn');
+  const n = activeStatusFilters.size;
+  if(n===0){
+    btn.textContent = 'Todos os status';
+    btn.classList.remove('has-selection');
+  }else{
+    btn.textContent = n===1 ? Object.keys(STATUS_META).filter(s=>activeStatusFilters.has(s)).map(s=>STATUS_META[s].short)[0] : `${n} status selecionados`;
+    btn.classList.add('has-selection');
+  }
+}
+document.getElementById('statusDropdownBtn').addEventListener('click', e=>{
+  e.stopPropagation();
+  document.getElementById('statusDropdownPanel').classList.toggle('open');
+});
+document.addEventListener('click', e=>{
+  const panel = document.getElementById('statusDropdownPanel');
+  if(!document.getElementById('statusDropdown').contains(e.target)) panel.classList.remove('open');
+});
+document.getElementById('statusSelectAll').addEventListener('click', ()=>{
+  Object.keys(STATUS_META).forEach(s=>activeStatusFilters.add(s));
+  renderStatusChips();
+  renderTable();
+});
+document.getElementById('statusClearSel').addEventListener('click', ()=>{
+  activeStatusFilters.clear();
+  renderStatusChips();
+  renderTable();
+});
+function getSortValue(p, key){
+  switch(key){
+    case 'dataVenda': return p.dataVenda ? p.dataVenda.getTime() : null;
+    case 'dataPrevista': return p.dataPrevista ? p.dataPrevista.getTime() : null;
+    case 'dataEntregaFinal': return p.dataEntregaFinal ? p.dataEntregaFinal.getTime() : null;
+    case 'valorTotal': return p.valorTotal;
+    case 'tbs': return p.tbs || '';
+    case 'nfsDisplay': return p.nfsDisplay || '';
+    case 'cliente': return (p.cliente||'').toLowerCase();
+    case 'statusIntegracao': return p.statusIntegracao || '';
+    case 'statusFinal': return (STATUS_META[p.statusFinal]||{}).short || p.statusFinal || '';
+    default: return '';
+  }
+}
+function applySort(list){
+  const sorted = list.slice();
+  sorted.sort((a,b)=>{
+    let va = getSortValue(a, sortKey);
+    let vb = getSortValue(b, sortKey);
+    // valores nulos (sem data) sempre vão para o final, independente da direção
+    if(va===null && vb===null) return 0;
+    if(va===null) return 1;
+    if(vb===null) return -1;
+    let cmp;
+    if(typeof va === 'number' && typeof vb === 'number') cmp = va - vb;
+    else cmp = String(va).localeCompare(String(vb), 'pt-BR');
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+  return sorted;
+}
+function updateSortIndicators(){
+  document.querySelectorAll('th.sortable').forEach(th=>{
+    const ind = th.querySelector('.sort-ind');
+    if(th.dataset.sort === sortKey){
+      ind.textContent = sortDir === 'asc' ? '▲' : '▼';
+    }else{
+      ind.textContent = '';
+    }
+  });
+}
+document.querySelectorAll('th.sortable').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.sort;
+    if(sortKey === key){
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    }else{
+      sortKey = key;
+      sortDir = 'asc';
+    }
+    updateSortIndicators();
+    renderTable();
+  });
+});
+
+function getFiltered(){
+  const search = document.getElementById('fSearch').value.trim().toLowerCase();
+  const min = parseFloat(document.getElementById('fMin').value) || null;
+  const max = parseFloat(document.getElementById('fMax').value) || null;
+  const dFrom = document.getElementById('fDateFrom').value ? new Date(document.getElementById('fDateFrom').value) : null;
+  const dTo = document.getElementById('fDateTo').value ? new Date(document.getElementById('fDateTo').value) : null;
+
+  const result = PEDIDOS.filter(p=>{
+    if(activeStatusFilters.size && !activeStatusFilters.has(p.statusFinal)) return false;
+    if(min!==null && p.valorTotal < min) return false;
+    if(max!==null && p.valorTotal > max) return false;
+    if(dFrom && (!p.dataPrevista || p.dataPrevista < dFrom)) return false;
+    if(dTo && (!p.dataPrevista || p.dataPrevista > dTo)) return false;
+    if(search){
+      const hay = [p.tbs, p.cliente, p.nfsDisplay].join(' ').toLowerCase();
+      if(!hay.includes(search)) return false;
+    }
+    return true;
+  });
+  return applySort(result);
+}
+function statusBadge(status){
+  const meta = STATUS_META[status] || {cls:'b-gray', short:status};
+  return `<span class="badge ${meta.cls}">${meta.short}</span>`;
+}
+function renderTable(){
+  const filtered = getFiltered();
+  const tbody = document.getElementById('tbody');
+  if(!filtered.length){
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:var(--ink-soft);padding:36px;">Nenhum pedido encontrado com os filtros atuais.</td></tr>`;
+  }else{
+    tbody.innerHTML = filtered.map(p=>{
+      const latest = getLatestObs(p.tbs);
+      const hasMulti = p.nfDetails.length > 1;
+      return `
+      <tr data-tbs="${p.tbs}">
+        <td>${hasMulti ? `<button class="expand-btn" data-toggle="${p.tbs}">+</button>` : ''}</td>
+        <td>${fmtDate(p.dataVenda)}</td>
+        <td><strong>${p.tbs}</strong></td>
+        <td><span class="nf-list">${p.nfsDisplay}</span></td>
+        <td class="wrap-ok">
+          <div class="cliente-name">${p.cliente || '—'}</div>
+          <div class="cliente-sub">${p.uf || ''}</div>
+        </td>
+        <td><span class="valor">${fmtMoney(p.valorTotal)}</span></td>
+        <td><span class="nf-list">${p.statusIntegracao}</span></td>
+        <td>${fmtDate(p.dataPrevista)}</td>
+        <td>${fmtDate(p.dataEntregaFinal)}</td>
+        <td>${statusBadge(p.statusFinal)}</td>
+        <td class="obs-cell wrap-ok">
+          <div class="obs-current ${latest?'':'empty'}">${latest ? latest.texto : 'Sem observações registradas'}</div>
+          ${latest ? `<div class="obs-meta">${latest.autor} · ${new Date(latest.data).toLocaleString('pt-BR')}</div>` : ''}
+          <button class="obs-btn" data-obs="${p.tbs}">Ver histórico / adicionar</button>
+        </td>
+      </tr>
+      ${hasMulti ? `<tr class="expand-row" id="exp-${p.tbs}" style="display:none;"><td></td><td colspan="10">${nfDetailTable(p)}</td></tr>` : ''}
+      `;
+    }).join('');
+  }
+
+  tbody.querySelectorAll('[data-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const row = document.getElementById('exp-'+btn.dataset.toggle);
+      const open = row.style.display !== 'none';
+      row.style.display = open ? 'none' : 'table-row';
+      btn.textContent = open ? '+' : '–';
+    });
+  });
+  tbody.querySelectorAll('[data-obs]').forEach(btn=>{
+    btn.addEventListener('click', ()=> openObsModal(btn.dataset.obs));
+  });
+
+  document.getElementById('countInfo').textContent = `${filtered.length} de ${PEDIDOS.length} pedidos exibidos`;
+}
+function nfDetailTable(p){
+  const rows = p.nfDetails.map(d=>`
+    <tr>
+      <td>${d.display}</td>
+      <td>${fmtDate(d.dataDespacho)}</td>
+      <td>${fmtDate(d.dataEntrega)}</td>
+      <td>${d.situacaoTransp || '—'}</td>
+      <td>${d.transportadora || '—'}</td>
+      <td>${d.cidade ? d.cidade+'/'+d.uf : '—'}</td>
+    </tr>`).join('');
+  return `<table class="nf-detail-table">
+    <thead><tr><th>NF</th><th>Despacho</th><th>Entrega</th><th>Situação transp.</th><th>Transportadora</th><th>Destino</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+/* ============ MODAL OBSERVAÇÕES ============ */
+function openObsModal(tbs){
+  currentModalTbs = tbs;
+  document.getElementById('modalTbsTag').textContent = tbs;
+  document.getElementById('obsInput').value = '';
+  const savedAutor = localStorage.getItem(LS_AUTOR) || '';
+  document.getElementById('obsAutor').value = savedAutor;
+  renderModalHistory();
+  document.getElementById('obsModal').classList.add('open');
+}
+function renderModalHistory(){
+  const store = loadObsStore();
+  const arr = store[currentModalTbs] || [];
+  const body = document.getElementById('modalBody');
+  if(!arr.length){
+    body.innerHTML = `<div class="hist-empty">Nenhuma observação registrada ainda para este pedido.</div>`;
+    return;
+  }
+  body.innerHTML = arr.map(o=>`
+    <div class="hist-entry">
+      <div class="txt">${o.texto}</div>
+      <div class="meta">${o.autor} · ${new Date(o.data).toLocaleString('pt-BR')}</div>
+    </div>`).join('');
+}
+document.getElementById('modalClose').addEventListener('click', ()=> document.getElementById('obsModal').classList.remove('open'));
+document.getElementById('obsModal').addEventListener('click', e=>{ if(e.target.id==='obsModal') document.getElementById('obsModal').classList.remove('open'); });
+document.getElementById('btnAddObs').addEventListener('click', ()=>{
+  const texto = document.getElementById('obsInput').value.trim();
+  const autor = document.getElementById('obsAutor').value.trim();
+  if(!texto) return;
+  localStorage.setItem(LS_AUTOR, autor);
+  addObservacao(currentModalTbs, texto, autor);
+  document.getElementById('obsInput').value = '';
+  renderModalHistory();
+  renderTable();
+});
+
+/* ============ FILTROS: LISTENERS ============ */
+['fSearch','fMin','fMax','fDateFrom','fDateTo'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderTable);
+});
+document.getElementById('btnClearFilters').addEventListener('click', ()=>{
+  document.getElementById('fSearch').value='';
+  document.getElementById('fMin').value='';
+  document.getElementById('fMax').value='';
+  document.getElementById('fDateFrom').value='';
+  document.getElementById('fDateTo').value='';
+  activeStatusFilters.clear();
+  renderStatusChips();
+  renderTable();
+});
+
+/* ============ EXPORT CSV ============ */
+document.getElementById('btnExportCsv').addEventListener('click', ()=>{
+  const filtered = getFiltered();
+  const header = ['TBS','Cliente','Telefone','Email','UF','Valor Total','Data Venda','Data Prevista','NF(s)','Status Integracao','Data Entrega','Status Final','Ultima Observacao'];
+  const lines = [header.join(';')];
+  filtered.forEach(p=>{
+    const latest = getLatestObs(p.tbs);
+    const row = [
+      p.tbs, p.cliente, p.telefone, p.email, p.uf,
+      p.valorTotal.toFixed(2).replace('.',','),
+      fmtDate(p.dataVenda), fmtDate(p.dataPrevista), p.nfsDisplay,
+      p.statusIntegracao, fmtDate(p.dataEntregaFinal), p.statusFinal,
+      latest ? latest.texto.replace(/;/g,',').replace(/\n/g,' ') : ''
+    ];
+    lines.push(row.map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(';'));
+  });
+  const blob = new Blob(['\uFEFF'+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `pedidos-alto-valor_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+});
+
+/* ============ INIT ============ */
+function renderAll(updatedAt){
+  document.getElementById('emptyState').style.display = PEDIDOS.length ? 'none' : 'block';
+  document.getElementById('dashboardView').style.display = PEDIDOS.length ? 'block' : 'none';
+  document.getElementById('btnExportCsv').style.display = PEDIDOS.length ? 'inline-block' : 'none';
+  if(updatedAt){
+    const tag = document.getElementById('updatedTag');
+    tag.style.display = 'inline-block';
+    tag.textContent = 'Atualizado em ' + new Date(updatedAt).toLocaleString('pt-BR');
+  }
+  renderKpis(PEDIDOS);
+  renderStatusChips();
+  updateSortIndicators();
+  renderTable();
+}
+
+(function init(){
+  const cached = loadData();
+  if(cached && cached.pedidos.length){
+    PEDIDOS = cached.pedidos;
+    renderAll(cached.updatedAt);
+    toggleUploadView(false);
+  }else{
+    toggleUploadView(true);
+  }
+})();
+</script>
+</body>
+</html>
