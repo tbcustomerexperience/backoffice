@@ -301,6 +301,19 @@
         </div>
       </div>
       <div class="f-group">
+        <label>Status</label>
+        <div class="dropdown-filter" id="statusCxDropdown">
+          <button class="dropdown-btn" id="statusCxDropdownBtn" type="button">Todos os status</button>
+          <div class="dropdown-panel" id="statusCxDropdownPanel">
+            <div class="dropdown-list" id="statusCxDropdownList"></div>
+            <div class="dropdown-actions">
+              <button type="button" id="statusCxSelectAll">Selecionar todos</button>
+              <button type="button" id="statusCxClearSel">Limpar seleção</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="f-group">
         <label>Buscar cliente / TBS / NF</label>
         <input type="text" id="fSearch" placeholder="Ex.: TBS-01327429, Olavo, 111355">
       </div>
@@ -405,6 +418,7 @@ const STATUS_META = {
 let PEDIDOS = [];          // dataset atual (após cruzamento)
 let filesStaged = {data:null, integrados:null, trans:null};
 let activeStatusFilters = new Set();
+let activeStatusCxFilters = new Set();
 let currentModalTbs = null;
 let sortKey = 'dataVenda';
 let sortDir = 'asc';
@@ -843,6 +857,52 @@ document.getElementById('statusClearSel').addEventListener('click', ()=>{
   renderStatusChips();
   renderTable();
 });
+function renderStatusCxChips(){
+  const list = document.getElementById('statusCxDropdownList');
+  list.innerHTML = STATUSCX_OPTIONS.map(s=>`
+    <label>
+      <input type="checkbox" data-statuscxfilter="${s}" ${activeStatusCxFilters.has(s)?'checked':''}>
+      ${s}
+    </label>`).join('');
+  list.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const s = cb.dataset.statuscxfilter;
+      if(cb.checked) activeStatusCxFilters.add(s); else activeStatusCxFilters.delete(s);
+      updateStatusCxDropdownBtn();
+      renderTable();
+    });
+  });
+  updateStatusCxDropdownBtn();
+}
+function updateStatusCxDropdownBtn(){
+  const btn = document.getElementById('statusCxDropdownBtn');
+  const n = activeStatusCxFilters.size;
+  if(n===0){
+    btn.textContent = 'Todos os status';
+    btn.classList.remove('has-selection');
+  }else{
+    btn.textContent = n===1 ? STATUSCX_OPTIONS.filter(s=>activeStatusCxFilters.has(s))[0] : `${n} status selecionados`;
+    btn.classList.add('has-selection');
+  }
+}
+document.getElementById('statusCxDropdownBtn').addEventListener('click', e=>{
+  e.stopPropagation();
+  document.getElementById('statusCxDropdownPanel').classList.toggle('open');
+});
+document.addEventListener('click', e=>{
+  const panel = document.getElementById('statusCxDropdownPanel');
+  if(!document.getElementById('statusCxDropdown').contains(e.target)) panel.classList.remove('open');
+});
+document.getElementById('statusCxSelectAll').addEventListener('click', ()=>{
+  STATUSCX_OPTIONS.forEach(s=>activeStatusCxFilters.add(s));
+  renderStatusCxChips();
+  renderTable();
+});
+document.getElementById('statusCxClearSel').addEventListener('click', ()=>{
+  activeStatusCxFilters.clear();
+  renderStatusCxChips();
+  renderTable();
+});
 function getSortValue(p, key){
   switch(key){
     case 'dataVenda': return p.dataVenda ? p.dataVenda.getTime() : null;
@@ -907,6 +967,7 @@ function getFiltered(){
 
   const result = PEDIDOS.filter(p=>{
     if(activeStatusFilters.size && !activeStatusFilters.has(p.statusFinal)) return false;
+    if(activeStatusCxFilters.size && !activeStatusCxFilters.has(getStatusCx(p.tbs))) return false;
     if(min!==null && p.valorTotal < min) return false;
     if(max!==null && p.valorTotal > max) return false;
     if(dFrom && (!p.dataPrevista || p.dataPrevista < dFrom)) return false;
@@ -1054,6 +1115,8 @@ document.getElementById('btnClearFilters').addEventListener('click', ()=>{
   document.getElementById('fDateTo').value='';
   activeStatusFilters.clear();
   renderStatusChips();
+  activeStatusCxFilters.clear();
+  renderStatusCxChips();
   renderTable();
 });
 
@@ -1092,6 +1155,7 @@ function renderAll(updatedAt){
   }
   renderKpis(PEDIDOS);
   renderStatusChips();
+  renderStatusCxChips();
   updateSortIndicators();
   renderTable();
 }
