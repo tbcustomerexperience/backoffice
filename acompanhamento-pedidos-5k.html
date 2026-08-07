@@ -50,7 +50,7 @@
   .btn-sm{padding:6px 11px;font-size:11.5px;}
   .btn:disabled{opacity:.45;cursor:not-allowed;}
 
-  .wrap{max-width:1400px;margin:0 auto;padding:26px 28px 60px;}
+  .wrap{max-width:1700px;margin:0 auto;padding:26px 28px 60px;}
 
   /* Upload */
   .upload-card{
@@ -135,7 +135,7 @@
   /* Table */
   .table-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
   .table-scroll{overflow-x:auto;max-height:640px;overflow-y:auto;}
-  table{border-collapse:collapse;width:100%;min-width:1180px;font-size:12px;}
+  table{border-collapse:collapse;width:100%;min-width:1520px;font-size:12px;}
   thead th{
     position:sticky;top:0;background:var(--green-dark);color:#EFE9D8;text-align:center;padding:10px 12px;
     font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:700;white-space:nowrap;z-index:2;
@@ -144,7 +144,7 @@
   thead th.sortable:hover{background:#385942;}
   .sort-ind{display:inline-block;width:9px;font-size:9px;color:var(--gold);}
   tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle;text-align:center;white-space:nowrap;}
-  tbody td.wrap-ok{white-space:normal;}
+  tbody td.wrap-ok{white-space:normal;min-width:190px;}
   tbody tr:hover{background:#FAF8F2;}
   tbody tr.expand-row td{background:#F7F5EE;padding-top:0;padding-bottom:14px;white-space:normal;}
   .cliente-name{font-weight:600;color:var(--ink);}
@@ -159,6 +159,13 @@
   .b-gold{background:#F3EBD8;color:#8a6d31;}
   .b-blue{background:#E4EBEE;color:var(--blue-soft);}
   .b-gray{background:#ECEBE6;color:var(--gray-soft);}
+  .statuscx-select{
+    border:1px solid var(--line);border-radius:20px;padding:4px 8px;font-size:10.5px;font-weight:700;
+    font-family:'DM Sans',sans-serif;cursor:pointer;color:inherit;
+  }
+  .statuscx-select.b-gray{background:#ECEBE6;color:var(--gray-soft);}
+  .statuscx-select.b-gold{background:#F3EBD8;color:#8a6d31;}
+  .statuscx-select.b-verde{background:#E4EEE0;color:var(--green-dark);}
   .nf-list{font-size:11px;color:var(--ink-soft);}
   .expand-btn{
     border:none;background:var(--line);width:20px;height:20px;border-radius:5px;cursor:pointer;
@@ -323,6 +330,7 @@
               <th class="sortable" data-sort="dataEntregaFinal">Data entrega <span class="sort-ind"></span></th>
               <th class="sortable" data-sort="statusFinal">Status final <span class="sort-ind"></span></th>
               <th style="min-width:210px;">Observação</th>
+              <th class="sortable" data-sort="statusCx">Status <span class="sort-ind"></span></th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -355,8 +363,7 @@
     <div class="modal-foot">
       <div class="obs-sync-tag" id="obsSyncTag" style="display:none;"></div>
       <textarea id="obsInput" placeholder="Registrar novo contato / observação sobre este pedido..."></textarea>
-      <div class="row">
-        <input type="text" id="obsAutor" placeholder="Seu nome">
+      <div class="row" style="justify-content:flex-end;">
         <button class="btn btn-green btn-sm" id="btnAddObs">Adicionar</button>
       </div>
     </div>
@@ -368,7 +375,6 @@
 const LIMIAR_VALOR = 5000;
 const LS_DATA = 'pav_data_v1';
 const LS_OBS = 'pav_obs_v1';
-const LS_AUTOR = 'pav_autor_v1';
 
 // Cole aqui a URL do Web App do Google Apps Script (ver instruções em
 // apps-script-backend.gs) para que as observações fiquem salvas numa
@@ -583,10 +589,10 @@ function loadObsStore(){
   try{ return JSON.parse(localStorage.getItem(LS_OBS)||'{}'); }catch(e){ return {}; }
 }
 function saveObsStore(store){ localStorage.setItem(LS_OBS, JSON.stringify(store)); }
-function addObservacaoLocal(tbs, texto, autor){
+function addObservacaoLocal(tbs, texto){
   const store = loadObsStore();
   if(!store[tbs]) store[tbs] = [];
-  store[tbs].unshift({texto, autor: autor||'—', data: new Date().toISOString()});
+  store[tbs].unshift({texto, data: new Date().toISOString()});
   saveObsStore(store);
 }
 
@@ -618,19 +624,68 @@ async function syncObsFromServer(){
 /** Envia uma nova observação ao backend. Content-Type text/plain evita o
  * preflight CORS que o Apps Script não responde. Sempre grava também no
  * cache local (otimista), mesmo se o envio ao servidor falhar. */
-async function addObservacao(tbs, texto, autor){
+async function addObservacao(tbs, texto){
   if(obsSyncDisponivel()){
     try{
       await fetch(APPS_SCRIPT_URL, {
         method:'POST',
         headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({action:'add', tbs, texto, autor})
+        body: JSON.stringify({action:'add', tbs, texto})
       });
     }catch(err){
       console.warn('Falha ao salvar observação no servidor — mantida apenas localmente:', err);
     }
   }
-  addObservacaoLocal(tbs, texto, autor);
+  addObservacaoLocal(tbs, texto);
+}
+
+/* ============ STATUS CX (Pendente / Em andamento / Finalizado) ============ */
+const LS_STATUSCX = 'pav_statuscx_v1';
+const STATUSCX_OPTIONS = ['Pendente', 'Em andamento', 'Finalizado'];
+const STATUSCX_CLASS = {'Pendente':'b-gray', 'Em andamento':'b-gold', 'Finalizado':'b-verde'};
+
+function loadStatusCxStore(){
+  try{ return JSON.parse(localStorage.getItem(LS_STATUSCX)||'{}'); }catch(e){ return {}; }
+}
+function saveStatusCxStore(store){ localStorage.setItem(LS_STATUSCX, JSON.stringify(store)); }
+function getStatusCx(tbs){
+  const store = loadStatusCxStore();
+  return store[tbs] || 'Pendente';
+}
+function statusCxClass(val){ return STATUSCX_CLASS[val] || 'b-gray'; }
+function statusCxSelect(tbs){
+  const atual = getStatusCx(tbs);
+  const options = STATUSCX_OPTIONS.map(o=>`<option value="${o}" ${o===atual?'selected':''}>${o}</option>`).join('');
+  return `<select class="statuscx-select ${statusCxClass(atual)}" data-statuscx="${tbs}">${options}</select>`;
+}
+async function syncStatusCxFromServer(){
+  if(!obsSyncDisponivel()) return;
+  try{
+    const resp = await fetch(APPS_SCRIPT_URL + '?action=listStatus');
+    const json = await resp.json();
+    if(json.ok){
+      saveStatusCxStore(json.status || {});
+      renderTable();
+    }
+  }catch(err){
+    console.warn('Falha ao sincronizar status CX:', err);
+  }
+}
+async function setStatusCx(tbs, valor){
+  const store = loadStatusCxStore();
+  store[tbs] = valor;
+  saveStatusCxStore(store);
+  if(obsSyncDisponivel()){
+    try{
+      await fetch(APPS_SCRIPT_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'setStatus', tbs, status: valor})
+      });
+    }catch(err){
+      console.warn('Falha ao salvar status CX no servidor — mantido apenas localmente:', err);
+    }
+  }
 }
 
 function getLatestObs(tbs){
@@ -690,6 +745,7 @@ document.getElementById('btnProcess').addEventListener('click', async ()=>{
     renderAll(new Date().toISOString());
     toggleUploadView(false);
     syncObsFromServer(); // garante que o histórico de observações está atualizado após trocar a planilha
+    syncStatusCxFromServer();
   }catch(err){
     console.error(err);
     msg.style.color = 'var(--wine)';
@@ -789,6 +845,7 @@ function getSortValue(p, key){
     case 'cliente': return (p.cliente||'').toLowerCase();
     case 'statusIntegracao': return p.statusIntegracao || '';
     case 'statusFinal': return (STATUS_META[p.statusFinal]||{}).short || p.statusFinal || '';
+    case 'statusCx': return getStatusCx(p.tbs);
     default: return '';
   }
 }
@@ -861,7 +918,7 @@ function renderTable(){
   const filtered = getFiltered();
   const tbody = document.getElementById('tbody');
   if(!filtered.length){
-    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:var(--ink-soft);padding:36px;">Nenhum pedido encontrado com os filtros atuais.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:var(--ink-soft);padding:36px;">Nenhum pedido encontrado com os filtros atuais.</td></tr>`;
   }else{
     tbody.innerHTML = filtered.map(p=>{
       const latest = getLatestObs(p.tbs);
@@ -883,11 +940,12 @@ function renderTable(){
         <td>${statusBadge(p.statusFinal)}</td>
         <td class="obs-cell wrap-ok">
           <div class="obs-current ${latest?'':'empty'}">${latest ? latest.texto : 'Sem observações registradas'}</div>
-          ${latest ? `<div class="obs-meta">${latest.autor} · ${new Date(latest.data).toLocaleString('pt-BR')}</div>` : ''}
+          ${latest ? `<div class="obs-meta">${new Date(latest.data).toLocaleString('pt-BR')}</div>` : ''}
           <button class="obs-btn" data-obs="${p.tbs}">Ver histórico / adicionar</button>
         </td>
+        <td>${statusCxSelect(p.tbs)}</td>
       </tr>
-      ${hasMulti ? `<tr class="expand-row" id="exp-${p.tbs}" style="display:none;"><td></td><td colspan="10">${nfDetailTable(p)}</td></tr>` : ''}
+      ${hasMulti ? `<tr class="expand-row" id="exp-${p.tbs}" style="display:none;"><td></td><td colspan="11">${nfDetailTable(p)}</td></tr>` : ''}
       `;
     }).join('');
   }
@@ -902,6 +960,16 @@ function renderTable(){
   });
   tbody.querySelectorAll('[data-obs]').forEach(btn=>{
     btn.addEventListener('click', ()=> openObsModal(btn.dataset.obs));
+  });
+  tbody.querySelectorAll('[data-statuscx]').forEach(sel=>{
+    sel.addEventListener('change', async ()=>{
+      const tbs = sel.dataset.statuscx;
+      const val = sel.value;
+      sel.disabled = true;
+      await setStatusCx(tbs, val);
+      sel.disabled = false;
+      sel.className = 'statuscx-select ' + statusCxClass(val);
+    });
   });
 
   document.getElementById('countInfo').textContent = `${filtered.length} de ${PEDIDOS.length} pedidos exibidos`;
@@ -926,8 +994,6 @@ function openObsModal(tbs){
   currentModalTbs = tbs;
   document.getElementById('modalTbsTag').textContent = tbs;
   document.getElementById('obsInput').value = '';
-  const savedAutor = localStorage.getItem(LS_AUTOR) || '';
-  document.getElementById('obsAutor').value = savedAutor;
   const tag = document.getElementById('obsSyncTag');
   if(obsSyncDisponivel()){
     tag.style.display = 'block';
@@ -950,19 +1016,17 @@ function renderModalHistory(){
   body.innerHTML = arr.map(o=>`
     <div class="hist-entry">
       <div class="txt">${o.texto}</div>
-      <div class="meta">${o.autor} · ${new Date(o.data).toLocaleString('pt-BR')}</div>
+      <div class="meta">${new Date(o.data).toLocaleString('pt-BR')}</div>
     </div>`).join('');
 }
 document.getElementById('modalClose').addEventListener('click', ()=> document.getElementById('obsModal').classList.remove('open'));
 document.getElementById('obsModal').addEventListener('click', e=>{ if(e.target.id==='obsModal') document.getElementById('obsModal').classList.remove('open'); });
 document.getElementById('btnAddObs').addEventListener('click', async ()=>{
   const texto = document.getElementById('obsInput').value.trim();
-  const autor = document.getElementById('obsAutor').value.trim();
   if(!texto) return;
-  localStorage.setItem(LS_AUTOR, autor);
   const btn = document.getElementById('btnAddObs');
   btn.disabled = true; btn.textContent = 'Salvando...';
-  await addObservacao(currentModalTbs, texto, autor);
+  await addObservacao(currentModalTbs, texto);
   btn.disabled = false; btn.textContent = 'Adicionar';
   document.getElementById('obsInput').value = '';
   renderModalHistory();
@@ -1033,6 +1097,7 @@ function renderAll(updatedAt){
     toggleUploadView(true);
   }
   syncObsFromServer();
+  syncStatusCxFromServer();
 })();
 </script>
 </body>
