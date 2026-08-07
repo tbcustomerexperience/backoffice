@@ -203,20 +203,21 @@
   .panel-head .desc{font-size:11px; color:var(--ink-soft); margin-top:2px;}
 
   .controls{
-    padding:18px 22px; display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end;
+    padding:18px 22px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
     border-bottom:1px solid var(--line); background:#fbfaf6;
   }
   .f-group{display:flex; flex-direction:column; gap:6px;}
   .f-group label{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); font-weight:700;}
-  .controls input[type=text], .controls input[type=number], .controls select{
-    font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px; border:1px solid var(--line);
+  .controls input[type=text], .controls input[type=number], .controls input[type=date], .controls select{
+    font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--line);
     border-radius:8px; background:#fff; color:var(--ink);
   }
-  .controls input[type=text]{width:250px;}
-  .controls select{cursor:pointer; min-width:160px;}
+  .controls input[type=text]{width:210px;}
+  .controls input[type=date]{width:150px; cursor:pointer; color-scheme:light;}
+  .controls select{cursor:pointer; min-width:130px; max-width:150px;}
   .clear-filters-link{
     background:none; border:none; font-size:12px; font-weight:700; color:var(--risco-critico);
-    text-decoration:underline; cursor:pointer; padding:11px 0; font-family:'DM Sans',sans-serif;
+    text-decoration:underline; cursor:pointer; padding:10px 0; font-family:'DM Sans',sans-serif; white-space:nowrap;
   }
   .pill-toggle{display:flex; gap:6px; flex-wrap:wrap;}
   .pill{
@@ -228,9 +229,10 @@
 
   .ms-dropdown{position:relative; font-family:'DM Sans',sans-serif;}
   .ms-dropdown-btn{
-    font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 32px 11px 14px; border:1px solid var(--line);
-    border-radius:8px; background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%237c7466'><path d='M5.5 7.5l4.5 4.5 4.5-4.5z'/></svg>") no-repeat right 10px center/13px;
-    color:var(--ink); cursor:pointer; text-align:left; white-space:nowrap; min-width:150px;
+    font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 28px 10px 12px; border:1px solid var(--line);
+    border-radius:8px; background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%237c7466'><path d='M5.5 7.5l4.5 4.5 4.5-4.5z'/></svg>") no-repeat right 9px center/13px;
+    color:var(--ink); cursor:pointer; text-align:left; white-space:nowrap; min-width:130px; max-width:150px;
+    overflow:hidden; text-overflow:ellipsis; display:block;
   }
   .ms-dropdown-btn:hover{border-color:var(--tb-gold);}
   .ms-dropdown.open .ms-dropdown-btn{border-color:var(--tb-green);}
@@ -368,6 +370,8 @@
   .ind-panel{padding:22px;}
   .ind-empty{text-align:center; padding:40px; color:#a39c8c; font-style:italic; font-size:13px;}
   .ind-bar-row{display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--line);}
+  .ind-bar-row-clickable{cursor:pointer; border-radius:6px; transition:background .15s;}
+  .ind-bar-row-clickable:hover{background:var(--tb-cream-2);}
   .ind-bar-row:last-child{border-bottom:none;}
   .ind-bar-date{width:78px; flex:0 0 auto; font-size:12px; font-weight:700; color:var(--tb-green-dark);}
   .ind-bar-track{flex:1; height:20px; background:var(--tb-cream-2); border-radius:5px; overflow:hidden; display:flex;}
@@ -532,13 +536,16 @@
         </div>
         <div class="f-group">
           <label>Nível</label>
-          <select id="riskFilter">
-            <option value="all">Todos</option>
-            <option value="critico">Crítico</option>
-            <option value="atencao">Atenção</option>
-            <option value="normal">Em trânsito</option>
-            <option value="entregue">Entregues</option>
-          </select>
+          <div class="ms-dropdown" id="riskFilterWrap">
+            <button type="button" class="ms-dropdown-btn" id="riskFilterBtn">Todos</button>
+            <div class="ms-dropdown-panel" id="riskFilterPanel">
+              <label><input type="checkbox" value="critico"> Crítico</label>
+              <label><input type="checkbox" value="atencao"> Atenção</label>
+              <label><input type="checkbox" value="normal"> Em trânsito</label>
+              <label><input type="checkbox" value="entregue"> Entregues</label>
+              <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+            </div>
+          </div>
         </div>
         <div class="f-group">
           <label>Atraso</label>
@@ -551,6 +558,10 @@
             <option value="15-">A partir de 15 dias</option>
             <option value="30-">A partir de 30 dias</option>
           </select>
+        </div>
+        <div class="f-group">
+          <label>Previsão</label>
+          <input type="date" id="dateFilterMain">
         </div>
         <div class="f-group">
           <label>Transportadora</label>
@@ -728,7 +739,7 @@ const CONFIG = {
 };
 const SHARED_MODE = !!CONFIG.API_URL;
 
-const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], statusTransp:[], obsFilter:[], statusFilter:[], diasAtrasoRange:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
+const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, riskFilter:[], search:'', transp:[], statusTransp:[], obsFilter:[], statusFilter:[], diasAtrasoRange:'', dateFilter:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
 const TABLE_PAGE_SIZE = 60;
 
 const STATUS_CX = {
@@ -751,9 +762,11 @@ function initMultiSelectFilter(prefix, opts){
   function updateBtn(){
     const selected = opts.getSelected();
     const n = selected.length;
-    btn.textContent = n===0 ? opts.labelAll
+    const text = n===0 ? opts.labelAll
       : n===1 ? opts.labelFor(selected[0])
       : n+' selecionados';
+    btn.textContent = text;
+    btn.title = text;
   }
 
   btn.addEventListener('click', e=>{
@@ -796,6 +809,13 @@ function initMultiSelectFilter(prefix, opts){
 }
 document.addEventListener('click', ()=> document.querySelectorAll('.ms-dropdown.open').forEach(w=>w.classList.remove('open')));
 
+const RISK_FILTER_LABELS = {critico:'Crítico', atencao:'Atenção', normal:'Em trânsito', entregue:'Entregues'};
+const riskMs = initMultiSelectFilter('riskFilter', {
+  labelAll: 'Todos', labelPrefix: 'Nível',
+  labelFor: v=> RISK_FILTER_LABELS[v],
+  getSelected: ()=>state.riskFilter, setSelected: v=>{ state.riskFilter = v; },
+  onChange: ()=>applyFilters(),
+});
 const transpMs = initMultiSelectFilter('transpFilter', {
   labelAll: 'Todas', labelPrefix: 'Transportadora',
   labelFor: v=>v,
@@ -1194,7 +1214,7 @@ function renderColDrilldown(){
     const days = Object.keys(byDay).sort().map(k=>({key:k, ...byDay[k]}));
     const max = Math.max(...days.map(d=>d.count));
     bodyHtml = days.map(d=>`
-      <div class="ind-bar-row">
+      <div class="ind-bar-row ind-bar-row-clickable" data-date="${d.key}" title="Ver essas NFs na Lista de ação">
         <div class="ind-bar-date">${escapeHtml(d.label)}</div>
         <div class="ind-bar-track"><div class="ind-bar-seg critico" style="width:${max?(d.count/max)*100:0}%"></div></div>
         <div class="ind-bar-count"><b>${d.count}</b> nota(s)</div>
@@ -1212,6 +1232,21 @@ function renderColDrilldown(){
     document.querySelectorAll('#indColChart .col-chart-item').forEach(it=>{
       it.classList.remove('active');
       it.querySelector('.col-chart-expand').textContent = '▾ expandir';
+    });
+  });
+  wrap.querySelectorAll('.ind-bar-row-clickable').forEach(row=>{
+    row.addEventListener('click', ()=>{
+      const dateKey = row.dataset.date;
+      state.riskFilter = ['critico'];
+      state.dateFilter = dateKey;
+      riskMs.syncCheckboxes();
+      document.getElementById('dateFilterMain').value = dateKey;
+      applyFilters();
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+      document.querySelector('.tab-btn[data-tab="Painel"]').classList.add('active');
+      document.getElementById('tabPainel').classList.add('active');
+      document.getElementById('tabPainel').scrollIntoView({behavior:'smooth', block:'start'});
     });
   });
 }
@@ -1541,8 +1576,6 @@ function populateStatusTranspFilter(rows){
 }
 
 function populateMonthFilter(rows){
-  const sel = document.getElementById('indMonthFilter');
-  const current = sel.value;
   const set = new Map();
   rows.forEach(r=>{
     if(!r.previsao) return;
@@ -1550,7 +1583,11 @@ function populateMonthFilter(rows){
     if(!set.has(key)) set.set(key, MESES_PT[r.previsao.getMonth()]+'/'+r.previsao.getFullYear());
   });
   const keys = [...set.keys()].sort();
-  sel.innerHTML = '<option value="">Mês (todos)</option>' + keys.map(k=>`<option value="${k}">${set.get(k)}</option>`).join('');
+  const optionsHtml = keys.map(k=>`<option value="${k}">${set.get(k)}</option>`).join('');
+
+  const sel = document.getElementById('indMonthFilter');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">Mês (todos)</option>' + optionsHtml;
   sel.value = current;
 }
 
@@ -1621,10 +1658,6 @@ function checkNewCritical(rows){
   localStorage.setItem('tb_cx_entregas_snapshot', JSON.stringify({date:todayKey, critical:criticalNow}));
 }
 
-document.getElementById('riskFilter').addEventListener('change', e=>{
-  state.risk = e.target.value;
-  applyFilters();
-});
 document.getElementById('searchBox').addEventListener('input', e=>{
   state.search = e.target.value.trim().toLowerCase();
   applyFilters();
@@ -1633,12 +1666,17 @@ document.getElementById('diasAtrasoFilter').addEventListener('change', e=>{
   state.diasAtrasoRange = e.target.value;
   applyFilters();
 });
+document.getElementById('dateFilterMain').addEventListener('change', e=>{
+  state.dateFilter = e.target.value;
+  applyFilters();
+});
 document.getElementById('btnClearFilters').addEventListener('click', ()=>{
-  state.risk = 'all'; state.search = ''; state.diasAtrasoRange = '';
+  state.riskFilter = []; state.search = ''; state.diasAtrasoRange = ''; state.dateFilter = '';
   state.transp = []; state.statusTransp = []; state.obsFilter = []; state.statusFilter = [];
-  document.getElementById('riskFilter').value = 'all';
+  riskMs.syncCheckboxes();
   document.getElementById('searchBox').value = '';
   document.getElementById('diasAtrasoFilter').value = '';
+  document.getElementById('dateFilterMain').value = '';
   transpMs.syncCheckboxes();
   statusTranspMs.syncCheckboxes();
   obsMs.syncCheckboxes();
@@ -1694,9 +1732,10 @@ function calcDiasAtraso(r){
 
 function applyFilters(){
   let rows = state.rows;
-  if(state.risk !== 'all'){
-    if(state.risk === 'entregue') rows = rows.filter(r=>r.risk==='entregue'||r.risk==='entregue-atraso');
-    else rows = rows.filter(r=>r.risk===state.risk);
+  if(state.riskFilter.length){
+    rows = rows.filter(r=>{
+      return state.riskFilter.some(f=> f==='entregue' ? (r.risk==='entregue'||r.risk==='entregue-atraso') : r.risk===f);
+    });
   }
   if(state.transp.length) rows = rows.filter(r=>state.transp.includes(r.transp));
   if(state.statusTransp.length) rows = rows.filter(r=>state.statusTransp.includes(r.status));
@@ -1722,6 +1761,13 @@ function applyFilters(){
       if(d < min) return false;
       if(max !== null && d > max) return false;
       return true;
+    });
+  }
+  if(state.dateFilter){
+    rows = rows.filter(r=>{
+      if(!r.previsao) return false;
+      const key = r.previsao.getFullYear()+'-'+String(r.previsao.getMonth()+1).padStart(2,'0')+'-'+String(r.previsao.getDate()).padStart(2,'0');
+      return key === state.dateFilter;
     });
   }
   if(state.statusFilter.length){
