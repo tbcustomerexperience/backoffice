@@ -57,7 +57,7 @@
     background:rgba(255,255,255,.08); padding:5px 10px; border-radius:20px;
   }
   .topbar-meta b{display:inline; font-size:11px; color:#fff; font-weight:700; margin-top:0; margin-left:4px;}
-  .wrap{max-width:1440px; margin:0 auto; padding:0 28px 60px;}
+  .wrap{max-width:1700px; margin:0 auto; padding:0 28px 60px;}
 
   .upload-zone{
     margin-top:18px; margin-bottom:22px;
@@ -142,29 +142,18 @@
   #dashboard{display:none;}
 
   .kpi-row{
-    display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:26px;
+    display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:22px;
   }
   .kpi-row.kpi-row-4col{grid-template-columns:repeat(4,1fr);}
-  .kpi-row.kpi-row-4col .kpi .l{font-size:9.5px; margin-bottom:6px;}
-  .kpi-row.kpi-row-4col .kpi .n{font-size:24px;}
-  .kpi-row.kpi-row-4col .kpi .sub{font-size:10px; margin-top:5px;}
   .kpi{
-    padding:18px 18px 16px; text-align:left; background:#fff; border:1px solid var(--line);
-    border-radius:12px; box-shadow:var(--shadow);
+    background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px 16px 14px;
+    box-shadow:0 1px 2px rgba(0,0,0,.03);
   }
-  .kpi .l{
-    font-family:'DM Sans',sans-serif; font-size:10.5px; color:var(--ink-soft); margin-bottom:9px;
-    text-transform:uppercase; letter-spacing:.08em; font-weight:700;
-  }
-  .kpi .n{
-    font-family:'Lora',serif; font-style:normal; font-size:27px; font-weight:500; color:var(--tb-green-dark);
-    line-height:1; letter-spacing:.005em;
-  }
-  .kpi .sub{
-    font-family:'DM Sans',sans-serif; font-size:11px; color:var(--ink-soft); margin-top:8px; font-weight:500;
-  }
-  .kpi.crit .n{color:var(--risco-critico);}
-  .kpi.aten .n{color:var(--risco-atencao);}
+  .kpi .val{font-family:'Lora',serif; font-weight:500; font-size:25px; color:var(--tb-green-dark);}
+  .kpi .val.crit{color:var(--risco-critico);}
+  .kpi .val.aten{color:var(--risco-atencao);}
+  .kpi .label{font-size:11px; color:var(--ink); font-weight:600; margin-top:4px;}
+  .kpi .sub{font-size:10px; color:var(--ink-soft); margin-top:1px;}
 
   .kpi-section-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; flex-wrap:wrap;}
   .view-toggle{display:flex; gap:4px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:3px;}
@@ -195,57 +184,6 @@
   .kpi-table .kpi-table-sub{font-family:'DM Sans',sans-serif; font-size:11.5px; color:var(--ink-soft);}
   @media(max-width:900px){ .kpi-table .kpi-table-label{width:auto;} }
 
-  /* KPI compacto — cards estilo "imagem 2" */
-  .kv2-top{display:grid; grid-template-columns:1fr 1fr 1.7fr; gap:10px; margin-bottom:12px;}
-  .kv2-card{
-    background:#fff; border:1px solid var(--line); border-radius:10px; padding:11px 13px;
-    box-shadow:var(--shadow);
-  }
-  .kv2-head{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:5px;}
-  .kv2-label{
-    font-family:'DM Sans',sans-serif; font-size:9.5px; text-transform:uppercase; letter-spacing:.06em;
-    color:var(--ink-soft); font-weight:700;
-  }
-  .kv2-badge{font-size:9px; font-weight:700; padding:2px 8px; border-radius:100px; white-space:nowrap;}
-  .kv2-badge.crit{background:var(--risco-critico-bg); color:var(--risco-critico);}
-  .kv2-badge.aten{background:var(--risco-atencao-bg); color:var(--risco-atencao);}
-  .kv2-num{font-family:'Lora',serif; font-size:21px; font-weight:600; color:var(--tb-green-dark); line-height:1;}
-  .kv2-card.crit .kv2-num{color:var(--risco-critico);}
-  .kv2-card.aten .kv2-num{color:var(--risco-atencao);}
-  .kv2-sub{font-family:'DM Sans',sans-serif; font-size:10px; color:var(--ink-soft); margin-top:5px; line-height:1.35;}
-
-  .kv2-quality-row{display:flex; align-items:center; gap:14px; margin-top:3px;}
-  .kv2-quality-pct{flex:1; min-width:0;}
-  .kv2-quality-pct .kv2-num{font-size:22px;}
-  .kv2-quality-pct-label{font-family:'DM Sans',sans-serif; font-size:10px; color:var(--ink-soft); margin-left:4px;}
-  .kv2-bar-track{height:5px; background:var(--tb-cream-2); border-radius:4px; overflow:hidden; margin-top:6px;}
-  .kv2-bar-fill{height:100%; background:var(--tb-green); border-radius:4px; transition:width .3s;}
-  .kv2-quality-breakdown{
-    display:flex; flex-direction:column; gap:8px; border-left:1px solid var(--line); padding-left:16px; flex:0 0 auto;
-  }
-  .kv2-quality-item{
-    display:flex; align-items:center; justify-content:space-between; gap:16px; font-family:'DM Sans',sans-serif; font-size:11.5px; color:var(--ink-soft);
-  }
-  .kv2-quality-item b{font-family:'Lora',serif; font-size:20px; color:var(--tb-green-dark); font-weight:600;}
-
-  .kv2-section-head{display:flex; align-items:baseline; justify-content:space-between; margin:14px 0 8px;}
-  .kv2-section-head h3{font-family:'Lora',serif; font-size:14px; color:var(--tb-green-dark); font-weight:600;}
-  .kv2-section-head span{font-family:'DM Sans',sans-serif; font-size:10.5px; color:var(--ink-soft);}
-
-  .kv2-status-row{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:22px;}
-  .kv2-status-card{
-    background:#fff; border:1px solid var(--line); border-top:3px solid var(--accent, var(--tb-green));
-    border-radius:10px; padding:11px 13px;
-  }
-  .kv2-status-num-row{display:flex; align-items:baseline; justify-content:space-between; margin-top:2px;}
-  .kv2-pct{font-family:'DM Sans',sans-serif; font-size:11px; color:var(--ink-soft); font-weight:700;}
-  .kv2-status-card .kv2-bar-track{margin-top:7px;}
-
-  @media(max-width:900px){
-    .kv2-top{grid-template-columns:1fr;}
-    .kv2-status-row{grid-template-columns:repeat(2,1fr);}
-  }
-
   .new-alert{
     background:var(--risco-critico-bg); border:1px solid #eec9c2; color:var(--risco-critico);
     padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:22px; display:none;
@@ -258,24 +196,28 @@
     box-shadow:var(--shadow);
   }
   .panel-head{
-    padding:20px 22px; border-bottom:1px solid var(--line);
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    padding:12px 18px; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
   }
-  .panel-head h2{font-size:20px; color:var(--tb-green-dark);}
-  .panel-head .desc{font-size:12.5px; color:var(--ink-soft); margin-top:3px;}
+  .panel-head h2{font-size:15px; color:var(--tb-green-dark);}
+  .panel-head .desc{font-size:11px; color:var(--ink-soft); margin-top:2px;}
 
   .controls{
-    padding:16px 22px; display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;
+    padding:18px 22px; display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end;
     border-bottom:1px solid var(--line); background:#fbfaf6;
   }
-  .f-group{display:flex; flex-direction:column; gap:5px;}
-  .f-group label{font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); font-weight:700;}
+  .f-group{display:flex; flex-direction:column; gap:6px;}
+  .f-group label{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); font-weight:700;}
   .controls input[type=text], .controls input[type=number], .controls select{
-    font-family:'DM Sans',sans-serif; font-size:12.5px; padding:8px 10px; border:1px solid var(--line);
-    border-radius:6px; background:#fff; color:var(--ink);
+    font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 14px; border:1px solid var(--line);
+    border-radius:8px; background:#fff; color:var(--ink);
   }
-  .controls input[type=text]{width:230px;}
-  .controls select{cursor:pointer;}
+  .controls input[type=text]{width:250px;}
+  .controls select{cursor:pointer; min-width:160px;}
+  .clear-filters-link{
+    background:none; border:none; font-size:12px; font-weight:700; color:var(--risco-critico);
+    text-decoration:underline; cursor:pointer; padding:11px 0; font-family:'DM Sans',sans-serif;
+  }
   .pill-toggle{display:flex; gap:6px; flex-wrap:wrap;}
   .pill{
     font-size:11.5px; padding:6px 12px; border-radius:100px; border:1px solid var(--line);
@@ -286,9 +228,9 @@
 
   .ms-dropdown{position:relative; font-family:'DM Sans',sans-serif;}
   .ms-dropdown-btn{
-    font-family:'DM Sans',sans-serif; font-size:12.5px; padding:8px 28px 8px 10px; border:1px solid var(--line);
-    border-radius:6px; background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%237c7466'><path d='M5.5 7.5l4.5 4.5 4.5-4.5z'/></svg>") no-repeat right 8px center/12px;
-    color:var(--ink); cursor:pointer; text-align:left; white-space:nowrap;
+    font-family:'DM Sans',sans-serif; font-size:13.5px; padding:11px 32px 11px 14px; border:1px solid var(--line);
+    border-radius:8px; background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%237c7466'><path d='M5.5 7.5l4.5 4.5 4.5-4.5z'/></svg>") no-repeat right 10px center/13px;
+    color:var(--ink); cursor:pointer; text-align:left; white-space:nowrap; min-width:150px;
   }
   .ms-dropdown-btn:hover{border-color:var(--tb-gold);}
   .ms-dropdown.open .ms-dropdown-btn{border-color:var(--tb-green);}
@@ -560,62 +502,15 @@
       <div style="font-size:11px; color:#8a8172;">Os números abaixo consideram os filtros aplicados na lista de ação.</div>
     </div>
     <div id="kpiCardsView">
-      <div class="kv2-top">
-        <div class="kv2-card crit">
-          <div class="kv2-head"><span class="kv2-label">NFs Críticas</span><span class="kv2-badge crit">Ação imediata</span></div>
-          <div class="kv2-num" id="kpiCritico">0</div>
-          <div class="kv2-sub">Pedidos que já ultrapassaram a previsão de entrega</div>
-        </div>
-        <div class="kv2-card aten">
-          <div class="kv2-head"><span class="kv2-label">NFs Atenção</span><span class="kv2-badge aten">Monitorar</span></div>
-          <div class="kv2-num" id="kpiAtencao">0</div>
-          <div class="kv2-sub">Pedidos com até 3 dias para a previsão de entrega</div>
-        </div>
-        <div class="kv2-card kv2-quality">
-          <div class="kv2-label">Qualidade do acompanhamento</div>
-          <div class="kv2-quality-row">
-            <div class="kv2-quality-pct">
-              <span class="kv2-num" id="kpiQualityPct">0%</span>
-              <span class="kv2-quality-pct-label">com observação</span>
-              <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiQualityBar" style="width:0%;"></div></div>
-            </div>
-            <div class="kv2-quality-breakdown">
-              <div class="kv2-quality-item"><span>Com observação</span><b id="kpiComObs">0</b></div>
-              <div class="kv2-quality-item"><span>Sem observação</span><b id="kpiSemObs">0</b></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="kv2-section-head">
-        <h3>Status das tratativas</h3>
-        <span id="kpiTotalCriticas">0 registros no recorte</span>
-      </div>
-      <div class="kv2-status-row">
-        <div class="kv2-status-card" style="--accent:#8a6d31;">
-          <div class="kv2-label">Pendente</div>
-          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStPendente">0</span><span class="kv2-pct" id="kpiStPendentePct">0%</span></div>
-          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStPendenteBar" style="width:0%; background:#8a6d31;"></div></div>
-          <div class="kv2-sub">Ainda sem conclusão da tratativa</div>
-        </div>
-        <div class="kv2-status-card" style="--accent:#5C7A8A;">
-          <div class="kv2-label">Em andamento</div>
-          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStAndamento">0</span><span class="kv2-pct" id="kpiStAndamentoPct">0%</span></div>
-          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStAndamentoBar" style="width:0%; background:#5C7A8A;"></div></div>
-          <div class="kv2-sub">Casos já em acompanhamento</div>
-        </div>
-        <div class="kv2-status-card" style="--accent:var(--tb-green);">
-          <div class="kv2-label">Finalizado</div>
-          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStFinalizado">0</span><span class="kv2-pct" id="kpiStFinalizadoPct">0%</span></div>
-          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStFinalizadoBar" style="width:0%; background:var(--tb-green);"></div></div>
-          <div class="kv2-sub">Tratativas concluídas no recorte</div>
-        </div>
-        <div class="kv2-status-card" style="--accent:var(--risco-critico);">
-          <div class="kv2-label">Em devolução</div>
-          <div class="kv2-status-num-row"><span class="kv2-num" id="kpiStDevolucao">0</span><span class="kv2-pct" id="kpiStDevolucaoPct">0%</span></div>
-          <div class="kv2-bar-track"><div class="kv2-bar-fill" id="kpiStDevolucaoBar" style="width:0%; background:var(--risco-critico);"></div></div>
-          <div class="kv2-sub">Pedidos em fluxo de devolução</div>
-        </div>
+      <div class="kpi-row kpi-row-4col">
+        <div class="kpi"><div class="val crit" id="kpiCritico">0</div><div class="label">NFs Críticas</div><div class="sub">Ação imediata</div></div>
+        <div class="kpi"><div class="val aten" id="kpiAtencao">0</div><div class="label">NFs Atenção</div><div class="sub">Monitorar</div></div>
+        <div class="kpi"><div class="val" id="kpiComObs">0</div><div class="label">Com observação</div><div class="sub" id="kpiComObsSub">% das NFs críticas</div></div>
+        <div class="kpi"><div class="val" id="kpiSemObs">0</div><div class="label">Sem observação</div><div class="sub" id="kpiSemObsSub">% das NFs críticas</div></div>
+        <div class="kpi"><div class="val" id="kpiStPendente">0</div><div class="label">Pendente</div><div class="sub" id="kpiStPendenteSub">% das NFs críticas</div></div>
+        <div class="kpi"><div class="val" id="kpiStAndamento">0</div><div class="label">Em andamento</div><div class="sub" id="kpiStAndamentoSub">% das NFs críticas</div></div>
+        <div class="kpi"><div class="val" id="kpiStFinalizado">0</div><div class="label">Finalizado</div><div class="sub" id="kpiStFinalizadoSub">% das NFs críticas</div></div>
+        <div class="kpi"><div class="val" id="kpiStDevolucao">0</div><div class="label">Em devolução</div><div class="sub" id="kpiStDevolucaoSub">% das NFs críticas</div></div>
       </div>
     </div>
 
@@ -667,6 +562,15 @@
           </div>
         </div>
         <div class="f-group">
+          <label>Status Transportadora</label>
+          <div class="ms-dropdown" id="statusTranspFilterWrap">
+            <button type="button" class="ms-dropdown-btn" id="statusTranspFilterBtn">Todos</button>
+            <div class="ms-dropdown-panel" id="statusTranspFilterPanel">
+              <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+            </div>
+          </div>
+        </div>
+        <div class="f-group">
           <label>Observação</label>
           <div class="ms-dropdown" id="obsFilterWrap">
             <button type="button" class="ms-dropdown-btn" id="obsFilterBtn">Todas</button>
@@ -690,6 +594,10 @@
               <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
             </div>
           </div>
+        </div>
+        <div class="f-group">
+          <label>&nbsp;</label>
+          <button type="button" class="clear-filters-link" id="btnClearFilters">Limpar filtros</button>
         </div>
       </div>
       <div class="table-scroll">
@@ -820,7 +728,7 @@ const CONFIG = {
 };
 const SHARED_MODE = !!CONFIG.API_URL;
 
-const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], obsFilter:[], statusFilter:[], diasAtrasoRange:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
+const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], statusTransp:[], obsFilter:[], statusFilter:[], diasAtrasoRange:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
 const TABLE_PAGE_SIZE = 60;
 
 const STATUS_CX = {
@@ -844,8 +752,8 @@ function initMultiSelectFilter(prefix, opts){
     const selected = opts.getSelected();
     const n = selected.length;
     btn.textContent = n===0 ? opts.labelAll
-      : n===1 ? opts.labelPrefix+': '+opts.labelFor(selected[0])
-      : opts.labelPrefix+' ('+n+' selecionados)';
+      : n===1 ? opts.labelFor(selected[0])
+      : n+' selecionados';
   }
 
   btn.addEventListener('click', e=>{
@@ -892,6 +800,12 @@ const transpMs = initMultiSelectFilter('transpFilter', {
   labelAll: 'Todas', labelPrefix: 'Transportadora',
   labelFor: v=>v,
   getSelected: ()=>state.transp, setSelected: v=>{ state.transp = v; },
+  onChange: ()=>applyFilters(),
+});
+const statusTranspMs = initMultiSelectFilter('statusTranspFilter', {
+  labelAll: 'Todos', labelPrefix: 'Status Transportadora',
+  labelFor: v=>v,
+  getSelected: ()=>state.statusTransp, setSelected: v=>{ state.statusTransp = v; },
   onChange: ()=>applyFilters(),
 });
 const obsMs = initMultiSelectFilter('obsFilter', {
@@ -1028,6 +942,7 @@ function recomputeRisk(r){
     diasRestantes = Math.round((p - hoje) / 86400000);
   }
   if((diasRestantes !== null && diasRestantes < 0) || r.situacao === 'Atrasado') return 'critico';
+  if((r.status||'').toLowerCase() === 'averiguar falha na entrega') return 'critico';
   if(diasRestantes !== null && diasRestantes <= 3) return 'atencao';
   return 'normal';
 }
@@ -1051,8 +966,10 @@ function classify(row){
   }
 
   // Crítico: já passou da previsão de entrega (ou o Intelipost já sinaliza "Atrasado")
-  // e ainda não foi marcada como entregue.
+  // e ainda não foi marcada como entregue. Também é crítico quando a transportadora
+  // sinaliza "Averiguar falha na entrega", mesmo que ainda esteja dentro do prazo.
   if((diasRestantes !== null && diasRestantes < 0) || situacao === 'Atrasado') return 'critico';
+  if(status.toLowerCase() === 'averiguar falha na entrega') return 'critico';
 
   // Atenção: faltam até 3 dias para a previsão de entrega e ainda não foi entregue.
   if(diasRestantes !== null && diasRestantes <= 3) return 'atencao';
@@ -1200,6 +1117,7 @@ function renderDataset(rows, meta){
 
   checkNewCritical(rows);
   populateTransportFilter(rows);
+  populateStatusTranspFilter(rows);
   populateMonthFilter(rows);
   renderIndicadores(rows);
   applyFilters();
@@ -1610,6 +1528,18 @@ function populateTransportFilter(rows){
   selInd.value = currentInd;
 }
 
+function populateStatusTranspFilter(rows){
+  const set = [...new Set(rows.map(r=>r.status).filter(Boolean))].sort();
+
+  // Mesmo padrão do filtro de Transportadora — remove da seleção qualquer
+  // status que não existir mais na base recém-carregada.
+  state.statusTransp = state.statusTransp.filter(s=> set.includes(s));
+  const panel = document.getElementById('statusTranspFilterPanel');
+  panel.innerHTML = set.map(s=>`<label><input type="checkbox" value="${escapeHtml(s)}" ${state.statusTransp.includes(s)?'checked':''}> ${escapeHtml(s)}</label>`).join('')
+    + '<div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>';
+  statusTranspMs.syncCheckboxes();
+}
+
 function populateMonthFilter(rows){
   const sel = document.getElementById('indMonthFilter');
   const current = sel.value;
@@ -1666,28 +1596,6 @@ function renderKPIs(rows){
   setKpi('kpiStAndamentoSub', pct(statusCount.andamento));
   setKpi('kpiStFinalizadoSub', pct(statusCount.finalizado));
   setKpi('kpiStDevolucaoSub', pct(statusCount.devolucao));
-
-  // Elementos exclusivos do card "estilo imagem 2" (percentual, barra de progresso, contagem do recorte)
-  const pctNum = n => totalCriticas ? Math.round((n/totalCriticas)*100) : 0;
-  const qualityPct = pctNum(comObs);
-  const setBar = (barId, pctVal) => { const el = document.getElementById(barId); if(el) el.style.width = pctVal + '%'; };
-  const setPctText = (id, pctVal) => { const el = document.getElementById(id); if(el) el.textContent = pctVal + '%'; };
-
-  const qualityPctEl = document.getElementById('kpiQualityPct');
-  if(qualityPctEl) qualityPctEl.textContent = qualityPct + '%';
-  setBar('kpiQualityBar', qualityPct);
-
-  const totalCriticasEl = document.getElementById('kpiTotalCriticas');
-  if(totalCriticasEl) totalCriticasEl.textContent = fmtNum(totalCriticas) + (totalCriticas===1 ? ' registro no recorte' : ' registros no recorte');
-
-  setPctText('kpiStPendentePct', pctNum(statusCount.pendente));
-  setPctText('kpiStAndamentoPct', pctNum(statusCount.andamento));
-  setPctText('kpiStFinalizadoPct', pctNum(statusCount.finalizado));
-  setPctText('kpiStDevolucaoPct', pctNum(statusCount.devolucao));
-  setBar('kpiStPendenteBar', pctNum(statusCount.pendente));
-  setBar('kpiStAndamentoBar', pctNum(statusCount.andamento));
-  setBar('kpiStFinalizadoBar', pctNum(statusCount.finalizado));
-  setBar('kpiStDevolucaoBar', pctNum(statusCount.devolucao));
 }
 
 function showCriticalAlert(novos, sourceLabel){
@@ -1723,6 +1631,18 @@ document.getElementById('searchBox').addEventListener('input', e=>{
 });
 document.getElementById('diasAtrasoFilter').addEventListener('change', e=>{
   state.diasAtrasoRange = e.target.value;
+  applyFilters();
+});
+document.getElementById('btnClearFilters').addEventListener('click', ()=>{
+  state.risk = 'all'; state.search = ''; state.diasAtrasoRange = '';
+  state.transp = []; state.statusTransp = []; state.obsFilter = []; state.statusFilter = [];
+  document.getElementById('riskFilter').value = 'all';
+  document.getElementById('searchBox').value = '';
+  document.getElementById('diasAtrasoFilter').value = '';
+  transpMs.syncCheckboxes();
+  statusTranspMs.syncCheckboxes();
+  obsMs.syncCheckboxes();
+  statusCxMs.syncCheckboxes();
   applyFilters();
 });
 document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -1779,6 +1699,7 @@ function applyFilters(){
     else rows = rows.filter(r=>r.risk===state.risk);
   }
   if(state.transp.length) rows = rows.filter(r=>state.transp.includes(r.transp));
+  if(state.statusTransp.length) rows = rows.filter(r=>state.statusTransp.includes(r.status));
   if(state.search) rows = rows.filter(r=>{
     const nfLower = r.nf.toLowerCase();
     const nfStripped = stripLeadingZeros(nfLower);
