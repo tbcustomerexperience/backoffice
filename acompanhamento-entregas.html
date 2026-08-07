@@ -649,11 +649,12 @@
           <label>Atraso</label>
           <select id="diasAtrasoFilter">
             <option value="">Todos</option>
-            <option value="1">A partir de 1 dia</option>
-            <option value="3">A partir de 3 dias</option>
-            <option value="7">A partir de 7 dias</option>
-            <option value="15">A partir de 15 dias</option>
-            <option value="30">A partir de 30 dias</option>
+            <option value="1-1">1 dia</option>
+            <option value="2-2">2 dias</option>
+            <option value="3-5">3 a 5 dias</option>
+            <option value="7-10">7 a 10 dias</option>
+            <option value="15-">A partir de 15 dias</option>
+            <option value="30-">A partir de 30 dias</option>
           </select>
         </div>
         <div class="f-group">
@@ -819,7 +820,7 @@ const CONFIG = {
 };
 const SHARED_MODE = !!CONFIG.API_URL;
 
-const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], obsFilter:[], statusFilter:[], diasAtrasoMin:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
+const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, risk:'all', search:'', transp:[], obsFilter:[], statusFilter:[], diasAtrasoRange:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
 const TABLE_PAGE_SIZE = 60;
 
 const STATUS_CX = {
@@ -1721,7 +1722,7 @@ document.getElementById('searchBox').addEventListener('input', e=>{
   applyFilters();
 });
 document.getElementById('diasAtrasoFilter').addEventListener('change', e=>{
-  state.diasAtrasoMin = e.target.value;
+  state.diasAtrasoRange = e.target.value;
   applyFilters();
 });
 document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -1790,14 +1791,17 @@ function applyFilters(){
       return state.obsFilter.some(f=> f==='com' ? hasObs : !hasObs);
     });
   }
-  if(state.diasAtrasoMin !== null && state.diasAtrasoMin !== ''){
-    const min = Number(state.diasAtrasoMin);
-    if(!isNaN(min)){
-      rows = rows.filter(r=>{
-        const d = calcDiasAtraso(r);
-        return d !== null && d >= min;
-      });
-    }
+  if(state.diasAtrasoRange){
+    const [minStr, maxStr] = state.diasAtrasoRange.split('-');
+    const min = Number(minStr);
+    const max = maxStr === '' || maxStr === undefined ? null : Number(maxStr);
+    rows = rows.filter(r=>{
+      const d = calcDiasAtraso(r);
+      if(d === null) return false;
+      if(d < min) return false;
+      if(max !== null && d > max) return false;
+      return true;
+    });
   }
   if(state.statusFilter.length){
     rows = rows.filter(r=>{
