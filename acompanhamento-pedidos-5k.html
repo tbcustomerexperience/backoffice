@@ -135,7 +135,16 @@
   /* Table */
   .table-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
   .table-scroll{overflow-x:auto;max-height:640px;overflow-y:auto;}
-  table{border-collapse:collapse;width:100%;min-width:1520px;font-size:12px;}
+  table{border-collapse:collapse;width:100%;font-size:12px;}
+  /* Colunas de data (Data venda, Data prevista, Data entrega): largura fixa em px,
+     suficiente só para "dd/mm/aaaa" — mais confiável que width:1% para impedir
+     que o navegador estique a coluna além do necessário. */
+  table th:nth-child(2), table td:nth-child(2),
+  table th:nth-child(8), table td:nth-child(8),
+  table th:nth-child(9), table td:nth-child(9){
+    width:84px;max-width:84px;padding-left:6px;padding-right:6px;
+  }
+  table th:nth-child(1), table td:nth-child(1){width:30px;max-width:30px;}
   thead th{
     position:sticky;top:0;background:var(--green-dark);color:#EFE9D8;text-align:center;padding:10px 12px;
     font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:700;white-space:nowrap;z-index:2;
