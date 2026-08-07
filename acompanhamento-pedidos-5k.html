@@ -196,6 +196,7 @@
   .hist-entry .meta{font-size:10px;color:var(--ink-soft);margin-top:3px;}
   .hist-empty{font-size:12px;color:var(--ink-soft);font-style:italic;text-align:center;padding:20px 0;}
   .modal-foot{padding:16px 22px;border-top:1px solid var(--line);}
+  .obs-sync-tag{font-size:10px;color:var(--ink-soft);margin-bottom:8px;}
   .modal-foot textarea{
     width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:'DM Sans',sans-serif;
     font-size:12.5px;resize:vertical;min-height:56px;margin-bottom:8px;
@@ -352,6 +353,7 @@
     </div>
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-foot">
+      <div class="obs-sync-tag" id="obsSyncTag" style="display:none;"></div>
       <textarea id="obsInput" placeholder="Registrar novo contato / observação sobre este pedido..."></textarea>
       <div class="row">
         <input type="text" id="obsAutor" placeholder="Seu nome">
@@ -367,6 +369,12 @@ const LIMIAR_VALOR = 5000;
 const LS_DATA = 'pav_data_v1';
 const LS_OBS = 'pav_obs_v1';
 const LS_AUTOR = 'pav_autor_v1';
+
+// Cole aqui a URL do Web App do Google Apps Script (ver instruções em
+// apps-script-backend.gs) para que as observações fiquem salvas numa
+// planilha central, compartilhada entre todo o time e entre atualizações
+// de arquivo. Deixe em branco '' para usar apenas o navegador local.
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIFmDS7J0ThO37iVUiVc3OCjAyM7gbwBivDEWT6j7taj2J2EzpEuqferYDioYgOfXu/exec';
 
 const STATUS_META = {
   'Não Localizado em Integrados': {cls:'b-gray', short:'Não localizado'},
@@ -575,12 +583,56 @@ function loadObsStore(){
   try{ return JSON.parse(localStorage.getItem(LS_OBS)||'{}'); }catch(e){ return {}; }
 }
 function saveObsStore(store){ localStorage.setItem(LS_OBS, JSON.stringify(store)); }
-function addObservacao(tbs, texto, autor){
+function addObservacaoLocal(tbs, texto, autor){
   const store = loadObsStore();
   if(!store[tbs]) store[tbs] = [];
   store[tbs].unshift({texto, autor: autor||'—', data: new Date().toISOString()});
   saveObsStore(store);
 }
+
+/* ============ SINCRONIZAÇÃO COM APPS SCRIPT (observações compartilhadas) ============ */
+function obsSyncDisponivel(){ return !!APPS_SCRIPT_URL; }
+
+async function syncObsFromServer(){
+  if(!obsSyncDisponivel()) return;
+  const tag = document.getElementById('obsSyncTag');
+  if(tag){ tag.textContent = 'Sincronizando observações...'; tag.style.display='inline-block'; }
+  try{
+    const resp = await fetch(APPS_SCRIPT_URL + '?action=list');
+    const json = await resp.json();
+    if(json.ok){
+      saveObsStore(json.observacoes || {});
+      renderTable();
+      if(document.getElementById('obsModal').classList.contains('open')) renderModalHistory();
+      if(tag){ tag.textContent = 'Observações sincronizadas às ' + new Date().toLocaleTimeString('pt-BR'); }
+    }else{
+      if(tag){ tag.textContent = 'Falha ao sincronizar observações (ver console).'; }
+      console.warn('Resposta com erro do backend de observações:', json);
+    }
+  }catch(err){
+    if(tag){ tag.textContent = 'Sem conexão com o backend de observações — usando cópia local.'; }
+    console.warn('Falha ao sincronizar observações:', err);
+  }
+}
+
+/** Envia uma nova observação ao backend. Content-Type text/plain evita o
+ * preflight CORS que o Apps Script não responde. Sempre grava também no
+ * cache local (otimista), mesmo se o envio ao servidor falhar. */
+async function addObservacao(tbs, texto, autor){
+  if(obsSyncDisponivel()){
+    try{
+      await fetch(APPS_SCRIPT_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({action:'add', tbs, texto, autor})
+      });
+    }catch(err){
+      console.warn('Falha ao salvar observação no servidor — mantida apenas localmente:', err);
+    }
+  }
+  addObservacaoLocal(tbs, texto, autor);
+}
+
 function getLatestObs(tbs){
   const store = loadObsStore();
   const arr = store[tbs];
@@ -637,6 +689,7 @@ document.getElementById('btnProcess').addEventListener('click', async ()=>{
     msg.textContent = '';
     renderAll(new Date().toISOString());
     toggleUploadView(false);
+    syncObsFromServer(); // garante que o histórico de observações está atualizado após trocar a planilha
   }catch(err){
     console.error(err);
     msg.style.color = 'var(--wine)';
@@ -875,6 +928,14 @@ function openObsModal(tbs){
   document.getElementById('obsInput').value = '';
   const savedAutor = localStorage.getItem(LS_AUTOR) || '';
   document.getElementById('obsAutor').value = savedAutor;
+  const tag = document.getElementById('obsSyncTag');
+  if(obsSyncDisponivel()){
+    tag.style.display = 'block';
+    tag.textContent = 'Observações compartilhadas com o time (planilha central).';
+  }else{
+    tag.style.display = 'block';
+    tag.textContent = 'Observações salvas apenas neste navegador — backend não configurado.';
+  }
   renderModalHistory();
   document.getElementById('obsModal').classList.add('open');
 }
@@ -894,12 +955,15 @@ function renderModalHistory(){
 }
 document.getElementById('modalClose').addEventListener('click', ()=> document.getElementById('obsModal').classList.remove('open'));
 document.getElementById('obsModal').addEventListener('click', e=>{ if(e.target.id==='obsModal') document.getElementById('obsModal').classList.remove('open'); });
-document.getElementById('btnAddObs').addEventListener('click', ()=>{
+document.getElementById('btnAddObs').addEventListener('click', async ()=>{
   const texto = document.getElementById('obsInput').value.trim();
   const autor = document.getElementById('obsAutor').value.trim();
   if(!texto) return;
   localStorage.setItem(LS_AUTOR, autor);
-  addObservacao(currentModalTbs, texto, autor);
+  const btn = document.getElementById('btnAddObs');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  await addObservacao(currentModalTbs, texto, autor);
+  btn.disabled = false; btn.textContent = 'Adicionar';
   document.getElementById('obsInput').value = '';
   renderModalHistory();
   renderTable();
@@ -968,6 +1032,7 @@ function renderAll(updatedAt){
   }else{
     toggleUploadView(true);
   }
+  syncObsFromServer();
 })();
 </script>
 </body>
