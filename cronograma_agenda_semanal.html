@@ -591,19 +591,19 @@
     <div class="form-grid">
       <div class="field">
         <label for="ghOwner">Usuário ou organização</label>
-        <input id="ghOwner" autocomplete="off" placeholder="ex.: simonenunes" />
+        <input id="ghOwner" autocomplete="off" value="tbcustomerexperience" readonly />
       </div>
       <div class="field">
         <label for="ghRepo">Repositório</label>
-        <input id="ghRepo" autocomplete="off" placeholder="ex.: agenda-cx" />
+        <input id="ghRepo" autocomplete="off" value="backoffice" readonly />
       </div>
       <div class="field">
         <label for="ghBranch">Branch</label>
-        <input id="ghBranch" autocomplete="off" value="main" />
+        <input id="ghBranch" autocomplete="off" value="main" readonly />
       </div>
       <div class="field">
         <label for="ghPath">Arquivo de dados</label>
-        <input id="ghPath" autocomplete="off" value="agenda-cx-state.json" />
+        <input id="ghPath" autocomplete="off" value="agenda-cx-state.json" readonly />
       </div>
       <div class="field full">
         <label for="ghToken">Token do GitHub</label>
@@ -711,10 +711,10 @@ function updateGithubUI(){
 
 function openGithubModal(){
   const cfg = getGithubConfig() || {};
-  document.getElementById("ghOwner").value = cfg.owner || "";
-  document.getElementById("ghRepo").value = cfg.repo || "";
-  document.getElementById("ghBranch").value = cfg.branch || "main";
-  document.getElementById("ghPath").value = cfg.path || "agenda-cx-state.json";
+  document.getElementById("ghOwner").value = "tbcustomerexperience";
+  document.getElementById("ghRepo").value = "backoffice";
+  document.getElementById("ghBranch").value = "main";
+  document.getElementById("ghPath").value = "agenda-cx-state.json";
   document.getElementById("ghToken").value = getGithubToken();
   document.getElementById("ghRemember").checked = !!localStorage.getItem(githubTokenKey);
   githubModal.classList.add("open");
@@ -779,12 +779,24 @@ async function githubRequest(url,options={}){
     ...(options.headers || {})
   };
   const response = await fetch(url,{...options,headers});
+  const contentType = response.headers.get("content-type") || "";
+  const raw = response.status === 204 ? "" : await response.text();
+  let body = null;
+  if(raw){
+    try{ body = JSON.parse(raw); }
+    catch{
+      const preview = raw.trim().slice(0,120).replace(/\s+/g," ");
+      const err = new Error(`A resposta recebida não veio da API do GitHub em formato JSON. Status ${response.status}. Início da resposta: ${preview}`);
+      err.status = response.status;
+      throw err;
+    }
+  }
   if(!response.ok){
     let msg = `GitHub respondeu ${response.status}`;
-    try{const body = await response.json(); if(body.message) msg += `: ${body.message}`;}catch{}
+    if(body && body.message) msg += `: ${body.message}`;
     const err = new Error(msg); err.status = response.status; throw err;
   }
-  return response.status === 204 ? null : response.json();
+  return body;
 }
 
 function githubFileUrl(cfg){
