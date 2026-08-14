@@ -45,7 +45,52 @@
         "sexta_notes": ""
       },
       "updatedAt": "2026-08-14T18:00:05.189Z"
+    },
+    "2026-08-17": {
+      "checks": {
+        "segunda_fixed_0": false,
+        "segunda_fixed_1": false,
+        "segunda_fixed_2": false,
+        "segunda_fixed_3": false,
+        "segunda_specific_0": false,
+        "segunda_specific_1": false,
+        "terca_fixed_0": false,
+        "terca_fixed_1": false,
+        "terca_fixed_2": false,
+        "terca_fixed_3": false,
+        "terca_specific_0": false,
+        "terca_specific_1": false,
+        "quarta_fixed_0": false,
+        "quarta_fixed_1": false,
+        "quarta_fixed_2": false,
+        "quarta_fixed_3": false,
+        "quarta_specific_0": false,
+        "quarta_specific_1": false,
+        "quarta_specific_2": false,
+        "quarta_specific_3": false,
+        "quarta_specific_4": false,
+        "quinta_fixed_0": false,
+        "quinta_fixed_1": false,
+        "quinta_fixed_2": false,
+        "quinta_fixed_3": false,
+        "quinta_specific_0": false,
+        "quinta_specific_1": false,
+        "sexta_fixed_0": false,
+        "sexta_fixed_1": false,
+        "sexta_fixed_2": false,
+        "sexta_fixed_3": false,
+        "sexta_specific_0": false,
+        "sexta_specific_1": false
+      },
+      "notes": {
+        "segunda_notes": "",
+        "terca_notes": "",
+        "quarta_notes": "",
+        "quinta_notes": "",
+        "sexta_notes": ""
+      },
+      "updatedAt": "2026-08-14T18:00:24.873Z"
     }
   },
-  "updatedAt": "2026-08-14T18:00:05.189Z"
+  "updatedAt": "2026-08-14T18:00:24.873Z"
 }
