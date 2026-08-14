@@ -355,6 +355,7 @@
   .status-select.st-andamento{background:#e8eef6; color:#2f5c8a; border-color:#c9d9ec;}
   .status-select.st-finalizado{background:var(--risco-normal-bg); color:var(--risco-normal); border-color:#cfe3d7;}
   .status-select.st-devolucao{background:var(--risco-critico-bg); color:var(--risco-critico); border-color:#eec9c2;}
+  .status-select.st-prevenda{background:#F2EAF5; color:#6F4C7D; border-color:#DECBE5;}
 
   .tabs{display:flex; gap:6px; margin-bottom:20px; border-bottom:1px solid var(--line);}
   .tab-btn{
@@ -601,6 +602,7 @@
               <label><input type="checkbox" value="andamento"> Em andamento</label>
               <label><input type="checkbox" value="finalizado"> Finalizado</label>
               <label><input type="checkbox" value="devolucao"> Em devolução</label>
+              <label><input type="checkbox" value="prevenda"> Pré-venda</label>
               <label><input type="checkbox" value="__sem"> Sem status</label>
               <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
             </div>
@@ -747,10 +749,11 @@ const STATUS_CX = {
   andamento:  {label:'Em andamento',   cls:'st-andamento'},
   finalizado: {label:'Finalizado',     cls:'st-finalizado'},
   devolucao:  {label:'Em devolução',   cls:'st-devolucao'},
+  prevenda:    {label:'Pré-venda',       cls:'st-prevenda'},
 };
 const MESES_PT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
-const STATUS_FILTER_LABELS = {pendente:'Pendente', andamento:'Em andamento', finalizado:'Finalizado', devolucao:'Em devolução', __sem:'Sem status'};
+const STATUS_FILTER_LABELS = {pendente:'Pendente', andamento:'Em andamento', finalizado:'Finalizado', devolucao:'Em devolução', prevenda:'Pré-venda', __sem:'Sem status'};
 
 // Componente genérico de dropdown com checkboxes (multi-seleção), usado nos
 // filtros de Transportadora, Observação e Status CX da Lista de ação.
@@ -1438,9 +1441,9 @@ function renderIndicadores(allRows){
   }
 
   // --- Casos por Status CX (donut, base = apenas NFs Crítico) ---
-  const statusOrder = ['pendente','andamento','finalizado','devolucao','__sem'];
-  const statusColors = {pendente:'#8a6d31', andamento:'#5C7A8A', finalizado:'#2C4F3A', devolucao:'#7A3B3B', __sem:'#9B9B90'};
-  const statusCount = {pendente:0, andamento:0, finalizado:0, devolucao:0, __sem:0};
+  const statusOrder = ['pendente','andamento','finalizado','devolucao','prevenda','__sem'];
+  const statusColors = {pendente:'#8a6d31', andamento:'#5C7A8A', finalizado:'#2C4F3A', devolucao:'#7A3B3B', prevenda:'#6F4C7D', __sem:'#9B9B90'};
+  const statusCount = {pendente:0, andamento:0, finalizado:0, devolucao:0, prevenda:0, __sem:0};
   criticalRows.forEach(r=>{
     const s = getStatusCx(r.nf);
     statusCount[STATUS_CX[s] ? s : '__sem']++;
