@@ -890,6 +890,7 @@ function githubFileUrl(cfg){
 
 async function readGithubData(){
   if(!getGithubToken()) return {data:{weeks:{}},sha:null};
+  const cfg = getGithubConfig();
   const url = githubFileUrl(cfg) + `?ref=${encodeURIComponent(cfg.branch || "main")}`;
   try{
     const file = await githubRequest(url);
@@ -911,6 +912,7 @@ async function saveToGithub(manual=false){
   githubSaving = true;
   setGithubStatus("Salvando no GitHub...");
   try{
+    const cfg = getGithubConfig();
     const {data,sha} = await readGithubData();
     data.version = 1;
     data.weeks = data.weeks || {};
