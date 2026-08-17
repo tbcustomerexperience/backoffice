@@ -594,8 +594,8 @@
 
 <div class="modal-backdrop" id="githubModal" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="githubModalTitle">
-    <h3 id="githubModalTitle">Sincronização com GitHub</h3>
-    <p>A conexão já vem configurada neste arquivo. Use o botão abaixo para sincronizar agora, se precisar.</p>
+    <h3 id="githubModalTitle">Conectar ao GitHub</h3>
+    <p>Configure uma vez. Depois disso, cada alteração será salva localmente e sincronizada automaticamente com um arquivo de dados no seu repositório.</p>
 
     <div class="form-grid">
       <div class="field">
@@ -614,30 +614,36 @@
         <label for="ghPath">Arquivo de dados</label>
         <input id="ghPath" autocomplete="off" value="agenda-cx-state.json" readonly />
       </div>
+      <div class="field full">
+        <label for="ghToken">Token do GitHub</label>
+        <input id="ghToken" type="password" autocomplete="off" placeholder="ghp_... ou github_pat_..." />
+      </div>
     </div>
 
-    <div class="github-note">O token de acesso já está embutido neste arquivo (definido no início do código-fonte, junto às demais configurações). Como o token concede permissão de gravação no repositório, trate este arquivo HTML como um item sensível — não o publique publicamente nem o encaminhe para fora do time.</div>
+    <label class="remember-row">
+      <input id="ghRemember" type="checkbox" />
+      <span>Guardar o token somente neste navegador. Se deixar desmarcado, o token dura apenas enquanto esta aba estiver aberta.</span>
+    </label>
+
+    <div class="github-note">O token não é gravado dentro deste HTML. Para reduzir o acesso, use um token restrito somente a este repositório e com permissão de leitura e gravação em Contents.</div>
 
     <div class="modal-actions">
-      <button class="btn secondary" id="ghCancelBtn" type="button">Fechar</button>
-      <button class="btn" id="ghConnectBtn" type="button">Sincronizar agora</button>
+      <button class="btn secondary" id="ghCancelBtn" type="button">Cancelar</button>
+      <button class="btn" id="ghConnectBtn" type="button">Conectar e sincronizar</button>
     </div>
   </div>
 </div>
 
 <script>
 // ── Configuração do GitHub (mesmo padrão dos outros arquivos) ──────────────
-// Preencha o token abaixo com um Personal Access Token (fine-grained),
-// restrito a este repositório, com permissão de leitura e gravação em
-// Contents. Como o token fica gravado neste arquivo, qualquer pessoa com
-// acesso a este HTML consegue gravar no repositório — trate o arquivo como
-// sensível.
+// Owner/repo/branch/path são fixos. O token é preenchido por cada pessoa
+// no modal "Conectar ao GitHub" e fica salvo apenas no navegador dela
+// (nunca dentro deste arquivo).
 const GITHUB_CONFIG = {
   owner: "tbcustomerexperience",
   repo: "backoffice",
   branch: "main",
-  path: "agenda-cx-state.json",
-  token: "COLE_AQUI_O_TOKEN_DO_GITHUB" // <-- substitua pelo token real (github_pat_...)
+  path: "agenda-cx-state.json"
 };
 
 const schedule = [
@@ -674,6 +680,7 @@ const schedule = [
 ];
 
 const storagePrefix = "agendaCX_v1_";
+const githubTokenKey = storagePrefix + "githubToken";
 const weekStartInput = document.getElementById("weekStart");
 const weekGrid = document.getElementById("weekGrid");
 const saveStatus = document.getElementById("saveStatus");
@@ -764,12 +771,14 @@ function getGithubConfig(){
   };
 }
 
-function githubTokenConfigured(){
-  return !!GITHUB_CONFIG.token && GITHUB_CONFIG.token !== "COLE_AQUI_O_TOKEN_DO_GITHUB";
-}
-
 function getGithubToken(){
-  return githubTokenConfigured() ? GITHUB_CONFIG.token : "";
+  if(hasSessionStorage){
+    try{
+      const t = sessionStorage.getItem(githubTokenKey);
+      if(t) return t;
+    }catch{ /* ignore */ }
+  }
+  return storeGet(githubTokenKey) || "";
 }
 
 function setGithubStatus(text,type=""){
@@ -779,16 +788,19 @@ function setGithubStatus(text,type=""){
 }
 
 function updateGithubUI(){
-  if(githubTokenConfigured()){
+  const token = getGithubToken();
+  if(token){
     setGithubStatus("GitHub conectado","connected");
     document.getElementById("githubBtn").textContent = "GitHub configurado";
   }else{
-    setGithubStatus("Token do GitHub não configurado no arquivo","error");
-    document.getElementById("githubBtn").textContent = "Ver configuração";
+    setGithubStatus("GitHub não configurado");
+    document.getElementById("githubBtn").textContent = "Configurar GitHub";
   }
 }
 
 function openGithubModal(){
+  document.getElementById("ghToken").value = getGithubToken();
+  document.getElementById("ghRemember").checked = !!storeGet(githubTokenKey);
   githubModal.classList.add("open");
   githubModal.setAttribute("aria-hidden","false");
 }
@@ -1183,10 +1195,16 @@ document.getElementById("ghCancelBtn").addEventListener("click",closeGithubModal
 githubModal.addEventListener("click",e=>{if(e.target === githubModal) closeGithubModal();});
 
 document.getElementById("ghConnectBtn").addEventListener("click",async()=>{
-  if(!githubTokenConfigured()){
-    alert("O token do GitHub ainda não foi preenchido no código deste arquivo (constante GITHUB_CONFIG.token).");
+  const token = document.getElementById("ghToken").value.trim();
+  const remember = document.getElementById("ghRemember").checked;
+  if(!token){
+    alert("Preencha o token do GitHub.");
     return;
   }
+  if(hasSessionStorage){ try{ sessionStorage.setItem(githubTokenKey,token); }catch{ /* ignore */ } }
+  if(remember) storeSet(githubTokenKey,token);
+  else storeRemove(githubTokenKey);
+  updateGithubUI();
   setGithubStatus("Testando conexão...");
   try{
     await readGithubData();
