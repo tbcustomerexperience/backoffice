@@ -1,1229 +1,918 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cronograma da Semana | Agenda CX</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda CX — Tania Bulhões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --green-900:#183f2b;
-    --green-800:#23553a;
-    --green-700:#2f6849;
-    --green-100:#e7eee5;
-    --green-050:#f3f6f1;
-    --ink:#132033;
-    --muted:#6f786f;
-    --line:#d9dfd5;
-    --paper:#fbfaf7;
-    --white:#ffffff;
-    --shadow:0 10px 28px rgba(24,63,43,.09);
-    --radius:18px;
+    --green:#2C4F3A;
+    --green-dark:#1E3828;
+    --gold:#B89A5E;
+    --gold-light:#D9C69B;
+    --cream:#FBF9F5;
+    --cream-2:#F3EEE4;
+    --ink:#26312B;
+    --muted:#7C8A80;
+    --line:#E4DFD2;
+    --done:#8FA894;
+    --danger:#B5573E;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(38,49,43,.05), 0 8px 24px -12px rgba(38,49,43,.15);
   }
-
-  *{box-sizing:border-box}
-
+  *{box-sizing:border-box;}
   body{
     margin:0;
-    background:
-      radial-gradient(circle at top left, rgba(47,104,73,.05), transparent 30%),
-      linear-gradient(180deg,#fbfaf7 0%,#f5f3ee 100%);
+    background:var(--cream);
     color:var(--ink);
-    font-family:'DM Sans',Segoe UI,Arial,sans-serif;
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
   }
+  h1,h2,.serif{font-family:'Cormorant Garamond',serif;}
 
-  .app{
-    max-width:1700px;
-    margin:0 auto;
-    padding:32px 30px 44px;
-  }
-
+  /* ---------- Header ---------- */
   .topbar{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:24px;
-    align-items:end;
-    margin-bottom:24px;
-  }
-
-  .eyebrow{
-    font-size:11px;
-    letter-spacing:.28em;
-    text-transform:uppercase;
-    color:var(--green-700);
-    font-weight:700;
-    margin-bottom:8px;
-  }
-
-  h1{
-    font-family:'Cormorant Garamond',Georgia,"Times New Roman",serif;
-    font-style:italic;
-    font-size:clamp(36px,4.2vw,62px);
-    line-height:1;
-    letter-spacing:.02em;
-    color:var(--green-900);
-    margin:0;
-    font-weight:400;
-  }
-
-  .subtitle{
-    margin:12px 0 0;
-    color:var(--muted);
-    font-size:13px;
-  }
-
-  .toolbar{
+    background:var(--green);
+    color:var(--cream);
+    padding:22px 32px 20px;
     display:flex;
-    gap:10px;
-    align-items:center;
+    align-items:flex-end;
+    justify-content:space-between;
     flex-wrap:wrap;
-    justify-content:flex-end;
+    gap:16px;
+    border-bottom:3px solid var(--gold);
   }
-
-
-  .save-status{
-    font-size:10px;
-    color:var(--green-700);
+  .brand-eyebrow{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold-light);
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .brand-title{
+    font-size:32px;
+    font-weight:600;
+    margin:0;
+    line-height:1;
+  }
+  .week-range{
+    font-size:13px;
+    color:#D9E2DC;
+    margin-top:6px;
+    font-weight:500;
+  }
+  .topbar-controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .nav-btn, .icon-btn{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.22);
+    color:var(--cream);
+    width:34px;height:34px;
+    border-radius:9px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+    transition:.15s;
+  }
+  .nav-btn:hover,.icon-btn:hover{background:rgba(255,255,255,.18);}
+  .today-btn{
+    background:var(--gold);
+    border:1px solid var(--gold);
+    color:var(--green-dark);
     font-weight:700;
-    padding:0 2px;
-    white-space:nowrap;
+    font-size:12.5px;
+    padding:0 14px;
+    height:34px;
+    border-radius:9px;
+    cursor:pointer;
+    letter-spacing:.02em;
+  }
+  .date-filter{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.22);
+    color:var(--cream);
+    height:34px;
+    border-radius:9px;
+    padding:0 10px;
+    font-family:'DM Sans',sans-serif;
+    font-size:13px;
+    color-scheme:dark;
   }
 
-  .github-status{
+  /* ---------- Save bar ---------- */
+  .savebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 32px;
+    background:var(--cream-2);
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .save-status{
+    font-size:12.5px;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+  .dot.saved{background:var(--done);}
+  .dot.saving{background:var(--gold);animation:pulse 1s infinite ease-in-out;}
+  .dot.error{background:var(--danger);}
+  .dot.dirty{background:var(--gold);}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+  .savebar-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .toggle-wrap{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink);font-weight:500;}
+  .switch{position:relative;width:34px;height:19px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;inset:0;background:#CBD1C9;border-radius:20px;cursor:pointer;transition:.2s;}
+  .slider:before{content:"";position:absolute;height:14px;width:14px;left:2.5px;top:2.5px;background:#fff;border-radius:50%;transition:.2s;}
+  input:checked + .slider{background:var(--green);}
+  input:checked + .slider:before{transform:translateX(15px);}
+
+  .btn{
+    border:none;
+    border-radius:9px;
+    font-family:'DM Sans',sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    cursor:pointer;
+    padding:8px 14px;
     display:inline-flex;
     align-items:center;
     gap:6px;
-    font-size:10px;
-    color:var(--muted);
-    font-weight:700;
-    white-space:nowrap;
   }
+  .btn-primary{background:var(--green);color:#fff;}
+  .btn-primary:hover{background:var(--green-dark);}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--gold);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
 
-  .github-status.connected{color:var(--green-700)}
-  .github-status.error{color:#9b3b36}
-
-  .modal-backdrop{
-    position:fixed;
-    inset:0;
-    background:rgba(19,32,51,.42);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:9999;
-  }
-
-  .modal-backdrop.open{display:flex}
-
-  .modal{
-    width:min(520px,100%);
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:18px;
-    box-shadow:0 24px 60px rgba(19,32,51,.20);
-    padding:20px;
-  }
-
-  .modal h3{
-    margin:0 0 6px;
-    font-family:'Cormorant Garamond',Georgia,"Times New Roman",serif;
-    font-style:italic;
-    color:var(--green-900);
-    font-size:24px;
-    font-weight:400;
-  }
-
-  .modal p{
-    margin:0 0 16px;
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.5;
-  }
-
-  .form-grid{
+  /* ---------- Grid ---------- */
+  .grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+    grid-template-columns:repeat(5, minmax(220px,1fr));
+    gap:18px;
+    padding:26px 32px 60px;
+  }
+  @media (max-width:1180px){ .grid{grid-template-columns:repeat(3,minmax(220px,1fr));} }
+  @media (max-width:760px){ .grid{grid-template-columns:1fr;padding:20px;} }
+
+  .day-card{
+    background:#fff;
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    transition:box-shadow .2s, border-color .2s, transform .2s;
+  }
+  .day-card.is-today{border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,154,94,.35), var(--shadow);}
+  .day-card.is-filtered{transform:translateY(-3px);box-shadow:0 0 0 2px rgba(44,79,58,.4), var(--shadow);}
+  .day-card.is-weekend-hidden{display:none;}
+
+  .day-head{
+    padding:18px 18px 16px;
+    position:relative;
+    background:linear-gradient(135deg, var(--green), var(--green-dark));
+    border-radius:calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+  }
+  .day-name{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:19px;
+    font-weight:600;
+    color:#fff;
+    letter-spacing:.01em;
+  }
+  .day-date{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--gold-light);
+    margin-top:4px;
+  }
+  .day-progress-badge{
+    position:absolute;
+    top:14px;right:14px;
+    width:38px;height:38px;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+    border:1.5px solid rgba(255,255,255,.4);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10.5px;
+    font-weight:700;
+    color:#fff;
+  }
+  .day-card.is-today .day-progress-badge{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:var(--green-dark);
   }
 
-  .field{display:flex;flex-direction:column;gap:5px}
-  .field.full{grid-column:1/-1}
-  .field label{font-size:10px;font-weight:800;color:var(--green-900);text-transform:uppercase;letter-spacing:.06em}
+  .section{padding:14px 18px 6px;}
+  .section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:9px;
+  }
+  .section-title .count{
+    background:var(--cream-2);
+    color:var(--muted);
+    font-size:9.5px;
+    padding:2px 7px;
+    border-radius:20px;
+    font-weight:700;
+  }
+  .task{
+    display:flex;
+    align-items:flex-start;
+    gap:9px;
+    padding:5px 0;
+    cursor:pointer;
+    user-select:none;
+  }
+  .task input{display:none;}
+  .box{
+    width:17px;height:17px;
+    border-radius:5px;
+    border:1.6px solid #C9CDC3;
+    flex-shrink:0;
+    margin-top:1px;
+    display:flex;align-items:center;justify-content:center;
+    transition:.15s;
+  }
+  .task input:checked + .box{
+    background:var(--green);
+    border-color:var(--green);
+  }
+  .task input:checked + .box:after{
+    content:"";
+    width:5px;height:9px;
+    border:solid #fff;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg) translate(-1px,-1px);
+  }
+  .task-label{
+    font-size:13.5px;
+    color:var(--ink);
+    line-height:1.35;
+    transition:.15s;
+  }
+  .task input:checked ~ .task-label{
+    color:var(--muted);
+    text-decoration:line-through;
+    text-decoration-color:#C9CDC3;
+  }
+  hr.divider{
+    border:none;
+    border-top:1px dashed var(--line);
+    margin:12px 18px 0;
+  }
+  .notes-wrap{padding:14px 18px 18px;margin-top:auto;}
+  .notes-title{
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  textarea.notes{
+    width:100%;
+    min-height:64px;
+    resize:vertical;
+    border:1px solid var(--line);
+    border-radius:9px;
+    background:var(--cream);
+    padding:9px 11px;
+    font-family:'DM Sans',sans-serif;
+    font-size:12.5px;
+    color:var(--ink);
+    outline:none;
+  }
+  textarea.notes:focus{border-color:var(--gold);background:#fff;}
+  textarea.notes::placeholder{color:#A8AE9F;}
+
+  /* ---------- Modal (config) ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(30,40,32,.45);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:#fff;
+    border-radius:16px;
+    width:100%;max-width:440px;
+    padding:26px 26px 22px;
+    box-shadow:0 20px 60px -12px rgba(0,0,0,.35);
+  }
+  .modal h2{margin:0 0 3px;font-size:23px;color:var(--green);}
+  .modal p.sub{margin:0 0 18px;font-size:12.5px;color:var(--muted);}
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:5px;
+    letter-spacing:.02em;
+  }
   .field input{
     width:100%;
     border:1px solid var(--line);
-    border-radius:10px;
-    padding:10px 11px;
-    font:12px 'DM Sans',Segoe UI,Arial,sans-serif;
-    color:var(--ink);
+    border-radius:8px;
+    padding:9px 11px;
+    font-family:'DM Sans',sans-serif;
+    font-size:13px;
     outline:none;
-    background:#fff;
+    background:var(--cream);
   }
-  .field input:focus{border-color:#aebdad;box-shadow:0 0 0 3px rgba(47,104,73,.07)}
+  .field input:focus{border-color:var(--gold);background:#fff;}
+  .field .hint{font-size:11px;color:var(--muted);margin-top:4px;}
+  .modal-actions{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:10px;}
+  .modal-msg{font-size:12px;margin-top:10px;min-height:16px;}
+  .modal-msg.ok{color:var(--green);}
+  .modal-msg.err{color:var(--danger);}
+  .close-x{
+    position:absolute;top:16px;right:18px;
+    background:none;border:none;cursor:pointer;
+    font-size:20px;color:var(--muted);
+  }
+  .modal{position:relative;}
 
-  .remember-row{
+  /* ---------- Week progress ---------- */
+  .week-progress{
     display:flex;
-    align-items:flex-start;
-    gap:8px;
-    margin-top:12px;
+    align-items:center;
+    gap:18px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    padding:14px 22px;
+    margin:20px 32px 4px;
+  }
+  .wp-label{
     font-size:11px;
-    color:var(--muted);
-    line-height:1.4;
-  }
-
-  .remember-row input{margin-top:2px}
-
-  .modal-actions{
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-    margin-top:18px;
-  }
-
-  .github-note{
-    margin-top:12px;
-    padding:10px 11px;
-    border-radius:10px;
-    background:var(--green-050);
-    color:var(--muted);
-    font-size:10px;
-    line-height:1.45;
-  }
-
-  @media (max-width:620px){
-    .form-grid{grid-template-columns:1fr}
-    .field.full{grid-column:auto}
-  }
-
-  .control{
-    background:rgba(255,255,255,.8);
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:9px 12px;
-    min-height:42px;
-    color:var(--ink);
-  }
-
-  .date-wrap{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:12px;
     font-weight:700;
-    color:var(--green-900);
-  }
-
-  input[type="date"]{
-    border:0;
-    background:transparent;
-    color:var(--ink);
-    font:inherit;
-    outline:none;
-  }
-
-  button{
-    border:0;
-    cursor:pointer;
-    font:inherit;
-  }
-
-  .btn{
-    background:var(--green-900);
-    color:#fff;
-    padding:10px 14px;
-    border-radius:12px;
-    font-weight:700;
-    font-size:12px;
-    letter-spacing:.02em;
-  }
-
-  .btn.secondary{
-    background:#fff;
-    color:var(--green-900);
-    border:1px solid var(--line);
-  }
-
-  .summary{
-    background:rgba(255,255,255,.78);
-    border:1px solid var(--line);
-    border-radius:16px;
-    box-shadow:var(--shadow);
-    padding:16px 18px;
-    margin-bottom:18px;
-    display:grid;
-    grid-template-columns:auto 1fr auto;
-    gap:16px;
-    align-items:center;
-  }
-
-  .summary-title{
-    font-size:12px;
+    letter-spacing:.09em;
     text-transform:uppercase;
-    letter-spacing:.13em;
     color:var(--muted);
-    font-weight:800;
-  }
-
-  .progress{
-    height:10px;
-    background:#e8ece5;
-    border-radius:999px;
-    overflow:hidden;
-  }
-
-  .progress > span{
-    display:block;
-    height:100%;
-    width:0;
-    border-radius:999px;
-    background:linear-gradient(90deg,var(--green-700),var(--green-900));
-    transition:width .25s ease;
-  }
-
-  .summary-number{
-    min-width:64px;
-    text-align:right;
-    color:var(--green-900);
-    font-weight:800;
-  }
-
-  .week{
-    display:grid;
-    grid-template-columns:repeat(5,minmax(240px,1fr));
-    gap:14px;
-  }
-
-  .day{
-    min-height:560px;
-    background:rgba(255,255,255,.88);
-    border:1px solid #cfd7cc;
-    border-radius:var(--radius);
-    overflow:hidden;
-    box-shadow:var(--shadow);
-    display:flex;
-    flex-direction:column;
-  }
-
-  .day-head{
-    background:
-      linear-gradient(135deg,rgba(255,255,255,.04),transparent 45%),
-      var(--green-900);
-    color:#fff;
-    padding:9px 11px 8px;
-  }
-
-  .day-head-row{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:10px;
-  }
-
-  .day-name{
-    font-family:'Cormorant Garamond',Georgia,"Times New Roman",serif;
-    font-style:italic;
-    font-size:15px;
-    line-height:1;
-    letter-spacing:.03em;
-    margin:0;
-    font-weight:400;
-  }
-
-  .day-date{
-    margin-top:5px;
-    color:rgba(255,255,255,.72);
-    font-size:9px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-  }
-
-  .day-score{
-    border:1px solid rgba(255,255,255,.28);
-    border-radius:999px;
-    min-width:34px;
-    height:34px;
-    display:grid;
-    place-items:center;
-    font-size:10px;
-    color:#fff;
-    font-weight:800;
-    background:rgba(255,255,255,.05);
-  }
-
-  .day-body{
-    padding:12px 12px 14px;
-    flex:1;
-  }
-
-  .section-label{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    padding:7px 9px;
-    border-radius:11px;
-    background:var(--green-100);
-    color:var(--green-900);
-    text-transform:uppercase;
-    font-size:10px;
-    letter-spacing:.06em;
-    font-weight:850;
-    margin-bottom:8px;
-  }
-
-  .section-label span:last-child{
-    color:var(--green-700);
-    font-size:10px;
     white-space:nowrap;
+    flex-shrink:0;
+  }
+  .wp-track{
+    flex:1;
+    height:8px;
+    background:var(--cream-2);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .wp-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--green), var(--green-dark));
+    border-radius:6px;
+    transition:width .3s ease;
+  }
+  .wp-pct{
+    font-family:'Cormorant Garamond',serif;
+    font-size:22px;
+    font-weight:700;
+    color:var(--green);
+    flex-shrink:0;
+    min-width:44px;
+    text-align:right;
+  }
+  @media (max-width:600px){
+    .week-progress{margin:16px 20px 4px;flex-wrap:wrap;}
+    .wp-track{order:3;flex-basis:100%;}
   }
 
-  .tasks{
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-
-  .task{
-    position:relative;
-    display:grid;
-    grid-template-columns:24px 1fr;
-    gap:10px;
-    align-items:start;
-    padding:7px 6px;
-    border-radius:10px;
-    transition:background .15s ease;
-  }
-
-  .task:hover{background:#f6f8f4}
-
-  .task input{
-    position:absolute;
+  .toast{
+    position:fixed;
+    bottom:22px;left:50%;
+    transform:translateX(-50%) translateY(8px);
+    background:var(--green-dark);
+    color:#fff;
+    padding:10px 18px;
+    border-radius:9px;
+    font-size:12.5px;
+    font-weight:500;
+    box-shadow:0 10px 30px -8px rgba(0,0,0,.4);
     opacity:0;
     pointer-events:none;
+    transition:.25s;
+    z-index:60;
   }
-
-  .box{
-    width:20px;
-    height:20px;
-    border:1.5px solid #9cab9e;
-    border-radius:6px;
-    display:grid;
-    place-items:center;
-    margin-top:1px;
-    background:#fff;
-    transition:.15s ease;
-  }
-
-  .box::after{
-    content:"";
-    width:8px;
-    height:4px;
-    border-left:2px solid #fff;
-    border-bottom:2px solid #fff;
-    transform:rotate(-45deg) translateY(-1px);
-    opacity:0;
-  }
-
-  .task input:checked + .box{
-    background:var(--green-700);
-    border-color:var(--green-700);
-  }
-
-  .task input:checked + .box::after{opacity:1}
-
-  .task-text{
-    font-size:14px;
-    line-height:1.35;
-    color:var(--ink);
-    transition:.15s ease;
-  }
-
-  .task input:checked ~ .task-text{
-    color:#8a928b;
-    text-decoration:line-through;
-    text-decoration-thickness:1px;
-  }
-
-  .divider{
-    border-top:1px dashed #c8d0c5;
-    margin:9px 0 10px;
-  }
-
-  .empty-note{
-    color:#8a928b;
-    font-size:12px;
-    line-height:1.5;
-    padding:12px 8px 0;
-    font-style:italic;
-  }
-
-  .notes{
-    margin-top:12px;
-    border-top:1px solid #e6e9e3;
-    padding-top:13px;
-  }
-
-  .notes-title{
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:.1em;
-    color:#879087;
-    font-weight:800;
-    margin-bottom:7px;
-  }
-
-  textarea{
-    width:100%;
-    min-height:58px;
-    resize:vertical;
-    border:1px solid #e1e5de;
-    background:#fafbf8;
-    border-radius:10px;
-    padding:10px;
-    font:12px/1.45 'DM Sans',Segoe UI,Arial,sans-serif;
-    color:var(--ink);
-    outline:none;
-  }
-
-  textarea:focus{
-    border-color:#aebdad;
-    box-shadow:0 0 0 3px rgba(47,104,73,.07);
-  }
-
-  .day-progress{
-    padding:0 12px 12px;
-  }
-
-  .day-progress-row{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:10px;
-    color:#7b847b;
-  }
-
-  .day-progress .progress{
-    height:6px;
-    flex:1;
-  }
-
-  .footer{
-    margin-top:22px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:18px;
-    color:#808880;
-    font-size:11px;
-  }
-
-  .footer strong{
-    color:var(--green-900);
-    letter-spacing:.12em;
-  }
-
-  @media (max-width:1280px){
-    .week{
-      grid-template-columns:repeat(3,minmax(250px,1fr));
-    }
-  }
-
-  @media (max-width:900px){
-    .topbar{grid-template-columns:1fr}
-    .toolbar{justify-content:flex-start}
-    .week{grid-template-columns:repeat(2,minmax(250px,1fr))}
-  }
-
-  @media (max-width:620px){
-    .app{padding:20px 14px 30px}
-    .week{grid-template-columns:1fr}
-    .summary{grid-template-columns:1fr}
-    .summary-number{text-align:left}
-  }
-
-  @media print{
-    body{background:#fff}
-    .app{max-width:none;padding:10px}
-    .toolbar,.notes{display:none}
-    .day{box-shadow:none;min-height:620px;break-inside:avoid}
-    .week{gap:8px}
-  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="topbar">
-    <div>
-      <div class="eyebrow">Rotina semanal · CX</div>
-      <h1>Cronograma da Semana</h1>
-      <p class="subtitle">Agenda operacional com acompanhamento diário e evolução da semana.</p>
-    </div>
 
-    <div class="toolbar">
-      <span class="save-status" id="saveStatus">Salvo neste navegador</span>
-      <span class="github-status" id="githubStatus">GitHub não configurado</span>
-      <div class="control date-wrap">
-        <span>Semana de</span>
-        <input id="weekStart" type="date" />
-      </div>
-      <button class="btn secondary" id="githubBtn">Configurar GitHub</button>
-      <button class="btn secondary" id="githubSaveBtn">Salvar no GitHub</button>
-      <button class="btn secondary" id="exportBtn">Exportar backup</button>
-      <button class="btn secondary" id="importBtn">Importar backup</button>
-      <input type="file" id="importFile" accept="application/json" hidden />
-      <button class="btn secondary" id="printBtn">Imprimir</button>
-      <button class="btn" id="resetBtn">Limpar checks</button>
-    </div>
-  </header>
-
-  <section class="summary">
-    <div class="summary-title">Progresso da semana</div>
-    <div class="progress"><span id="weekBar"></span></div>
-    <div class="summary-number" id="weekPct">0%</div>
-  </section>
-
-  <main class="week" id="weekGrid"></main>
-
-  <footer class="footer">
-    <span>Os checks e anotações são salvos neste navegador e, após configurar, sincronizados automaticamente com o GitHub.</span>
-    <strong>FOCO · DISCIPLINA · RESULTADOS</strong>
-  </footer>
-</div>
-
-<div class="modal-backdrop" id="githubModal" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="githubModalTitle">
-    <h3 id="githubModalTitle">Conectar ao GitHub</h3>
-    <p>Configure uma vez. Depois disso, cada alteração será salva localmente e sincronizada automaticamente com um arquivo de dados no seu repositório.</p>
-
-    <div class="form-grid">
-      <div class="field">
-        <label for="ghOwner">Usuário ou organização</label>
-        <input id="ghOwner" autocomplete="off" value="tbcustomerexperience" readonly />
-      </div>
-      <div class="field">
-        <label for="ghRepo">Repositório</label>
-        <input id="ghRepo" autocomplete="off" value="backoffice" readonly />
-      </div>
-      <div class="field">
-        <label for="ghBranch">Branch</label>
-        <input id="ghBranch" autocomplete="off" value="main" readonly />
-      </div>
-      <div class="field">
-        <label for="ghPath">Arquivo de dados</label>
-        <input id="ghPath" autocomplete="off" value="agenda-cx-state.json" readonly />
-      </div>
-      <div class="field full">
-        <label for="ghToken">Token do GitHub</label>
-        <input id="ghToken" type="password" autocomplete="off" placeholder="ghp_... ou github_pat_..." />
-      </div>
-    </div>
-
-    <label class="remember-row">
-      <input id="ghRemember" type="checkbox" />
-      <span>Guardar o token somente neste navegador. Se deixar desmarcado, o token dura apenas enquanto esta aba estiver aberta.</span>
-    </label>
-
-    <div class="github-note">O token não é gravado dentro deste HTML. Para reduzir o acesso, use um token restrito somente a este repositório e com permissão de leitura e gravação em Contents.</div>
-
-    <div class="modal-actions">
-      <button class="btn secondary" id="ghCancelBtn" type="button">Cancelar</button>
-      <button class="btn" id="ghConnectBtn" type="button">Conectar e sincronizar</button>
-    </div>
+<div class="topbar">
+  <div>
+    <p class="brand-eyebrow">Time de CX · Tania Bulhões</p>
+    <h1 class="brand-title">Agenda da semana</h1>
+    <div class="week-range" id="weekRange">—</div>
+  </div>
+  <div class="topbar-controls">
+    <input type="date" id="dateFilter" class="date-filter" title="Ir para uma data / filtrar">
+    <button class="nav-btn" id="prevWeek" title="Semana anterior">‹</button>
+    <button class="today-btn" id="gotoToday">Hoje</button>
+    <button class="nav-btn" id="nextWeek" title="Próxima semana">›</button>
+    <button class="icon-btn" id="openSettings" title="Configurar GitHub">⚙</button>
   </div>
 </div>
 
-<script>
-// ── Configuração do GitHub (mesmo padrão dos outros arquivos) ──────────────
-// Owner/repo/branch/path são fixos. O token é preenchido por cada pessoa
-// no modal "Conectar ao GitHub" e fica salvo apenas no navegador dela
-// (nunca dentro deste arquivo).
-const GITHUB_CONFIG = {
-  owner: "tbcustomerexperience",
-  repo: "backoffice",
-  branch: "main",
-  path: "agenda-cx-state.json"
-};
+<div class="savebar">
+  <div class="save-status">
+    <span class="dot" id="statusDot"></span>
+    <span id="statusText">Configure a conexão com o GitHub para começar a salvar.</span>
+  </div>
+  <div class="savebar-right">
+    <label class="toggle-wrap">
+      <span class="switch">
+        <input type="checkbox" id="autosaveToggle" checked>
+        <span class="slider"></span>
+      </span>
+      Salvar alterações automaticamente
+    </label>
+    <button class="btn btn-ghost" id="reloadBtn">↻ Recarregar do GitHub</button>
+    <button class="btn btn-primary" id="saveNowBtn">Salvar agora</button>
+  </div>
+</div>
 
-const schedule = [
-  {
-    key:"segunda",
-    name:"SEGUNDA",
-    fixed:["Pendentes Zendesk","Acompanhamentos de entregas","Pedidos de ruptura","Pedidos 5K"],
-    specific:["Reclame Aqui","Amplifique-me"]
-  },
-  {
-    key:"terca",
-    name:"TERÇA",
-    fixed:["Pendentes Zendesk","Acompanhamentos de entregas","Pedidos de ruptura","Pedidos 5K"],
-    specific:["Reclame Aqui","JIRA"]
-  },
-  {
-    key:"quarta",
-    name:"QUARTA",
-    fixed:["Pendentes Zendesk","Acompanhamentos de entregas","Pedidos de ruptura","Pedidos 5K"],
-    specific:["Reclame Aqui","Amplifique-me","Troque","Planilhas de Devolução Cliente","JIRA"]
-  },
-  {
-    key:"quinta",
-    name:"QUINTA",
-    fixed:["Pendentes Zendesk","Acompanhamentos de entregas","Pedidos de ruptura","Pedidos 5K"],
-    specific:["Reclame Aqui","JIRA"]
-  },
-  {
-    key:"sexta",
-    name:"SEXTA",
-    fixed:["Pendentes Zendesk","Acompanhamentos de entregas","Pedidos de ruptura","Pedidos 5K"],
-    specific:["Reclame Aqui","Amplifique-me"]
-  }
+<div class="week-progress">
+  <div class="wp-label">Progresso da semana</div>
+  <div class="wp-track"><div class="wp-fill" id="weekProgressFill"></div></div>
+  <div class="wp-pct" id="weekProgressPct">0%</div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsOverlay">
+  <div class="modal">
+    <button class="close-x" id="closeSettings">×</button>
+    <h2>Conexão com o GitHub</h2>
+    <p class="sub">Os dados da agenda são salvos direto no repositório, não no computador. Essas informações ficam guardadas apenas neste navegador.</p>
+
+    <div class="field">
+      <label>Repositório (owner/repo)</label>
+      <input type="text" id="cfgRepo" placeholder="ex: taniabulhoes/agenda-cx">
+    </div>
+    <div class="field">
+      <label>Caminho do arquivo de dados</label>
+      <input type="text" id="cfgPath" placeholder="agenda-cx-data.json">
+      <div class="hint">Se o arquivo ainda não existir no repositório, ele será criado automaticamente ao salvar.</div>
+    </div>
+    <div class="field">
+      <label>Branch</label>
+      <input type="text" id="cfgBranch" placeholder="main">
+    </div>
+    <div class="field">
+      <label>Personal Access Token</label>
+      <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+      <div class="hint">Precisa de permissão de escrita em conteúdo do repositório (classic: escopo "repo"; fine-grained: "Contents: Read and write").</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="testConnBtn">Testar conexão</button>
+      <button class="btn btn-primary" id="saveConfigBtn">Salvar configuração</button>
+    </div>
+    <div class="modal-msg" id="modalMsg"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== Config & template ===================== */
+const LS_CONFIG = 'agendaCX_githubConfig';
+const LS_AUTOSAVE = 'agendaCX_autosave';
+
+const DAILY_TASKS = [
+  {id:'zendesk', label:'Pendentes Zendesk'},
+  {id:'entregas', label:'Acompanhamentos de entregas'},
+  {id:'ruptura', label:'Pedidos de ruptura'},
+  {id:'5k', label:'Pedidos 5K'},
 ];
 
-const storagePrefix = "agendaCX_v1_";
-const githubTokenKey = storagePrefix + "githubToken";
-const weekStartInput = document.getElementById("weekStart");
-const weekGrid = document.getElementById("weekGrid");
-const saveStatus = document.getElementById("saveStatus");
-const githubStatus = document.getElementById("githubStatus");
-const githubModal = document.getElementById("githubModal");
-let saveTimer;
-let githubTimer;
-let githubSaving = false;
-let githubPending = false;
+// Weekday index 1=Mon ... 5=Fri -> "demais atividades"
+const OTHER_TASKS_BY_WEEKDAY = {
+  1: [ {id:'reclame_aqui', label:'Reclame Aqui'}, {id:'amplifique', label:'Amplifique-me'} ],
+  2: [ {id:'reclame_aqui', label:'Reclame Aqui'}, {id:'jira', label:'JIRA'} ],
+  3: [ {id:'reclame_aqui', label:'Reclame Aqui'}, {id:'amplifique', label:'Amplifique-me'}, {id:'troque', label:'Troque'}, {id:'planilhas_devolucao', label:'Planilhas de Devolução Cliente'}, {id:'jira', label:'JIRA'} ],
+  4: [ {id:'reclame_aqui', label:'Reclame Aqui'}, {id:'jira', label:'JIRA'} ],
+  5: [ {id:'reclame_aqui', label:'Reclame Aqui'}, {id:'amplifique', label:'Amplifique-me'} ],
+};
 
-// --- Camada de armazenamento resiliente -----------------------------------
-// Alguns navegadores (modo privado/anônimo, restrições de cookies de
-// terceiros quando a página é aberta dentro de um iframe, ou políticas de
-// empresa) bloqueiam localStorage/sessionStorage silenciosamente. Sem essa
-// camada, o checkbox parecia marcar mas o valor nunca era persistido — na
-// próxima abertura o estado voltava vazio. Aqui detectamos a falha, avisamos
-// visivelmente e usamos um Map em memória como rede de segurança dentro da
-// mesma sessão.
-const memoryStore = new Map();
-let storageBlocked = false;
+const WEEKDAY_NAMES = {1:'Segunda-feira',2:'Terça-feira',3:'Quarta-feira',4:'Quinta-feira',5:'Sexta-feira'};
 
-function storageAvailable(kind){
-  try{
-    const s = window[kind];
-    const testKey = "__agendaCX_test__";
-    s.setItem(testKey,"1");
-    s.removeItem(testKey);
-    return true;
-  }catch(err){
-    return false;
-  }
+/* ===================== Date helpers ===================== */
+function toISO(d){
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
 }
-
-const hasLocalStorage = storageAvailable("localStorage");
-const hasSessionStorage = storageAvailable("sessionStorage");
-
-function storeGet(key){
-  if(hasLocalStorage){
-    try{ return localStorage.getItem(key); }
-    catch{ /* fall through to memory */ }
-  }
-  return memoryStore.has(key) ? memoryStore.get(key) : null;
+function fromISO(s){
+  const [y,m,d]=s.split('-').map(Number);
+  return new Date(y, m-1, d);
 }
-
-function storeSet(key,value){
-  if(hasLocalStorage){
-    try{ localStorage.setItem(key,value); return true; }
-    catch(err){
-      console.error("Falha ao gravar no localStorage:", err);
-    }
-  }
-  memoryStore.set(key,value);
-  flagStorageBlocked();
-  return false;
-}
-
-function storeRemove(key){
-  if(hasLocalStorage){
-    try{ localStorage.removeItem(key); }
-    catch{ /* ignore */ }
-  }
-  memoryStore.delete(key);
-}
-
-function flagStorageBlocked(){
-  if(storageBlocked) return;
-  storageBlocked = true;
-  if(saveStatus){
-    saveStatus.textContent = "Navegador bloqueou o salvamento local — use Exportar backup ou Salvar no GitHub";
-    saveStatus.style.color = "#9b3b36";
-  }
-}
-
-function showSaved(){
-  if(!saveStatus) return;
-  if(storageBlocked) return; // mantém o aviso de bloqueio visível
-  saveStatus.textContent = "Salvando neste navegador...";
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>saveStatus.textContent = "Salvo neste navegador", 450);
-}
-
-function getGithubConfig(){
-  return {
-    owner: GITHUB_CONFIG.owner,
-    repo: GITHUB_CONFIG.repo,
-    branch: GITHUB_CONFIG.branch,
-    path: GITHUB_CONFIG.path
-  };
-}
-
-function getGithubToken(){
-  if(hasSessionStorage){
-    try{
-      const t = sessionStorage.getItem(githubTokenKey);
-      if(t) return t;
-    }catch{ /* ignore */ }
-  }
-  return storeGet(githubTokenKey) || "";
-}
-
-function setGithubStatus(text,type=""){
-  githubStatus.textContent = text;
-  githubStatus.classList.remove("connected","error");
-  if(type) githubStatus.classList.add(type);
-}
-
-function updateGithubUI(){
-  const token = getGithubToken();
-  if(token){
-    setGithubStatus("GitHub conectado","connected");
-    document.getElementById("githubBtn").textContent = "GitHub configurado";
-  }else{
-    setGithubStatus("GitHub não configurado");
-    document.getElementById("githubBtn").textContent = "Configurar GitHub";
-  }
-}
-
-function openGithubModal(){
-  document.getElementById("ghToken").value = getGithubToken();
-  document.getElementById("ghRemember").checked = !!storeGet(githubTokenKey);
-  githubModal.classList.add("open");
-  githubModal.setAttribute("aria-hidden","false");
-}
-
-function closeGithubModal(){
-  githubModal.classList.remove("open");
-  githubModal.setAttribute("aria-hidden","true");
-}
-
-function collectCurrentWeekState(){
-  const checks = {};
-  document.querySelectorAll('input[type="checkbox"][data-day]').forEach(cb=>checks[cb.id] = cb.checked);
-  const notes = {};
-  document.querySelectorAll("textarea").forEach(area=>notes[area.id] = area.value);
-  return {checks,notes,updatedAt:new Date().toISOString()};
-}
-
-function applyWeekState(state){
-  if(!state) return;
-  if(state.checks){
-    document.querySelectorAll('input[type="checkbox"][data-day]').forEach(cb=>{
-      if(Object.prototype.hasOwnProperty.call(state.checks,cb.id)){
-        cb.checked = !!state.checks[cb.id];
-        storeSet(storagePrefix + currentWeekKey() + "_" + cb.id, cb.checked ? "1" : "0");
-      }
-    });
-  }
-  if(state.notes){
-    document.querySelectorAll("textarea").forEach(area=>{
-      if(Object.prototype.hasOwnProperty.call(state.notes,area.id)){
-        area.value = state.notes[area.id] || "";
-        storeSet(storagePrefix + currentWeekKey() + "_" + area.id, area.value);
-      }
-    });
-  }
-  updateProgress();
-}
-
-function utf8ToBase64(text){
-  const bytes = new TextEncoder().encode(text);
-  let binary = "";
-  bytes.forEach(b=>binary += String.fromCharCode(b));
-  return btoa(binary);
-}
-
-function base64ToUtf8(base64){
-  const clean = base64.replace(/\n/g,"");
-  const binary = atob(clean);
-  const bytes = Uint8Array.from(binary,c=>c.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
-
-async function githubRequest(url,options={}){
-  const token = getGithubToken();
-  if(!token) throw new Error("Token não informado.");
-  const headers = {
-    "Accept":"application/vnd.github+json",
-    "Authorization":`Bearer ${token}`,
-    "X-GitHub-Api-Version":"2022-11-28",
-    ...(options.headers || {})
-  };
-  const response = await fetch(url,{...options,headers});
-  const contentType = response.headers.get("content-type") || "";
-  const raw = response.status === 204 ? "" : await response.text();
-  let body = null;
-  if(raw){
-    try{ body = JSON.parse(raw); }
-    catch{
-      const preview = raw.trim().slice(0,120).replace(/\s+/g," ");
-      const err = new Error(`A resposta recebida não veio da API do GitHub em formato JSON. Status ${response.status}. Início da resposta: ${preview}`);
-      err.status = response.status;
-      throw err;
-    }
-  }
-  if(!response.ok){
-    let msg = `GitHub respondeu ${response.status}`;
-    if(body && body.message) msg += `: ${body.message}`;
-    const err = new Error(msg); err.status = response.status; throw err;
-  }
-  return body;
-}
-
-function githubFileUrl(cfg){
-  const encodedPath = cfg.path.split("/").map(encodeURIComponent).join("/");
-  return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${encodedPath}`;
-}
-
-async function readGithubData(){
-  if(!getGithubToken()) return {data:{weeks:{}},sha:null};
-  const cfg = getGithubConfig();
-  const url = githubFileUrl(cfg) + `?ref=${encodeURIComponent(cfg.branch || "main")}`;
-  try{
-    const file = await githubRequest(url);
-    const parsed = JSON.parse(base64ToUtf8(file.content));
-    if(!parsed.weeks) parsed.weeks = {};
-    return {data:parsed,sha:file.sha};
-  }catch(err){
-    if(err.status === 404) return {data:{version:1,weeks:{}},sha:null};
-    throw err;
-  }
-}
-
-async function saveToGithub(manual=false){
-  if(!getGithubToken()){
-    if(manual) openGithubModal();
-    return;
-  }
-  if(githubSaving){githubPending = true; return;}
-  githubSaving = true;
-  setGithubStatus("Salvando no GitHub...");
-  try{
-    const cfg = getGithubConfig();
-    const {data,sha} = await readGithubData();
-    data.version = 1;
-    data.weeks = data.weeks || {};
-    data.weeks[currentWeekKey()] = collectCurrentWeekState();
-    data.updatedAt = new Date().toISOString();
-    const body = {
-      message:`Atualiza agenda CX ${currentWeekKey()}`,
-      content:utf8ToBase64(JSON.stringify(data,null,2)),
-      branch:cfg.branch || "main"
-    };
-    if(sha) body.sha = sha;
-    await githubRequest(githubFileUrl(cfg),{
-      method:"PUT",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(body)
-    });
-    setGithubStatus("GitHub salvo","connected");
-  }catch(err){
-    console.error(err);
-    setGithubStatus("Erro ao salvar no GitHub","error");
-    if(manual) alert("Não foi possível salvar no GitHub. " + err.message);
-  }finally{
-    githubSaving = false;
-    if(githubPending){githubPending = false; scheduleGithubSave();}
-  }
-}
-
-function scheduleGithubSave(){
-  if(!getGithubToken()) return;
-  setGithubStatus("Aguardando sincronização...");
-  clearTimeout(githubTimer);
-  githubTimer = setTimeout(()=>saveToGithub(false),900);
-}
-
-async function loadCurrentWeekFromGithub(){
-  if(!getGithubToken()) return;
-  setGithubStatus("Sincronizando GitHub...");
-  try{
-    const {data} = await readGithubData();
-    const remote = data.weeks && data.weeks[currentWeekKey()];
-    if(remote) applyWeekState(remote);
-    setGithubStatus("GitHub conectado","connected");
-  }catch(err){
-    console.error(err);
-    setGithubStatus("Erro ao sincronizar GitHub","error");
-  }
-}
-
-function toLocalISO(date){
-  const y = date.getFullYear();
-  const m = String(date.getMonth()+1).padStart(2,"0");
-  const d = String(date.getDate()).padStart(2,"0");
-  return `${y}-${m}-${d}`;
-}
-
 function getMonday(date){
   const d = new Date(date);
-  const day = d.getDay();
+  const day = d.getDay(); // 0=Sun..6=Sat
   const diff = day === 0 ? -6 : 1 - day;
   d.setDate(d.getDate()+diff);
-  d.setHours(12,0,0,0);
+  d.setHours(0,0,0,0);
   return d;
 }
+const TODAY = new Date(2026,7,17); // 17/08/2026, Monday — data de referência inicial
+const todayISO = toISO(TODAY);
 
-function formatDate(date){
-  return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"short"}).format(date).replace(".","");
+let currentMonday = getMonday(TODAY);
+let filteredISO = null; // date currently highlighted via filter
+
+/* ===================== Data store ===================== */
+// dataStore shape: { days: { 'yyyy-mm-dd': { checked: {taskId:bool}, notes: '' } } }
+let dataStore = { days: {} };
+let remoteSha = null;      // sha of last fetched file (for conflict-safe PUT)
+let dirtyDates = new Set(); // dates changed locally since last successful save
+let saveTimer = null;
+let isSaving = false;
+
+function getDayData(iso){
+  if(!dataStore.days[iso]) dataStore.days[iso] = {checked:{}, notes:''};
+  return dataStore.days[iso];
 }
 
-function taskId(dayKey,type,index){
-  return `${dayKey}_${type}_${index}`;
+/* ===================== Rendering ===================== */
+const grid = document.getElementById('grid');
+const weekRangeEl = document.getElementById('weekRange');
+
+function fmtDatePt(d){
+  return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+}
+function fmtDayLabel(d){
+  const day = String(d.getDate()).padStart(2,'0');
+  const mon = d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','');
+  return `${day} DE ${mon.toUpperCase()}`;
 }
 
-function render(){
-  weekGrid.innerHTML = "";
-  const monday = new Date(weekStartInput.value + "T12:00:00");
+function renderWeek(){
+  grid.innerHTML = '';
+  const days = [];
+  for(let i=0;i<5;i++){
+    const d = new Date(currentMonday);
+    d.setDate(d.getDate()+i);
+    days.push(d);
+  }
+  const first = days[0], last = days[4];
+  weekRangeEl.textContent = `${fmtDatePt(first)} a ${fmtDatePt(last)} de ${last.toLocaleDateString('pt-BR',{month:'long', year:'numeric'})}`;
 
-  schedule.forEach((day,dayIndex)=>{
-    const date = new Date(monday);
-    date.setDate(monday.getDate()+dayIndex);
+  let weekDone = 0, weekTotal = 0;
 
-    const allTasks = [
-      ...day.fixed.map((text,i)=>({text,type:"fixed",index:i})),
-      ...day.specific.map((text,i)=>({text,type:"specific",index:i}))
-    ];
+  days.forEach((d, idx) => {
+    const weekdayNum = idx+1; // 1..5
+    const iso = toISO(d);
+    const dayData = getDayData(iso);
+    const isToday = iso === todayISO;
+    const isFiltered = filteredISO === iso;
 
-    const card = document.createElement("section");
-    card.className = "day";
-    card.dataset.day = day.key;
+    const card = document.createElement('div');
+    card.className = 'day-card' + (isToday?' is-today':'') + (isFiltered?' is-filtered':'');
 
-    const fixedHTML = day.fixed.map((text,i)=>taskHTML(day, "fixed", i, text)).join("");
-    const specificHTML = day.specific.length
-      ? day.specific.map((text,i)=>taskHTML(day, "specific", i, text)).join("")
-      : `<div class="empty-note">Sem demais atividades programadas para este dia.</div>`;
+    const dailyItems = DAILY_TASKS;
+    const otherItems = OTHER_TASKS_BY_WEEKDAY[weekdayNum] || [];
+    const allItems = [...dailyItems, ...otherItems];
+    const doneCount = allItems.filter(t => dayData.checked[t.id]).length;
+    const pct = allItems.length ? Math.round((doneCount/allItems.length)*100) : 0;
+    weekDone += doneCount;
+    weekTotal += allItems.length;
 
     card.innerHTML = `
       <div class="day-head">
-        <div class="day-head-row">
-          <div>
-            <h2 class="day-name">${day.name}</h2>
-            <div class="day-date">${formatDate(date)}</div>
-          </div>
-          <div class="day-score" id="${day.key}_score">0%</div>
-        </div>
+        <span class="day-progress-badge">${pct}%</span>
+        <div class="day-name">${WEEKDAY_NAMES[weekdayNum]}</div>
+        <div class="day-date">${fmtDayLabel(d)}</div>
       </div>
 
-      <div class="day-body">
-        <div class="section-label">
-          <span>Atividades diarias</span>
-          <span>${day.fixed.length} ${day.fixed.length === 1 ? "item" : "itens"}</span>
-        </div>
-        <div class="tasks">${fixedHTML}</div>
-
-        <div class="divider"></div>
-
-        <div class="section-label">
-          <span>Demais Atividades</span>
-          <span>${day.specific.length} ${day.specific.length === 1 ? "item" : "itens"}</span>
-        </div>
-        <div class="tasks">${specificHTML}</div>
-
-        <div class="notes">
-          <div class="notes-title">Anotações do dia</div>
-          <textarea id="${day.key}_notes" placeholder="Registre pendências, retornos ou pontos importantes..."></textarea>
-        </div>
+      <div class="section">
+        <div class="section-title">Atividades diárias <span class="count">${dailyItems.length} itens</span></div>
+        ${dailyItems.map(t => taskHTML(iso, t, dayData)).join('')}
       </div>
 
-      <div class="day-progress">
-        <div class="day-progress-row">
-          <span>Concluído</span>
-          <div class="progress"><span id="${day.key}_bar"></span></div>
-          <strong id="${day.key}_count">0/${allTasks.length}</strong>
-        </div>
+      <hr class="divider">
+
+      <div class="section">
+        <div class="section-title">Demais atividades <span class="count">${otherItems.length} itens</span></div>
+        ${otherItems.map(t => taskHTML(iso, t, dayData)).join('')}
+      </div>
+
+      <div class="notes-wrap">
+        <div class="notes-title">Anotações do dia</div>
+        <textarea class="notes" data-iso="${iso}" placeholder="Registre pendências, retornos ou pontos importantes...">${escapeHTML(dayData.notes||'')}</textarea>
       </div>
     `;
-
-    weekGrid.appendChild(card);
+    grid.appendChild(card);
   });
 
-  restoreState();
-  bindEvents();
-  updateProgress();
+  const weekPct = weekTotal ? Math.round((weekDone/weekTotal)*100) : 0;
+  document.getElementById('weekProgressFill').style.width = weekPct + '%';
+  document.getElementById('weekProgressPct').textContent = weekPct + '%';
+
+  // wire events
+  grid.querySelectorAll('.task input').forEach(inp => {
+    inp.addEventListener('change', onTaskToggle);
+  });
+  grid.querySelectorAll('textarea.notes').forEach(ta => {
+    ta.addEventListener('input', onNotesInput);
+  });
 }
 
-function taskHTML(day,type,index,text){
-  const id = taskId(day.key,type,index);
+function taskHTML(iso, t, dayData){
+  const checked = !!dayData.checked[t.id];
   return `
     <label class="task">
-      <input type="checkbox" id="${id}" data-day="${day.key}" />
+      <input type="checkbox" data-iso="${iso}" data-task="${t.id}" ${checked?'checked':''}>
       <span class="box"></span>
-      <span class="task-text">${text}</span>
+      <span class="task-label">${t.label}</span>
     </label>
   `;
 }
 
-function currentWeekKey(){
-  return weekStartInput.value;
+function escapeHTML(s){
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
-function bindEvents(){
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-    cb.addEventListener("change",()=>{
-      storeSet(storagePrefix + currentWeekKey() + "_" + cb.id, cb.checked ? "1" : "0");
-      showSaved();
-      scheduleGithubSave();
-      updateProgress();
-    });
-  });
-
-  document.querySelectorAll("textarea").forEach(area=>{
-    area.addEventListener("input",()=>{
-      storeSet(storagePrefix + currentWeekKey() + "_" + area.id, area.value);
-      showSaved();
-      scheduleGithubSave();
-    });
-  });
+function onTaskToggle(e){
+  const iso = e.target.dataset.iso;
+  const taskId = e.target.dataset.task;
+  const d = getDayData(iso);
+  d.checked[taskId] = e.target.checked;
+  markDirty(iso);
+  renderWeek(); // update progress bars, keep filter/today state
+  restoreFocusNotAffected();
+  scheduleAutosave();
 }
 
-function restoreState(){
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-    cb.checked = storeGet(storagePrefix + currentWeekKey() + "_" + cb.id) === "1";
-  });
-
-  document.querySelectorAll("textarea").forEach(area=>{
-    area.value = storeGet(storagePrefix + currentWeekKey() + "_" + area.id) || "";
-  });
+let notesDebounce = {};
+function onNotesInput(e){
+  const iso = e.target.dataset.iso;
+  const d = getDayData(iso);
+  d.notes = e.target.value;
+  markDirty(iso);
+  clearTimeout(notesDebounce[iso]);
+  notesDebounce[iso] = setTimeout(scheduleAutosave, 500);
 }
 
-function updateProgress(){
-  let weekDone = 0;
-  let weekTotal = 0;
+function restoreFocusNotAffected(){ /* no-op placeholder, checkboxes don't need focus retention */ }
 
-  schedule.forEach(day=>{
-    const boxes = [...document.querySelectorAll(`input[data-day="${day.key}"]`)];
-    const done = boxes.filter(cb=>cb.checked).length;
-    const total = boxes.length;
-    weekDone += done;
-    weekTotal += total;
-
-    const pct = total ? Math.round((done/total)*100) : 0;
-    document.getElementById(`${day.key}_score`).textContent = `${pct}%`;
-    document.getElementById(`${day.key}_bar`).style.width = `${pct}%`;
-    document.getElementById(`${day.key}_count`).textContent = `${done}/${total}`;
-  });
-
-  const weekPct = weekTotal ? Math.round((weekDone/weekTotal)*100) : 0;
-  document.getElementById("weekBar").style.width = `${weekPct}%`;
-  document.getElementById("weekPct").textContent = `${weekPct}%`;
+function markDirty(iso){
+  dirtyDates.add(iso);
+  updateStatus('dirty', 'Alterações não salvas');
 }
 
-function resetChecks(){
-  if(!confirm("Deseja limpar todos os checks desta semana?")) return;
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-    cb.checked = false;
-    storeRemove(storagePrefix + currentWeekKey() + "_" + cb.id);
-  });
-  updateProgress();
-  showSaved();
-  scheduleGithubSave();
-}
+/* ===================== Navigation & filter ===================== */
+document.getElementById('prevWeek').onclick = () => { currentMonday.setDate(currentMonday.getDate()-7); currentMonday=new Date(currentMonday); renderWeek(); };
+document.getElementById('nextWeek').onclick = () => { currentMonday.setDate(currentMonday.getDate()+7); currentMonday=new Date(currentMonday); renderWeek(); };
+document.getElementById('gotoToday').onclick = () => { currentMonday = getMonday(TODAY); filteredISO = todayISO; document.getElementById('dateFilter').value = todayISO; renderWeek(); };
 
-function exportBackup(){
-  const payload = {
-    version:1,
-    weekKey:currentWeekKey(),
-    exportedAt:new Date().toISOString(),
-    state:collectCurrentWeekState()
-  };
-  const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `agenda-cx-${currentWeekKey()}.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function importBackup(file){
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const payload = JSON.parse(reader.result);
-      const state = payload.state || payload; // aceita backup bruto ou embrulhado
-      applyWeekState(state);
-      showSaved();
-      scheduleGithubSave();
-      alert("Backup importado com sucesso.");
-    }catch(err){
-      console.error(err);
-      alert("Não foi possível ler este arquivo de backup.");
-    }
-  };
-  reader.readAsText(file);
-}
-
-const now = new Date();
-const initialMonday = getMonday(now);
-weekStartInput.value = storeGet(storagePrefix+"selectedWeek") || toLocalISO(initialMonday);
-
-weekStartInput.addEventListener("change",()=>{
-  const chosen = new Date(weekStartInput.value + "T12:00:00");
-  const monday = getMonday(chosen);
-  weekStartInput.value = toLocalISO(monday);
-  storeSet(storagePrefix+"selectedWeek",weekStartInput.value);
-  render();
-  loadCurrentWeekFromGithub();
+const dateFilterEl = document.getElementById('dateFilter');
+dateFilterEl.value = todayISO;
+dateFilterEl.addEventListener('change', () => {
+  if(!dateFilterEl.value) { filteredISO = null; renderWeek(); return; }
+  const d = fromISO(dateFilterEl.value);
+  currentMonday = getMonday(d);
+  filteredISO = dateFilterEl.value;
+  renderWeek();
 });
 
-document.getElementById("resetBtn").addEventListener("click",resetChecks);
-document.getElementById("printBtn").addEventListener("click",()=>window.print());
-document.getElementById("exportBtn").addEventListener("click",exportBackup);
-document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("importFile").click());
-document.getElementById("importFile").addEventListener("change",e=>{
-  const file = e.target.files[0];
-  if(file) importBackup(file);
-  e.target.value = "";
-});
-document.getElementById("githubBtn").addEventListener("click",openGithubModal);
-document.getElementById("githubSaveBtn").addEventListener("click",()=>saveToGithub(true));
-document.getElementById("ghCancelBtn").addEventListener("click",closeGithubModal);
-githubModal.addEventListener("click",e=>{if(e.target === githubModal) closeGithubModal();});
+/* ===================== Status / toast ===================== */
+const statusDot = document.getElementById('statusDot');
+const statusText = document.getElementById('statusText');
+function updateStatus(kind, text){
+  statusDot.className = 'dot ' + kind;
+  statusText.textContent = text;
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+}
 
-document.getElementById("ghConnectBtn").addEventListener("click",async()=>{
-  const token = document.getElementById("ghToken").value.trim();
-  const remember = document.getElementById("ghRemember").checked;
-  if(!token){
-    alert("Preencha o token do GitHub.");
+/* ===================== GitHub config ===================== */
+function loadConfig(){
+  try{ return JSON.parse(localStorage.getItem(LS_CONFIG) || 'null'); }catch(e){ return null; }
+}
+function saveConfig(cfg){ localStorage.setItem(LS_CONFIG, JSON.stringify(cfg)); }
+
+function apiBase(cfg){ return `https://api.github.com/repos/${cfg.repo}/contents/${encodeURIComponent(cfg.path).replace(/%2F/g,'/')}`; }
+
+async function ghGet(cfg){
+  const res = await fetch(`${apiBase(cfg)}?ref=${encodeURIComponent(cfg.branch)}&t=${Date.now()}`, {
+    headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/vnd.github+json' }
+  });
+  if(res.status === 404) return {notFound:true};
+  if(!res.ok) throw new Error(`GET falhou (${res.status})`);
+  const json = await res.json();
+  const content = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
+  return { sha: json.sha, content };
+}
+
+async function ghPut(cfg, contentObj, sha){
+  const body = {
+    message: `Atualiza agenda CX — ${new Date().toLocaleString('pt-BR')}`,
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(contentObj, null, 2)))),
+    branch: cfg.branch,
+  };
+  if(sha) body.sha = sha;
+  const res = await fetch(apiBase(cfg), {
+    method:'PUT',
+    headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err.message || `PUT falhou (${res.status})`);
+  }
+  return res.json();
+}
+
+/* ===================== Load / Save flow ===================== */
+async function loadFromGithub(showToastOnEmpty){
+  const cfg = loadConfig();
+  if(!cfg || !cfg.repo || !cfg.token){
+    updateStatus('error', 'Conecte o GitHub em ⚙ para carregar e salvar a agenda.');
     return;
   }
-  if(hasSessionStorage){ try{ sessionStorage.setItem(githubTokenKey,token); }catch{ /* ignore */ } }
-  if(remember) storeSet(githubTokenKey,token);
-  else storeRemove(githubTokenKey);
-  updateGithubUI();
-  setGithubStatus("Testando conexão...");
+  updateStatus('saving', 'Carregando do GitHub...');
   try{
-    await readGithubData();
-    closeGithubModal();
-    await loadCurrentWeekFromGithub();
-    await saveToGithub(true);
+    const result = await ghGet(cfg);
+    if(result.notFound){
+      remoteSha = null;
+      dataStore = { days: {} };
+      updateStatus('dirty', 'Arquivo ainda não existe no repositório — será criado ao salvar.');
+      if(showToastOnEmpty) showToast('Nenhum dado encontrado ainda. Comece a marcar as tarefas.');
+    } else {
+      remoteSha = result.sha;
+      const parsed = JSON.parse(result.content || '{"days":{}}');
+      dataStore = parsed && parsed.days ? parsed : { days:{} };
+      dirtyDates.clear();
+      updateStatus('saved', `Carregado do GitHub · ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`);
+    }
+    renderWeek();
   }catch(err){
     console.error(err);
-    setGithubStatus("Falha na conexão","error");
-    alert("Não foi possível conectar ao GitHub. " + err.message);
+    updateStatus('error', 'Erro ao carregar: ' + err.message);
   }
+}
+
+async function saveToGithub(){
+  const cfg = loadConfig();
+  if(!cfg || !cfg.repo || !cfg.token){
+    updateStatus('error', 'Conecte o GitHub em ⚙ para salvar.');
+    return;
+  }
+  if(dirtyDates.size === 0 && remoteSha !== null){
+    return; // nothing to save
+  }
+  if(isSaving) return;
+  isSaving = true;
+  updateStatus('saving', 'Salvando...');
+  const pendingDates = new Set(dirtyDates);
+  try{
+    // re-fetch latest remote to merge and avoid clobbering the other person's edits
+    const result = await ghGet(cfg);
+    let remoteData = { days:{} };
+    let sha = null;
+    if(!result.notFound){
+      sha = result.sha;
+      try{ remoteData = JSON.parse(result.content || '{"days":{}}'); }catch(e){ remoteData = {days:{}}; }
+      if(!remoteData.days) remoteData.days = {};
+    }
+    // merge: only overwrite the dates we actually changed locally
+    pendingDates.forEach(iso => {
+      remoteData.days[iso] = dataStore.days[iso];
+    });
+    const saved = await ghPut(cfg, remoteData, sha);
+    remoteSha = saved.content.sha;
+    dataStore = remoteData;
+    pendingDates.forEach(d => dirtyDates.delete(d));
+    updateStatus('saved', `Salvo às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`);
+  }catch(err){
+    console.error(err);
+    updateStatus('error', 'Erro ao salvar: ' + err.message);
+    showToast('Não foi possível salvar. Tente novamente.');
+  }finally{
+    isSaving = false;
+  }
+}
+
+function scheduleAutosave(){
+  const autosave = document.getElementById('autosaveToggle').checked;
+  if(!autosave) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveToGithub, 1400);
+}
+
+document.getElementById('saveNowBtn').onclick = () => { clearTimeout(saveTimer); saveToGithub(); };
+document.getElementById('reloadBtn').onclick = () => {
+  if(dirtyDates.size > 0 && !confirm('Existem alterações não salvas que serão perdidas ao recarregar. Continuar?')) return;
+  dirtyDates.clear();
+  loadFromGithub(true);
+};
+
+const autosaveToggle = document.getElementById('autosaveToggle');
+autosaveToggle.checked = localStorage.getItem(LS_AUTOSAVE) !== 'off';
+autosaveToggle.addEventListener('change', () => {
+  localStorage.setItem(LS_AUTOSAVE, autosaveToggle.checked ? 'on' : 'off');
 });
 
-if(!hasLocalStorage) flagStorageBlocked();
-render();
-updateGithubUI();
-loadCurrentWeekFromGithub();
+/* ===================== Settings modal ===================== */
+const overlay = document.getElementById('settingsOverlay');
+document.getElementById('openSettings').onclick = () => {
+  const cfg = loadConfig() || {};
+  document.getElementById('cfgRepo').value = cfg.repo || '';
+  document.getElementById('cfgPath').value = cfg.path || 'agenda-cx-data.json';
+  document.getElementById('cfgBranch').value = cfg.branch || 'main';
+  document.getElementById('cfgToken').value = cfg.token || '';
+  document.getElementById('modalMsg').textContent = '';
+  overlay.classList.add('open');
+};
+document.getElementById('closeSettings').onclick = () => overlay.classList.remove('open');
+overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
+
+function readCfgForm(){
+  return {
+    repo: document.getElementById('cfgRepo').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\.git$/,''),
+    path: document.getElementById('cfgPath').value.trim() || 'agenda-cx-data.json',
+    branch: document.getElementById('cfgBranch').value.trim() || 'main',
+    token: document.getElementById('cfgToken').value.trim(),
+  };
+}
+
+document.getElementById('testConnBtn').onclick = async () => {
+  const cfg = readCfgForm();
+  const msg = document.getElementById('modalMsg');
+  msg.className = 'modal-msg';
+  msg.textContent = 'Testando...';
+  if(!cfg.repo || !cfg.token){ msg.className='modal-msg err'; msg.textContent='Preencha repositório e token.'; return; }
+  try{
+    const res = await fetch(`https://api.github.com/repos/${cfg.repo}`, { headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/vnd.github+json' }});
+    if(!res.ok) throw new Error(`Repositório não encontrado ou sem acesso (${res.status})`);
+    const result = await ghGet(cfg);
+    if(result.notFound){
+      msg.className = 'modal-msg ok';
+      msg.textContent = 'Conexão OK. O arquivo de dados será criado ao salvar pela primeira vez.';
+    } else {
+      msg.className = 'modal-msg ok';
+      msg.textContent = 'Conexão OK. Arquivo de dados encontrado no repositório.';
+    }
+  }catch(err){
+    msg.className = 'modal-msg err';
+    msg.textContent = err.message;
+  }
+};
+
+document.getElementById('saveConfigBtn').onclick = async () => {
+  const cfg = readCfgForm();
+  const msg = document.getElementById('modalMsg');
+  if(!cfg.repo || !cfg.token){ msg.className='modal-msg err'; msg.textContent='Preencha repositório e token.'; return; }
+  saveConfig(cfg);
+  overlay.classList.remove('open');
+  showToast('Configuração salva neste navegador.');
+  await loadFromGithub(true);
+};
+
+/* ===================== Init ===================== */
+filteredISO = todayISO;
+renderWeek();
+loadFromGithub(false);
 </script>
 </body>
 </html>
