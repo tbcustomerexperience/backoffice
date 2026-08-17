@@ -483,12 +483,13 @@
 
     <div class="field">
       <label>Repositório (owner/repo)</label>
-      <input type="text" id="cfgRepo" placeholder="ex: taniabulhoes/agenda-cx">
+      <input type="text" id="cfgRepo" placeholder="ex: tbcustomerexperience/backoffice">
+      <div class="hint">É o nome do repositório no GitHub, não o link do site publicado. Encontra em github.com/&lt;owner&gt;/&lt;repo&gt;.</div>
     </div>
     <div class="field">
       <label>Caminho do arquivo de dados</label>
-      <input type="text" id="cfgPath" placeholder="agenda-cx-data.json">
-      <div class="hint">Se o arquivo ainda não existir no repositório, ele será criado automaticamente ao salvar.</div>
+      <input type="text" id="cfgPath" placeholder="cronograma/agenda-cx-data.json">
+      <div class="hint">Se o dashboard estiver dentro de uma pasta do repositório (ex: "cronograma"), inclua a pasta no caminho. Se o arquivo ainda não existir, ele será criado automaticamente ao salvar.</div>
     </div>
     <div class="field">
       <label>Branch</label>
@@ -868,12 +869,25 @@ document.getElementById('closeSettings').onclick = () => overlay.classList.remov
 overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
 
 function readCfgForm(){
+  let repoRaw = document.getElementById('cfgRepo').value.trim();
+  // remove protocol/host if user pasted a full URL by mistake
+  repoRaw = repoRaw.replace(/^https?:\/\/(www\.)?github\.com\//i, '').replace(/\.git$/i, '');
   return {
-    repo: document.getElementById('cfgRepo').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\.git$/,''),
+    repo: repoRaw,
     path: document.getElementById('cfgPath').value.trim() || 'agenda-cx-data.json',
     branch: document.getElementById('cfgBranch').value.trim() || 'main',
     token: document.getElementById('cfgToken').value.trim(),
   };
+}
+
+function validateRepoFormat(repo){
+  if(/github\.io/i.test(repo)){
+    return 'Esse é o endereço do site publicado, não o nome do repositório. Use o formato "owner/repo" (ex: tbcustomerexperience/backoffice).';
+  }
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)){
+    return 'Formato inválido. Use "owner/repo", ex: tbcustomerexperience/backoffice.';
+  }
+  return null;
 }
 
 document.getElementById('testConnBtn').onclick = async () => {
@@ -882,6 +896,8 @@ document.getElementById('testConnBtn').onclick = async () => {
   msg.className = 'modal-msg';
   msg.textContent = 'Testando...';
   if(!cfg.repo || !cfg.token){ msg.className='modal-msg err'; msg.textContent='Preencha repositório e token.'; return; }
+  const repoErr = validateRepoFormat(cfg.repo);
+  if(repoErr){ msg.className='modal-msg err'; msg.textContent=repoErr; return; }
   try{
     const res = await fetch(`https://api.github.com/repos/${cfg.repo}`, { headers:{ 'Authorization':`Bearer ${cfg.token}`, 'Accept':'application/vnd.github+json' }});
     if(!res.ok) throw new Error(`Repositório não encontrado ou sem acesso (${res.status})`);
@@ -903,6 +919,8 @@ document.getElementById('saveConfigBtn').onclick = async () => {
   const cfg = readCfgForm();
   const msg = document.getElementById('modalMsg');
   if(!cfg.repo || !cfg.token){ msg.className='modal-msg err'; msg.textContent='Preencha repositório e token.'; return; }
+  const repoErr = validateRepoFormat(cfg.repo);
+  if(repoErr){ msg.className='modal-msg err'; msg.textContent=repoErr; return; }
   saveConfig(cfg);
   overlay.classList.remove('open');
   showToast('Configuração salva neste navegador.');
