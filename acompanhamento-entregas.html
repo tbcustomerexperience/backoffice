@@ -192,9 +192,10 @@
   .new-alert b{font-weight:700;}
 
   .panel{
-    background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:24px;
+    background:#fff; border:1px solid var(--line); border-radius:12px; overflow:visible; margin-bottom:24px;
     box-shadow:var(--shadow);
   }
+  .panel .table-scroll{border-bottom-left-radius:12px; border-bottom-right-radius:12px;}
   .panel-head{
     padding:12px 18px; border-bottom:1px solid var(--line);
     display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
@@ -549,16 +550,19 @@
           </div>
         </div>
         <div class="f-group">
-          <label>Atraso</label>
-          <select id="diasAtrasoFilter">
-            <option value="">Todos</option>
-            <option value="1-1">1 dia</option>
-            <option value="2-2">2 dias</option>
-            <option value="3-5">3 a 5 dias</option>
-            <option value="7-10">7 a 10 dias</option>
-            <option value="15-">A partir de 15 dias</option>
-            <option value="30-">A partir de 30 dias</option>
-          </select>
+          <label>Dias em atraso</label>
+          <div class="ms-dropdown" id="diasAtrasoFilterWrap">
+            <button type="button" class="ms-dropdown-btn" id="diasAtrasoFilterBtn">Todos</button>
+            <div class="ms-dropdown-panel" id="diasAtrasoFilterPanel">
+              <label><input type="checkbox" value="1-1"> 1 dia</label>
+              <label><input type="checkbox" value="2-2"> 2 dias</label>
+              <label><input type="checkbox" value="3-5"> 3 a 5 dias</label>
+              <label><input type="checkbox" value="7-10"> 7 a 10 dias</label>
+              <label><input type="checkbox" value="15-"> A partir de 15 dias</label>
+              <label><input type="checkbox" value="30-"> A partir de 30 dias</label>
+              <div class="ms-dropdown-clear" data-clear-only>Limpar seleção</div>
+            </div>
+          </div>
         </div>
         <div class="f-group">
           <label>Previsão</label>
@@ -741,7 +745,7 @@ const CONFIG = {
 };
 const SHARED_MODE = !!CONFIG.API_URL;
 
-const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, riskFilter:[], search:'', transp:[], statusTransp:[], obsFilter:[], statusFilter:[], diasAtrasoRange:'', dateFilter:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
+const state = { rows: [], filtered: [], sortKey:'risk', sortDir:1, riskFilter:[], search:'', transp:[], statusTransp:[], obsFilter:[], statusFilter:[], diasAtraso:[], dateFilter:'', obs:{}, page:1, ind:{month:'', transp:'', hideEntregue:false} };
 const TABLE_PAGE_SIZE = 60;
 
 const STATUS_CX = {
@@ -841,6 +845,13 @@ const statusCxMs = initMultiSelectFilter('statusCxFilter', {
   labelAll: 'Todos', labelPrefix: 'Status CX',
   labelFor: v=> STATUS_FILTER_LABELS[v],
   getSelected: ()=>state.statusFilter, setSelected: v=>{ state.statusFilter = v; },
+  onChange: ()=>applyFilters(),
+});
+const DIAS_ATRASO_LABELS = {'1-1':'1 dia', '2-2':'2 dias', '3-5':'3 a 5 dias', '7-10':'7 a 10 dias', '15-':'A partir de 15 dias', '30-':'A partir de 30 dias'};
+const diasAtrasoMs = initMultiSelectFilter('diasAtrasoFilter', {
+  labelAll: 'Todos', labelPrefix: 'Atraso',
+  labelFor: v=> DIAS_ATRASO_LABELS[v],
+  getSelected: ()=>state.diasAtraso, setSelected: v=>{ state.diasAtraso = v; },
   onChange: ()=>applyFilters(),
 });
 
@@ -1665,20 +1676,16 @@ document.getElementById('searchBox').addEventListener('input', e=>{
   state.search = e.target.value.trim().toLowerCase();
   applyFilters();
 });
-document.getElementById('diasAtrasoFilter').addEventListener('change', e=>{
-  state.diasAtrasoRange = e.target.value;
-  applyFilters();
-});
 document.getElementById('dateFilterMain').addEventListener('change', e=>{
   state.dateFilter = e.target.value;
   applyFilters();
 });
 document.getElementById('btnClearFilters').addEventListener('click', ()=>{
-  state.riskFilter = []; state.search = ''; state.diasAtrasoRange = ''; state.dateFilter = '';
+  state.riskFilter = []; state.search = ''; state.diasAtraso = []; state.dateFilter = '';
   state.transp = []; state.statusTransp = []; state.obsFilter = []; state.statusFilter = [];
   riskMs.syncCheckboxes();
   document.getElementById('searchBox').value = '';
-  document.getElementById('diasAtrasoFilter').value = '';
+  diasAtrasoMs.syncCheckboxes();
   document.getElementById('dateFilterMain').value = '';
   transpMs.syncCheckboxes();
   statusTranspMs.syncCheckboxes();
@@ -1754,16 +1761,18 @@ function applyFilters(){
       return state.obsFilter.some(f=> f==='com' ? hasObs : !hasObs);
     });
   }
-  if(state.diasAtrasoRange){
-    const [minStr, maxStr] = state.diasAtrasoRange.split('-');
-    const min = Number(minStr);
-    const max = maxStr === '' || maxStr === undefined ? null : Number(maxStr);
+  if(state.diasAtraso.length){
     rows = rows.filter(r=>{
       const d = calcDiasAtraso(r);
       if(d === null) return false;
-      if(d < min) return false;
-      if(max !== null && d > max) return false;
-      return true;
+      return state.diasAtraso.some(rangeStr=>{
+        const [minStr, maxStr] = rangeStr.split('-');
+        const min = Number(minStr);
+        const max = maxStr === '' || maxStr === undefined ? null : Number(maxStr);
+        if(d < min) return false;
+        if(max !== null && d > max) return false;
+        return true;
+      });
     });
   }
   if(state.dateFilter){
