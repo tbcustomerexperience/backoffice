@@ -40,7 +40,8 @@
         "reclame_aqui": true,
         "jira": true,
         "ruptura": true,
-        "5k": true
+        "5k": true,
+        "entregas": true
       },
       "notes": ""
     }
