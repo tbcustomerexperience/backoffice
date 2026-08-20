@@ -5,7 +5,9 @@
         "reclame_aqui": true,
         "amplifique": true,
         "zendesk": true,
-        "ruptura": true
+        "ruptura": true,
+        "entregas": true,
+        "5k": true
       },
       "notes": ""
     },
@@ -14,7 +16,9 @@
         "ruptura": true,
         "entregas": true,
         "zendesk": true,
-        "5k": true
+        "5k": true,
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     }
