@@ -37,7 +37,8 @@
     "2026-08-20": {
       "checked": {
         "zendesk": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     }
