@@ -38,7 +38,8 @@
       "checked": {
         "zendesk": true,
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "ruptura": true
       },
       "notes": ""
     }
