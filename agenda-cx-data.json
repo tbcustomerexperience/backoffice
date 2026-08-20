@@ -28,7 +28,8 @@
         "zendesk": true,
         "ruptura": true,
         "5k": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     },
