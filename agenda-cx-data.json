@@ -8,6 +8,15 @@
         "ruptura": true
       },
       "notes": ""
+    },
+    "2026-08-18": {
+      "checked": {
+        "ruptura": true,
+        "entregas": true,
+        "zendesk": true,
+        "5k": true
+      },
+      "notes": ""
     }
   }
 }
