@@ -21,6 +21,16 @@
         "jira": true
       },
       "notes": ""
+    },
+    "2026-08-19": {
+      "checked": {
+        "entregas": true,
+        "zendesk": true,
+        "ruptura": true,
+        "5k": true,
+        "reclame_aqui": true
+      },
+      "notes": ""
     }
   }
 }
