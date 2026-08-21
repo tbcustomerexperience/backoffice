@@ -44,6 +44,12 @@
         "entregas": true
       },
       "notes": ""
+    },
+    "2026-08-21": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
