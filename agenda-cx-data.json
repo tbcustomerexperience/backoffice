@@ -54,6 +54,12 @@
         "5k": true
       },
       "notes": ""
+    },
+    "2026-08-24": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
