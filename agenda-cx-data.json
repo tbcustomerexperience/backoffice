@@ -58,7 +58,8 @@
     "2026-08-24": {
       "checked": {
         "zendesk": true,
-        "amplifique": true
+        "amplifique": true,
+        "5k": true
       },
       "notes": ""
     }
