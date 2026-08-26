@@ -81,7 +81,8 @@
         "zendesk": true,
         "jira": true,
         "reclame_aqui": true,
-        "amplifique": true
+        "amplifique": true,
+        "5k": false
       },
       "notes": ""
     }
