@@ -80,7 +80,8 @@
       "checked": {
         "zendesk": true,
         "jira": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "amplifique": true
       },
       "notes": ""
     }
