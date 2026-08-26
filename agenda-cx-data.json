@@ -82,7 +82,8 @@
         "jira": true,
         "reclame_aqui": true,
         "amplifique": true,
-        "5k": false
+        "5k": true,
+        "ruptura": false
       },
       "notes": ""
     }
