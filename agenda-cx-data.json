@@ -101,7 +101,9 @@
     },
     "2026-08-28": {
       "checked": {
-        "amplifique": true
+        "amplifique": true,
+        "reclame_aqui": true,
+        "zendesk": true
       },
       "notes": ""
     }
