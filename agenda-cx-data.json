@@ -94,7 +94,7 @@
       "checked": {
         "zendesk": true,
         "reclame_aqui": true,
-        "jira": false,
+        "jira": true,
         "5k": true
       },
       "notes": ""
