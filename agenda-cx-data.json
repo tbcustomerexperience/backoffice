@@ -109,7 +109,8 @@
     },
     "2026-08-31": {
       "checked": {
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "amplifique": true
       },
       "notes": ""
     }
