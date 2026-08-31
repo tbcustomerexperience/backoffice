@@ -106,6 +106,12 @@
         "zendesk": true
       },
       "notes": ""
+    },
+    "2026-08-31": {
+      "checked": {
+        "reclame_aqui": true
+      },
+      "notes": ""
     }
   }
 }
