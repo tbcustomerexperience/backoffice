@@ -126,7 +126,8 @@
     },
     "2026-09-02": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
