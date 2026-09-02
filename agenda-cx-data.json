@@ -128,7 +128,8 @@
       "checked": {
         "zendesk": true,
         "planilhas_devolucao": true,
-        "jira": true
+        "jira": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
