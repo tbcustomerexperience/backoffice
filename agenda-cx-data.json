@@ -132,6 +132,12 @@
         "reclame_aqui": true
       },
       "notes": ""
+    },
+    "2026-09-03": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
