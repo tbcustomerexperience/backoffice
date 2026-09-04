@@ -137,7 +137,8 @@
     "2026-09-03": {
       "checked": {
         "zendesk": true,
-        "jira": true
+        "jira": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
