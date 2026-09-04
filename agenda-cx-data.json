@@ -144,7 +144,9 @@
     },
     "2026-09-04": {
       "checked": {
-        "ruptura": true
+        "ruptura": true,
+        "zendesk": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
