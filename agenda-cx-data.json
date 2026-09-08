@@ -154,7 +154,8 @@
     "2026-09-08": {
       "checked": {
         "zendesk": true,
-        "5k": true
+        "5k": true,
+        "jira": true
       },
       "notes": ""
     },
