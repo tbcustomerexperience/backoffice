@@ -150,6 +150,12 @@
         "amplifique": true
       },
       "notes": ""
+    },
+    "2026-09-08": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
