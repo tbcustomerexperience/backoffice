@@ -160,7 +160,9 @@
     },
     "2026-09-07": {
       "checked": {
-        "amplifique": true
+        "amplifique": true,
+        "zendesk": true,
+        "5k": true
       },
       "notes": ""
     }
