@@ -155,7 +155,8 @@
       "checked": {
         "zendesk": true,
         "5k": true,
-        "jira": true
+        "jira": true,
+        "reclame_aqui": true
       },
       "notes": ""
     },
