@@ -174,7 +174,8 @@
       "checked": {
         "zendesk": true,
         "amplifique": true,
-        "jira": true
+        "jira": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
