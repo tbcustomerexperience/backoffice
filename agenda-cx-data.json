@@ -176,7 +176,10 @@
         "amplifique": true,
         "jira": true,
         "planilhas_devolucao": true,
-        "5k": true
+        "5k": true,
+        "reclame_aqui": true,
+        "ruptura": true,
+        "entregas": true
       },
       "notes": ""
     },
