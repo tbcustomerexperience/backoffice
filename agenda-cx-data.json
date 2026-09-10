@@ -185,7 +185,8 @@
     },
     "2026-09-10": {
       "checked": {
-        "5k": true
+        "5k": true,
+        "jira": true
       },
       "notes": ""
     }
