@@ -198,7 +198,8 @@
       "checked": {
         "zendesk": true,
         "5k": true,
-        "amplifique": true
+        "amplifique": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
