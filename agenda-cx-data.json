@@ -189,6 +189,13 @@
         "jira": true,
         "reclame_aqui": true,
         "ruptura": true,
+        "zendesk": false,
+        "entregas": true
+      },
+      "notes": ""
+    },
+    "2026-09-11": {
+      "checked": {
         "zendesk": true
       },
       "notes": ""
