@@ -196,7 +196,8 @@
     },
     "2026-09-11": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "5k": true
       },
       "notes": ""
     }
