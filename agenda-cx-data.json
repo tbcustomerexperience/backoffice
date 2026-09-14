@@ -210,7 +210,8 @@
         "zendesk": true,
         "amplifique": true,
         "5k": true,
-        "entregas": true
+        "entregas": true,
+        "ruptura": true
       },
       "notes": ""
     }
