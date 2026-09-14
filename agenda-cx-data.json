@@ -199,7 +199,8 @@
         "zendesk": true,
         "5k": true,
         "amplifique": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "entregas": true
       },
       "notes": ""
     }
