@@ -219,7 +219,9 @@
       "checked": {
         "jira": true,
         "reclame_aqui": true,
-        "zendesk": true
+        "zendesk": true,
+        "ruptura": false,
+        "5k": true
       },
       "notes": ""
     }
