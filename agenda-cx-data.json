@@ -217,7 +217,8 @@
     },
     "2026-09-15": {
       "checked": {
-        "jira": true
+        "jira": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
