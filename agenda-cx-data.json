@@ -221,7 +221,8 @@
         "reclame_aqui": true,
         "zendesk": true,
         "ruptura": false,
-        "5k": true
+        "5k": true,
+        "entregas": true
       },
       "notes": ""
     }
