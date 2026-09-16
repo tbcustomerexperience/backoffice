@@ -225,6 +225,12 @@
         "entregas": true
       },
       "notes": ""
+    },
+    "2026-09-16": {
+      "checked": {
+        "amplifique": true
+      },
+      "notes": ""
     }
   }
 }
