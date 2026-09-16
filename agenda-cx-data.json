@@ -230,7 +230,8 @@
       "checked": {
         "amplifique": true,
         "ruptura": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     }
