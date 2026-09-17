@@ -240,7 +240,9 @@
     },
     "2026-09-17": {
       "checked": {
-        "jira": true
+        "jira": true,
+        "ruptura": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
