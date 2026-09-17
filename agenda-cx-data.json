@@ -231,7 +231,10 @@
         "amplifique": true,
         "ruptura": true,
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "5k": true,
+        "entregas": true,
+        "zendesk": true
       },
       "notes": ""
     }
