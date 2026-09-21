@@ -263,7 +263,8 @@
       "checked": {
         "zendesk": true,
         "amplifique": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "ruptura": true
       },
       "notes": ""
     }
