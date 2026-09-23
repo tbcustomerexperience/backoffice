@@ -283,7 +283,9 @@
         "amplifique": true,
         "reclame_aqui": true,
         "ruptura": true,
-        "5k": true
+        "5k": true,
+        "jira": true,
+        "entregas": true
       },
       "notes": ""
     }
