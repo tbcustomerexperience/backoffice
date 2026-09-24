@@ -294,7 +294,8 @@
     "2026-09-24": {
       "checked": {
         "ruptura": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     }
