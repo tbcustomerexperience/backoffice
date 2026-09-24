@@ -285,7 +285,9 @@
         "ruptura": true,
         "5k": true,
         "jira": true,
-        "entregas": true
+        "entregas": true,
+        "troque": true,
+        "zendesk": true
       },
       "notes": ""
     }
