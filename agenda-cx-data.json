@@ -295,7 +295,8 @@
       "checked": {
         "ruptura": true,
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "5k": true
       },
       "notes": ""
     }
