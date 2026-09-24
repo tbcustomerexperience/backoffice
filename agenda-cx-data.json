@@ -287,7 +287,8 @@
         "jira": true,
         "entregas": true,
         "troque": true,
-        "zendesk": true
+        "zendesk": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     },
