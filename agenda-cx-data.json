@@ -290,6 +290,13 @@
         "zendesk": true
       },
       "notes": ""
+    },
+    "2026-09-24": {
+      "checked": {
+        "ruptura": true,
+        "reclame_aqui": true
+      },
+      "notes": ""
     }
   }
 }
