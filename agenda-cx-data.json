@@ -313,6 +313,12 @@
         "entregas": true
       },
       "notes": ""
+    },
+    "2026-09-28": {
+      "checked": {
+        "5k": true
+      },
+      "notes": ""
     }
   }
 }
