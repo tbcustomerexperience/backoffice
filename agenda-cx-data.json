@@ -317,7 +317,8 @@
     "2026-09-28": {
       "checked": {
         "5k": true,
-        "amplifique": true
+        "amplifique": true,
+        "ruptura": true
       },
       "notes": ""
     }
