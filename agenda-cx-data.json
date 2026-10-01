@@ -331,6 +331,12 @@
         "ruptura": true
       },
       "notes": ""
+    },
+    "2026-09-30": {
+      "checked": {
+        "amplifique": true
+      },
+      "notes": ""
     }
   }
 }
