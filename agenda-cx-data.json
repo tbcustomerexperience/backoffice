@@ -321,6 +321,12 @@
         "ruptura": true
       },
       "notes": ""
+    },
+    "2026-10-01": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
