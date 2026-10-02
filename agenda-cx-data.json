@@ -337,6 +337,12 @@
         "amplifique": true
       },
       "notes": ""
+    },
+    "2026-10-02": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
