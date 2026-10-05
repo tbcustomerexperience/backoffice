@@ -349,7 +349,10 @@
     },
     "2026-10-05": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "ruptura": true,
+        "amplifique": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
