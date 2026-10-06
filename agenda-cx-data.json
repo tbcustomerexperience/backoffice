@@ -361,6 +361,12 @@
         "zendesk": true
       },
       "notes": ""
+    },
+    "2026-10-07": {
+      "checked": {
+        "troque": true
+      },
+      "notes": ""
     }
   }
 }
