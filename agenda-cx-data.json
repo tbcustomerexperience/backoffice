@@ -355,6 +355,12 @@
         "reclame_aqui": true
       },
       "notes": "Bonificados de avalição RA"
+    },
+    "2026-10-06": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
