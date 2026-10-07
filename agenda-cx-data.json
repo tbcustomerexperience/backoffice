@@ -367,7 +367,8 @@
     },
     "2026-10-07": {
       "checked": {
-        "troque": true
+        "troque": true,
+        "jira": true
       },
       "notes": ""
     }
