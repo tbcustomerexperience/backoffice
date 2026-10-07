@@ -369,7 +369,8 @@
       "checked": {
         "troque": true,
         "jira": true,
-        "amplifique": true
+        "amplifique": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
