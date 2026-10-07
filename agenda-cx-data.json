@@ -370,7 +370,8 @@
         "troque": true,
         "jira": true,
         "amplifique": true,
-        "planilhas_devolucao": true
+        "planilhas_devolucao": true,
+        "ruptura": true
       },
       "notes": ""
     }
