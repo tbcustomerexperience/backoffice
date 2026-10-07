@@ -372,7 +372,8 @@
         "amplifique": true,
         "planilhas_devolucao": true,
         "ruptura": true,
-        "zendesk": true
+        "zendesk": true,
+        "5k": true
       },
       "notes": ""
     }
