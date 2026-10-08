@@ -382,7 +382,8 @@
       "checked": {
         "zendesk": true,
         "jira": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     }
