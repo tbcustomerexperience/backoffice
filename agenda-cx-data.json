@@ -361,7 +361,8 @@
         "zendesk": true,
         "jira": true,
         "5k": true,
-        "ruptura": true
+        "ruptura": true,
+        "reclame_aqui": true
       },
       "notes": ""
     },
@@ -374,7 +375,8 @@
         "ruptura": true,
         "zendesk": true,
         "5k": true,
-        "entregas": true
+        "entregas": true,
+        "reclame_aqui": true
       },
       "notes": ""
     },
@@ -384,7 +386,8 @@
         "jira": true,
         "ruptura": true,
         "5k": true,
-        "entregas": true
+        "entregas": true,
+        "reclame_aqui": true
       },
       "notes": ""
     },
