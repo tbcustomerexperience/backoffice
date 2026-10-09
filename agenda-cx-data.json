@@ -394,7 +394,8 @@
     "2026-10-09": {
       "checked": {
         "zendesk": true,
-        "amplifique": true
+        "amplifique": true,
+        "ruptura": true
       },
       "notes": ""
     }
