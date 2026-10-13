@@ -404,6 +404,12 @@
         "zendesk": true
       },
       "notes": ""
+    },
+    "2026-10-12": {
+      "checked": {
+        "amplifique": true
+      },
+      "notes": ""
     }
   }
 }
