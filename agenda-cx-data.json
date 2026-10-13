@@ -401,7 +401,8 @@
     },
     "2026-10-13": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "jira": true
       },
       "notes": ""
     },
