@@ -417,7 +417,8 @@
     "2026-10-14": {
       "checked": {
         "zendesk": true,
-        "entregas": true
+        "entregas": true,
+        "amplifique": true
       },
       "notes": ""
     }
