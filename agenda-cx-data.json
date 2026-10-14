@@ -422,7 +422,9 @@
         "jira": true,
         "planilhas_devolucao": true,
         "ruptura": true,
-        "5k": true
+        "5k": true,
+        "troque": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
