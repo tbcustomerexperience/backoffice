@@ -418,7 +418,9 @@
       "checked": {
         "zendesk": true,
         "entregas": true,
-        "amplifique": true
+        "amplifique": true,
+        "jira": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
