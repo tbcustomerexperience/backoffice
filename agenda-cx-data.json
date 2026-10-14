@@ -421,7 +421,8 @@
         "amplifique": true,
         "jira": true,
         "planilhas_devolucao": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     }
