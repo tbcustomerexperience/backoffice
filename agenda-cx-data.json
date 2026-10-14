@@ -416,7 +416,8 @@
     },
     "2026-10-14": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "entregas": true
       },
       "notes": ""
     }
