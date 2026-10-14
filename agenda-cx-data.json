@@ -420,7 +420,8 @@
         "entregas": true,
         "amplifique": true,
         "jira": true,
-        "planilhas_devolucao": true
+        "planilhas_devolucao": true,
+        "ruptura": true
       },
       "notes": ""
     }
