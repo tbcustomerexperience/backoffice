@@ -432,7 +432,8 @@
       "checked": {
         "reclame_aqui": true,
         "jira": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     }
