@@ -431,7 +431,8 @@
     "2026-10-15": {
       "checked": {
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "ruptura": true
       },
       "notes": ""
     }
