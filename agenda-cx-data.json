@@ -442,7 +442,8 @@
         "ruptura": true,
         "amplifique": true,
         "5k": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "zendesk": true
       },
       "notes": ""
     }
