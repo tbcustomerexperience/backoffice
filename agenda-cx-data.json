@@ -436,6 +436,12 @@
         "5k": true
       },
       "notes": ""
+    },
+    "2026-10-19": {
+      "checked": {
+        "ruptura": true
+      },
+      "notes": ""
     }
   }
 }
