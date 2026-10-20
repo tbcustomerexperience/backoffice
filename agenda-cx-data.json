@@ -451,7 +451,8 @@
       "checked": {
         "entregas": true,
         "jira": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "5k": true
       },
       "notes": ""
     }
