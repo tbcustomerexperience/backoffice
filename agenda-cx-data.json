@@ -457,6 +457,14 @@
         "zendesk": true
       },
       "notes": ""
+    },
+    "2026-10-21": {
+      "checked": {
+        "amplifique": true,
+        "troque": true,
+        "planilhas_devolucao": true
+      },
+      "notes": ""
     }
   }
 }
