@@ -449,7 +449,8 @@
     },
     "2026-10-20": {
       "checked": {
-        "entregas": true
+        "entregas": true,
+        "jira": true
       },
       "notes": ""
     }
