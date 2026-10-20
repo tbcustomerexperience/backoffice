@@ -453,7 +453,8 @@
         "jira": true,
         "reclame_aqui": true,
         "5k": true,
-        "ruptura": true
+        "ruptura": true,
+        "zendesk": true
       },
       "notes": ""
     }
