@@ -450,7 +450,8 @@
     "2026-10-20": {
       "checked": {
         "entregas": true,
-        "jira": true
+        "jira": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
