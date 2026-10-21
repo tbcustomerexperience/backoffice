@@ -464,7 +464,8 @@
         "troque": true,
         "planilhas_devolucao": true,
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "zendesk": true
       },
       "notes": ""
     }
