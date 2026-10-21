@@ -462,7 +462,8 @@
       "checked": {
         "amplifique": true,
         "troque": true,
-        "planilhas_devolucao": true
+        "planilhas_devolucao": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
