@@ -465,7 +465,8 @@
         "planilhas_devolucao": true,
         "reclame_aqui": true,
         "jira": true,
-        "zendesk": true
+        "zendesk": true,
+        "5k": true
       },
       "notes": ""
     }
