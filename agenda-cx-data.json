@@ -474,7 +474,9 @@
     "2026-10-22": {
       "checked": {
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "zendesk": true,
+        "entregas": true
       },
       "notes": ""
     }
