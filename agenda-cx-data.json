@@ -473,7 +473,8 @@
     },
     "2026-10-22": {
       "checked": {
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     }
