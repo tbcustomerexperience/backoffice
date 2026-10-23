@@ -479,6 +479,13 @@
         "entregas": true
       },
       "notes": ""
+    },
+    "2026-10-23": {
+      "checked": {
+        "reclame_aqui": true,
+        "ruptura": true
+      },
+      "notes": ""
     }
   }
 }
