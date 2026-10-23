@@ -476,7 +476,9 @@
         "reclame_aqui": true,
         "jira": true,
         "zendesk": true,
-        "entregas": true
+        "entregas": true,
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     },
