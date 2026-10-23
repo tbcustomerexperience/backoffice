@@ -486,7 +486,8 @@
         "ruptura": true,
         "amplifique": true,
         "5k": true,
-        "zendesk": true
+        "zendesk": true,
+        "entregas": true
       },
       "notes": ""
     }
