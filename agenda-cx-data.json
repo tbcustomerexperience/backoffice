@@ -493,6 +493,12 @@
         "entregas": true
       },
       "notes": ""
+    },
+    "2026-10-26": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
