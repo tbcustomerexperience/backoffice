@@ -500,7 +500,8 @@
         "reclame_aqui": true,
         "amplifique": true,
         "entregas": true,
-        "5k": true
+        "5k": true,
+        "ruptura": true
       },
       "notes": ""
     }
