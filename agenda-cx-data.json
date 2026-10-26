@@ -496,7 +496,8 @@
     },
     "2026-10-26": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
