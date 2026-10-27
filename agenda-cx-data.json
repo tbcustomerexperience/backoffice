@@ -504,6 +504,13 @@
         "ruptura": true
       },
       "notes": "Cursos Reclame AQUI"
+    },
+    "2026-10-27": {
+      "checked": {
+        "zendesk": true,
+        "reclame_aqui": true
+      },
+      "notes": ""
     }
   }
 }
