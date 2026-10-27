@@ -509,7 +509,8 @@
       "checked": {
         "zendesk": true,
         "reclame_aqui": true,
-        "jira": true
+        "jira": true,
+        "entregas": true
       },
       "notes": "Contatos Prêmio Reclame AQUI * OK\n"
     }
