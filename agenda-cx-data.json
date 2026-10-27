@@ -515,6 +515,12 @@
         "ruptura": true
       },
       "notes": "Contatos Prêmio Reclame AQUI * OK\n"
+    },
+    "2026-10-28": {
+      "checked": {
+        "planilhas_devolucao": true
+      },
+      "notes": ""
     }
   }
 }
