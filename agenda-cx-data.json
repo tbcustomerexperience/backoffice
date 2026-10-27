@@ -510,7 +510,9 @@
         "zendesk": true,
         "reclame_aqui": true,
         "jira": true,
-        "entregas": true
+        "entregas": true,
+        "5k": true,
+        "ruptura": true
       },
       "notes": "Contatos Prêmio Reclame AQUI * OK\n"
     }
