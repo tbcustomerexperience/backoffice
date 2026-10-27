@@ -518,7 +518,8 @@
     },
     "2026-10-28": {
       "checked": {
-        "planilhas_devolucao": true
+        "planilhas_devolucao": true,
+        "troque": true
       },
       "notes": ""
     }
