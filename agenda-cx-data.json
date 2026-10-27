@@ -508,9 +508,10 @@
     "2026-10-27": {
       "checked": {
         "zendesk": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
-      "notes": "Contatos Prêmio Reclame AQUI * OK"
+      "notes": "Contatos Prêmio Reclame AQUI * OK\n"
     }
   }
 }
