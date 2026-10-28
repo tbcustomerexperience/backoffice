@@ -520,7 +520,8 @@
       "checked": {
         "planilhas_devolucao": true,
         "troque": true,
-        "ruptura": true
+        "ruptura": true,
+        "jira": true
       },
       "notes": ""
     }
