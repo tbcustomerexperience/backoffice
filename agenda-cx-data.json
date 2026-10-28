@@ -521,7 +521,8 @@
         "planilhas_devolucao": true,
         "troque": true,
         "ruptura": true,
-        "jira": true
+        "jira": true,
+        "5k": true
       },
       "notes": ""
     }
