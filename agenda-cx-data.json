@@ -530,7 +530,8 @@
     },
     "2026-10-29": {
       "checked": {
-        "ruptura": true
+        "ruptura": true,
+        "jira": true
       },
       "notes": ""
     }
