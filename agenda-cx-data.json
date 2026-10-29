@@ -531,7 +531,8 @@
     "2026-10-29": {
       "checked": {
         "ruptura": true,
-        "jira": true
+        "jira": true,
+        "zendesk": true
       },
       "notes": ""
     }
