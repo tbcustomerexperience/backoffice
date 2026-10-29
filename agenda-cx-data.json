@@ -533,7 +533,8 @@
         "ruptura": true,
         "jira": true,
         "zendesk": true,
-        "entregas": true
+        "entregas": true,
+        "5k": true
       },
       "notes": ""
     }
