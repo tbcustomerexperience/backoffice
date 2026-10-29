@@ -532,7 +532,8 @@
       "checked": {
         "ruptura": true,
         "jira": true,
-        "zendesk": true
+        "zendesk": true,
+        "entregas": true
       },
       "notes": ""
     }
