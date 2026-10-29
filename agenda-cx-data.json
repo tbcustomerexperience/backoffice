@@ -522,7 +522,9 @@
         "troque": true,
         "ruptura": true,
         "jira": true,
-        "5k": true
+        "5k": true,
+        "amplifique": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
