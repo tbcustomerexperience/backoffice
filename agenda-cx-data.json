@@ -534,7 +534,8 @@
         "jira": true,
         "zendesk": true,
         "entregas": true,
-        "5k": true
+        "5k": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
