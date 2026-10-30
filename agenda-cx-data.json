@@ -542,7 +542,8 @@
     "2026-10-30": {
       "checked": {
         "amplifique": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     }
