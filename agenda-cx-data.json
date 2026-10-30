@@ -30,7 +30,9 @@
         "5k": true,
         "reclame_aqui": true,
         "jira": true,
-        "amplifique": true
+        "amplifique": true,
+        "troque": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     },
