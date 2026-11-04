@@ -554,7 +554,8 @@
         "jira": true,
         "reclame_aqui": false,
         "amplifique": true,
-        "ruptura": true
+        "ruptura": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
