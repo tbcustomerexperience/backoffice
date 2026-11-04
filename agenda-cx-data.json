@@ -552,7 +552,9 @@
     "2026-11-04": {
       "checked": {
         "jira": true,
-        "reclame_aqui": false
+        "reclame_aqui": false,
+        "amplifique": true,
+        "ruptura": true
       },
       "notes": ""
     }
