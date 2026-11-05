@@ -564,7 +564,8 @@
         "zendesk": true,
         "jira": true,
         "reclame_aqui": true,
-        "entregas": true
+        "entregas": true,
+        "ruptura": true
       },
       "notes": ""
     }
