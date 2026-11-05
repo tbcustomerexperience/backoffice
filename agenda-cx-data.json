@@ -558,6 +558,12 @@
         "planilhas_devolucao": true
       },
       "notes": ""
+    },
+    "2026-11-05": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
