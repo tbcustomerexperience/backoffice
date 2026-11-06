@@ -565,7 +565,8 @@
         "jira": true,
         "reclame_aqui": true,
         "entregas": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     },
