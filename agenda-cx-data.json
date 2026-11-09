@@ -583,7 +583,8 @@
     },
     "2026-11-09": {
       "checked": {
-        "zendesk": true
+        "zendesk": true,
+        "reclame_aqui": true
       },
       "notes": ""
     }
