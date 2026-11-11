@@ -603,7 +603,8 @@
         "jira": true,
         "reclame_aqui": true,
         "entregas": true,
-        "planilhas_devolucao": true
+        "planilhas_devolucao": true,
+        "amplifique": true
       },
       "notes": ""
     }
