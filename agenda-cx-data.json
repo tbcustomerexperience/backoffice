@@ -600,7 +600,9 @@
     },
     "2026-11-11": {
       "checked": {
-        "jira": true
+        "jira": true,
+        "reclame_aqui": true,
+        "entregas": true
       },
       "notes": ""
     }
