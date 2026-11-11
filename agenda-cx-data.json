@@ -604,7 +604,8 @@
         "reclame_aqui": true,
         "entregas": true,
         "planilhas_devolucao": true,
-        "amplifique": true
+        "amplifique": true,
+        "troque": true
       },
       "notes": ""
     }
