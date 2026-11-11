@@ -602,7 +602,8 @@
       "checked": {
         "jira": true,
         "reclame_aqui": true,
-        "entregas": true
+        "entregas": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
