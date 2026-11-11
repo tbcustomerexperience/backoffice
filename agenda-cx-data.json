@@ -597,6 +597,12 @@
         "reclame_aqui": true
       },
       "notes": ""
+    },
+    "2026-11-11": {
+      "checked": {
+        "jira": true
+      },
+      "notes": ""
     }
   }
 }
