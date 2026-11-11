@@ -594,7 +594,8 @@
       "checked": {
         "zendesk": true,
         "entregas": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "jira": true
       },
       "notes": ""
     },
