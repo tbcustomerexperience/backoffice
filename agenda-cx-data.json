@@ -609,6 +609,12 @@
         "troque": true
       },
       "notes": ""
+    },
+    "2026-11-12": {
+      "checked": {
+        "jira": true
+      },
+      "notes": ""
     }
   }
 }
