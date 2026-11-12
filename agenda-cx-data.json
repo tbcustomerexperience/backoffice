@@ -613,7 +613,8 @@
     "2026-11-12": {
       "checked": {
         "jira": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     }
