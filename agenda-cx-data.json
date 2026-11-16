@@ -630,7 +630,8 @@
     "2026-11-16": {
       "checked": {
         "zendesk": true,
-        "amplifique": true
+        "amplifique": true,
+        "ruptura": true
       },
       "notes": ""
     }
