@@ -631,7 +631,8 @@
       "checked": {
         "zendesk": true,
         "amplifique": true,
-        "ruptura": true
+        "ruptura": true,
+        "5k": true
       },
       "notes": ""
     }
