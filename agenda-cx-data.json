@@ -646,6 +646,12 @@
         "reclame_aqui": true
       },
       "notes": ""
+    },
+    "2026-11-18": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
