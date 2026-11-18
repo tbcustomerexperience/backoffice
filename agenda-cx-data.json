@@ -650,7 +650,9 @@
     "2026-11-18": {
       "checked": {
         "zendesk": true,
-        "amplifique": true
+        "amplifique": true,
+        "jira": true,
+        "planilhas_devolucao": true
       },
       "notes": ""
     }
