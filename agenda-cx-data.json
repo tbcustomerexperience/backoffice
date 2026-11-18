@@ -653,7 +653,8 @@
         "amplifique": true,
         "jira": true,
         "planilhas_devolucao": true,
-        "troque": true
+        "troque": true,
+        "ruptura": true
       },
       "notes": ""
     }
