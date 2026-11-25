@@ -682,6 +682,12 @@
         "entregas": true
       },
       "notes": ""
+    },
+    "2026-11-25": {
+      "checked": {
+        "jira": true
+      },
+      "notes": ""
     }
   }
 }
