@@ -686,7 +686,8 @@
     "2026-11-25": {
       "checked": {
         "jira": true,
-        "reclame_aqui": true
+        "reclame_aqui": true,
+        "amplifique": true
       },
       "notes": ""
     }
