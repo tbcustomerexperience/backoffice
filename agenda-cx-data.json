@@ -702,6 +702,12 @@
         "reclame_aqui": true
       },
       "notes": ""
+    },
+    "2026-11-27": {
+      "checked": {
+        "zendesk": true
+      },
+      "notes": ""
     }
   }
 }
